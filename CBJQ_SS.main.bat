@@ -1,10 +1,47 @@
 @echo off
 
-@REM 设置代码页为UTF-8
+@REM Set codepage to UTF-8(65001)
 @for /F "tokens=2 delims=:" %%i in ('chcp') do @( set /A codepage=%%i ) 
 @call :func_ensureACP
 
+@REM ----------------------------------------------
+@REM 用户变量设定区
 
+@REM 以下三行请填入启动器路径(不加引号)。
+@set launcher_worldwide=
+@set launcher_bilibili=
+@set launcher_kingsoft=
+
+if not defined LANG (
+    @REM 设置默认语言
+    set LANG=zh
+    @REM set LANG=en
+)
+set LANG
+
+@REM ----------------------------------------------
+@REM 初始化已完成，正式进入程序。
+
+if /I "%LANG%" EQU "zh" (
+    call :func_programinfo_zh_cn
+) else (
+    call :func_programinfo_en_us
+)
+
+@REM ----------------------------------------------
+@REM 程序加载完成，开始工作。
+
+if /I "%~1" == "worldwide" (
+    if /I "%LANG%" == "zh" ( echo 启动国际服 ) else ( echo Start: worldwide )
+
+) else if /I "%~1" == "bilibili" (
+    if /I "%LANG%" == "zh" ( echo 启动B服 ) else ( echo Start: bilibili )
+
+) else if /I "%~1" == "kingsoft" (
+    if /I "%LANG%" == "zh" ( echo 启动官服 ) else ( echo Start: kingsoft )
+)
+
+@REM ----------------------------------------------
 
 @REM 程序正常退出
 @EXIT /B 0
