@@ -43,8 +43,8 @@ setlocal enabledelayedexpansion
 @set launcher_kingsoft_dest=.\snow_launcher.exe
 
 @REM 以下两句最多启用一个。
-@REM @set LANG_default=zh
-@set LANG_default=en
+@set LANG_default=zh
+@REM @set LANG_default=en
 
 @REM ----------------------------------------------
 @REM 程序初始化阶段2
@@ -59,8 +59,8 @@ setlocal enabledelayedexpansion
         set mLANG=%LANG_default%
         if not defined mLANG (
             @REM 普通玩家不要动
-            @REM set mLANG=zh
-            set mLANG=en
+            set mLANG=zh
+            @REM set mLANG=en
         )
     )
     
@@ -156,7 +156,9 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
     @echo Description: This is a server switcher for CBJQ(Snowbreak: Containment Zone) implemented with Windows bat script.
     @echo Author: LiuJiewenTT
     @echo Version: 1.0.0
-    @echo Date: 2024-01-24
+    @echo Date: 2024-01-25
+    @echo Note：Github Repo：^<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher^>
+    @echo       Author's Email：^<liuljwtt@163.com^>
 @ goto:eof
 
 :func_programinfo_zh_cn
@@ -164,7 +166,9 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
     @echo 描述: 这是一个使用Windows批处理脚本实现的尘白禁区服务器切换器。
     @echo 作者: LiuJiewenTT
     @echo 版本: 1.0.0
-    @echo 日期: 2024-01-24
+    @echo 日期: 2024-01-25
+    @echo 备注：Github项目链接：^<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher^>
+    @echo       作者Email地址：^<liuljwtt@163.com^>
 @ goto:eof
 
 :func_updateSymlink
@@ -196,7 +200,7 @@ To avoid deleting real launcher by mistake, this program will be terminated. ^
 Before using this program, please follow the instructions to set up. 
                 )
                 if /I "%flag_nopause%" NEQ "true" ( pause )
-                endlocal
+                @REM endlocal
                 @ EXIT /B %threshold_abort%
             )
             if /I "%mLANG%" == "zh" ( echo [INFO] 删除旧符号链接 ) else ( echo [INFO] Deleting old SYMLINK... )

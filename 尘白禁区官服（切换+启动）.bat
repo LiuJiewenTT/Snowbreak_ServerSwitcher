@@ -1,0 +1,1 @@
+call .\CBJQ_SS.main.bat kingsoft
