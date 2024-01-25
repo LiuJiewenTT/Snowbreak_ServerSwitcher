@@ -75,63 +75,7 @@ set flag_need_replace=false
 
 @ if /I "%~1" == "worldwide" (
     if /I "%mLANG%" == "zh" ( echo [INFO] 启动国际服 ) else ( echo [INFO] Start: worldwide )
-    dir "snow.exe" | findstr "<SYMLINK>" | findstr "%launcher_worldwide%"
-    if ERRORLEVEL 1 (
-        if exist "snow.exe" (
-            for /f "delims=" %%i in ('dir "snow.exe" ^| findstr "snow.exe"') do (
-                echo [INFO] [Existed, old] %%i
-            )
-            dir "snow.exe" | findstr "<SYMLINK>">nul
-            if ERRORLEVEL 1 (
-                if /I "%mLANG%" == "zh" ( 
-                    echo [ERROR] 目的地的启动器并非符号链接，非本程序创建。为保证真的启动器不被错删，程序终止。使用程序前，请按照说明做好准备。 
-                ) else ( 
-                    echo [ERROR] Launcher in destination is not a SYMLINK, which means it was not created by this program. ^
-                    To avoid deleting real launcher by mistake, this program will be terminated. ^
-                    Before using this program, please follow the instructions to set up. 
-                )
-                endlocal
-                @ EXIT /B 1
-            )
-            if /I "%mLANG%" == "zh" ( echo [INFO] 删除旧符号链接 ) else ( echo [INFO] Deleting old SYMLINK... )
-            @REM del "snow.exe"
-        ) else (
-            if /I "%mLANG%" == "zh" ( echo [INFO] 目的地不存在启动器 ) else ( echo [INFO] Launcher does not exist in destination. )
-        )
-        if /I "%mLANG%" == "zh" ( echo [INFO] 准备替换 ) else ( echo [INFO] Replacing... )
-        @REM mklink "snow_launcher.exe" "%launcher_worldwide%
-    ) else (
-        if /I "%mLANG%" == "zh" ( echo [INFO] 新启动器已存在 ) else ( echo [INFO] New launcher has been ready. )
-    )
-
-
-    if exist "snow.exe" (
-        for /f "delims=" %%i in ('dir "snow.exe" ^| findstr "<SYMLINK>"') do (
-            echo %%i | findstr "%launcher_worldwide%"
-            if ERRORLEVEL 1 (
-                echo [INFO] [Existed, old] %%i
-                if /I "%mLANG%" == "zh" ( echo [INFO] 准备替换 ) else ( echo [INFO] Replacing... )
-                set flag_need_replace=true
-            ) else (
-                if /I "%mLANG%" == "zh" ( echo [INFO] 新启动器已存在 ) else ( echo [INFO] New launcher has been ready. )
-            )
-        )
-    ) else (
-        if /I "%mLANG%" == "zh" ( echo [INFO] 目的地不存在启动器 ) else ( echo [INFO] Launcher does not exist in destination. )
-        set flag_need_replace=true
-    )
-
-    if /I "!flag_need_replace!" == "true" (
-        @REM if exist "snow.exe" ( del "snow.exe" )
-        @REM mklink "snow_launcher.exe" "%launcher_worldwide%"
-        dir "snow_launcher.exe" | findstr "<SYMLINK>" | findstr "[%launcher_worldwide%]"
-        if ERRORLEVEL 1 (
-            if /I "%mLANG%" == "zh" ( echo [ERROR] 链接失败 ) else ( echo [ERROR] Failed to link. )
-        )
-    ) else (
-        echo do nothing about linking. [!flag_need_replace!]
-    )
-
+    call :func_updateSymlink "snow.exe" "%launcher_worldwide%"
     call "snow_launcher.exe"
     if ERRORLEVEL 1 (
         if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist! )
@@ -171,4 +115,45 @@ set flag_need_replace=false
     @echo 作者: LiuJiewenTT
     @echo 版本: 1.0.0
     @echo 日期: 2024-01-24
+@goto:eof
+
+:func_updateSymlink
+@REM param1: Name of launcher (It can be a path).
+@REM param2: Path to expected real launcher (It can be a relative path).
+
+    set launchername=%~nx1
+    set reallauncherpath=%~2
+
+    dir "%launchername%" | findstr "<SYMLINK>" | findstr "%reallauncherpath%"
+    if ERRORLEVEL 1 (
+        if exist "%launchername%" (
+            for /f "delims=" %%i in ('dir "%launchername%" ^| findstr "%launchername%"') do (
+                echo [INFO] [Existed, old] %%i
+            )
+            dir "%launchername%" | findstr "<SYMLINK>">nul
+            if ERRORLEVEL 1 (
+                if /I "%mLANG%" == "zh" ( 
+                    echo [ERROR] 目的地的启动器并非符号链接，非本程序创建。为保证真的启动器不被错删，程序终止。使用程序前，请按照说明做好准备。 
+                ) else ( 
+                    echo [ERROR] Launcher in destination is not a SYMLINK, which means it was not created by this program. ^
+                    To avoid deleting real launcher by mistake, this program will be terminated. ^
+                    Before using this program, please follow the instructions to set up. 
+                )
+                endlocal
+                @ EXIT /B 1
+            )
+            if /I "%mLANG%" == "zh" ( echo [INFO] 删除旧符号链接 ) else ( echo [INFO] Deleting old SYMLINK... )
+            @REM del "%launchername%"
+        ) else (
+            if /I "%mLANG%" == "zh" ( echo [INFO] 目的地不存在启动器 ) else ( echo [INFO] Launcher does not exist in destination. )
+        )
+        if /I "%mLANG%" == "zh" ( echo [INFO] 准备替换 ) else ( echo [INFO] Replacing... )
+        @REM mklink "%launchername%" "%reallauncherpath%"
+    ) else (
+        if /I "%mLANG%" == "zh" ( echo [INFO] 新启动器已存在 ) else ( echo [INFO] New launcher has been ready. )
+    )
+    dir "%launchername%" | findstr "<SYMLINK>" | findstr "[%reallauncherpath%]"
+    if ERRORLEVEL 1 (
+        if /I "%mLANG%" == "zh" ( echo [ERROR] 链接失败 ) else ( echo [ERROR] Failed to link. )
+    )
 @goto:eof
