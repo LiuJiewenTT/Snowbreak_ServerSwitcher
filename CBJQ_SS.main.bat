@@ -6,6 +6,9 @@
 @REM Set codepage to UTF-8(65001)
 @for /F "tokens=2 delims=:" %%i in ('chcp') do @( set /A codepage=%%i ) 
 @call :func_ensureACP
+REM 已设定代码页，如遇乱码请检查文件编码或终端字体。
+
+setlocal enabledelayedexpansion
 
 @REM ----------------------------------------------
 @REM 运行环境注意（普通玩家）
@@ -16,13 +19,12 @@
 @REM ----------------------------------------------
 @REM 运行环境注意（高级玩家）
 
-@REM 1. 如果从命令行启动，请使用“start”而非“call”命令。
-@REM 2. 从Powershell启动可能会存在LANG环境变量，缺省值优先从LANG选择。
+@REM 1. 从Powershell启动可能会存在LANG环境变量，缺省值优先从LANG选择。
 
 @REM ----------------------------------------------
 @REM 用户变量预设值区
 
-@set launcher_none=cmd.exe /C Exit /B 1
+@set launcher_none=none
 
 @REM ----------------------------------------------
 @REM 用户变量设定区
@@ -39,7 +41,7 @@
 @REM ----------------------------------------------
 @REM 程序初始化阶段2
 
-if not defined mLANG (
+@ if not defined mLANG (
     @REM mLANG: module's LANG
     if defined LANG (
         @REM 使用环境变量选择语言
@@ -69,11 +71,70 @@ if /I "%mLANG%" EQU "zh" (
 @REM ----------------------------------------------
 @REM 程序加载完成，开始工作。
 
-if /I "%~1" == "worldwide" (
-    if /I "%mLANG%" == "zh" ( echo 启动国际服 ) else ( echo Start: worldwide )
-    call "%launcher_worldwide%"
+set flag_need_replace=false
+
+@ if /I "%~1" == "worldwide" (
+    if /I "%mLANG%" == "zh" ( echo [INFO] 启动国际服 ) else ( echo [INFO] Start: worldwide )
+    dir "snow.exe" | findstr "<SYMLINK>" | findstr "%launcher_worldwide%"
     if ERRORLEVEL 1 (
-        echo 出错力！
+        if exist "snow.exe" (
+            for /f "delims=" %%i in ('dir "snow.exe" ^| findstr "snow.exe"') do (
+                echo [INFO] [Existed, old] %%i
+            )
+            dir "snow.exe" | findstr "<SYMLINK>">nul
+            if ERRORLEVEL 1 (
+                if /I "%mLANG%" == "zh" ( 
+                    echo [ERROR] 目的地的启动器并非符号链接，非本程序创建。为保证真的启动器不被错删，程序终止。使用程序前，请按照说明做好准备。 
+                ) else ( 
+                    echo [ERROR] Launcher in destination is not a SYMLINK, which means it was not created by this program. ^
+                    To avoid deleting real launcher by mistake, this program will be terminated. ^
+                    Before using this program, please follow the instructions to set up. 
+                )
+                endlocal
+                @ EXIT /B 1
+            )
+            if /I "%mLANG%" == "zh" ( echo [INFO] 删除旧符号链接 ) else ( echo [INFO] Deleting old SYMLINK... )
+            @REM del "snow.exe"
+        ) else (
+            if /I "%mLANG%" == "zh" ( echo [INFO] 目的地不存在启动器 ) else ( echo [INFO] Launcher does not exist in destination. )
+        )
+        if /I "%mLANG%" == "zh" ( echo [INFO] 准备替换 ) else ( echo [INFO] Replacing... )
+        @REM mklink "snow_launcher.exe" "%launcher_worldwide%
+    ) else (
+        if /I "%mLANG%" == "zh" ( echo [INFO] 新启动器已存在 ) else ( echo [INFO] New launcher has been ready. )
+    )
+
+
+    if exist "snow.exe" (
+        for /f "delims=" %%i in ('dir "snow.exe" ^| findstr "<SYMLINK>"') do (
+            echo %%i | findstr "%launcher_worldwide%"
+            if ERRORLEVEL 1 (
+                echo [INFO] [Existed, old] %%i
+                if /I "%mLANG%" == "zh" ( echo [INFO] 准备替换 ) else ( echo [INFO] Replacing... )
+                set flag_need_replace=true
+            ) else (
+                if /I "%mLANG%" == "zh" ( echo [INFO] 新启动器已存在 ) else ( echo [INFO] New launcher has been ready. )
+            )
+        )
+    ) else (
+        if /I "%mLANG%" == "zh" ( echo [INFO] 目的地不存在启动器 ) else ( echo [INFO] Launcher does not exist in destination. )
+        set flag_need_replace=true
+    )
+
+    if /I "!flag_need_replace!" == "true" (
+        @REM if exist "snow.exe" ( del "snow.exe" )
+        @REM mklink "snow_launcher.exe" "%launcher_worldwide%"
+        dir "snow_launcher.exe" | findstr "<SYMLINK>" | findstr "[%launcher_worldwide%]"
+        if ERRORLEVEL 1 (
+            if /I "%mLANG%" == "zh" ( echo [ERROR] 链接失败 ) else ( echo [ERROR] Failed to link. )
+        )
+    ) else (
+        echo do nothing about linking. [!flag_need_replace!]
+    )
+
+    call "snow_launcher.exe"
+    if ERRORLEVEL 1 (
+        if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist! )
     )
 ) else if /I "%~1" == "bilibili" (
     if /I "%mLANG%" == "zh" ( echo 启动B服 ) else ( echo Start: bilibili )
@@ -85,8 +146,9 @@ if /I "%~1" == "worldwide" (
 
 @REM ----------------------------------------------
 
+@endlocal
 @REM 程序正常退出
-@EXIT /B 0
+@ EXIT /B 0
 
 :func_ensureACP
     @if /I %codepage% NEQ 65001 ( 
