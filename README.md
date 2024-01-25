@@ -12,6 +12,9 @@ date: 2024-01-25 19:57:00 +0800
 
 ![icon](icon1.png)
 
+项目地址：<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher>
+说明页链接：<https://liujiewentt.github.io/Snowbreak_ServerSwitcher/README>
+
 ## 痛点
 
 不知道启动器更新的方式，担心不同渠道的启动器混乱。
