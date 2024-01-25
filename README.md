@@ -10,6 +10,8 @@ date: 2024-01-25 19:57:00 +0800
 
 快速跳转：[使用](#使用), [配置方法](#配置方法).
 
+![icon](icon1.png)
+
 ## 痛点
 
 不知道启动器更新的方式，担心不同渠道的启动器混乱。
@@ -166,4 +168,6 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
 ## LICENSE
 
 本项目遵循MIT开源协议。
+
+本项目内置[`IconFold` `v1.0.0`](https://github.com/LiuJiewenTT/IconFold) （MIT开源协议）实现文件夹图标的设置。可以删除tools文件夹。
 
