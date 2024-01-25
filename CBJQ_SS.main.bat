@@ -1,16 +1,23 @@
 @echo off
 
 @REM ----------------------------------------------
-@REM 运行环境注意
-
-@REM 1. 从Powershell启动可能会存在LANG环境变量
-
-@REM ----------------------------------------------
-@REM 程序初始化阶段1
+@REM Program Initialization Stage 1
 
 @REM Set codepage to UTF-8(65001)
 @for /F "tokens=2 delims=:" %%i in ('chcp') do @( set /A codepage=%%i ) 
 @call :func_ensureACP
+
+@REM ----------------------------------------------
+@REM 运行环境注意（普通玩家）
+
+@REM 1. 使用前请确认“用户变量设定区”的已经设置好了启动器路径。
+@REM 2. 除了“用户变量设定区”，其它都不要动。
+
+@REM ----------------------------------------------
+@REM 运行环境注意（高级玩家）
+
+@REM 1. 如果从命令行启动，请使用“start”而非“call”命令。
+@REM 2. 从Powershell启动可能会存在LANG环境变量，缺省值优先从LANG选择。
 
 @REM ----------------------------------------------
 @REM 用户变量预设值区
@@ -20,7 +27,7 @@
 @REM ----------------------------------------------
 @REM 用户变量设定区
 
-@REM 以下三行请填入启动器路径(不加引号，不可以为空)。
+@REM 以下三行请填入启动器路径(不加引号，不可以为空，没有就填“%launcher_none%”)。
 @set launcher_worldwide=%launcher_none%
 @set launcher_bilibili=%launcher_none%
 @set launcher_kingsoft=%launcher_none%
@@ -33,10 +40,22 @@
 @REM 程序初始化阶段2
 
 if not defined mLANG (
-    @REM 设置默认语言
-    set mLANG=%LANG_default%
+    @REM mLANG: module's LANG
+    if defined LANG (
+        @REM 使用环境变量选择语言
+        for /f "tokens=1,* delims=_" %%i in ("%LANG%") do ( set mLANG=%%i)
+    ) else (
+        @REM 使用预设默认语言
+        set mLANG=%LANG_default%
+        if not defined mLANG (
+            @REM 普通玩家不要动
+            set mLANG=zh
+            @REM set mLANG=en
+        )
+    )
+    
 )
-set LANG
+set mLANG
 
 @REM ----------------------------------------------
 @REM 初始化已完成，正式进入程序。
