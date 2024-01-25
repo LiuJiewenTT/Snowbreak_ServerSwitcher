@@ -43,8 +43,8 @@ setlocal enabledelayedexpansion
 @set launcher_kingsoft_dest=.\snow_launcher.exe
 
 @REM 以下两句最多启用一个。
-@set LANG_default=zh
-@REM @set LANG_default=en
+@REM @set LANG_default=zh
+@set LANG_default=en
 
 @REM ----------------------------------------------
 @REM 程序初始化阶段2
@@ -59,8 +59,8 @@ setlocal enabledelayedexpansion
         set mLANG=%LANG_default%
         if not defined mLANG (
             @REM 普通玩家不要动
-            set mLANG=zh
-            @REM set mLANG=en
+            @REM set mLANG=zh
+            set mLANG=en
         )
     )
     
@@ -82,6 +82,8 @@ if /I "%mLANG%" EQU "zh" (
 set flag_nostart=false
 set flag_nopause=false
 
+set threshold_abort=10
+
 :loop1
 
 @ if "%~1" == "" (
@@ -95,26 +97,38 @@ set flag_nopause=false
     @ if /I "%~1" == "worldwide" (
         if /I "%mLANG%" == "zh" ( echo [INFO] 启动国际服 ) else ( echo [INFO] Start Option: worldwide )
         call :func_updateSymlink "%launcher_worldwide_dest%" "%launcher_worldwide%"
+        if ERRORLEVEL %threshold_abort% (
+            if /I "%mLANG%" == "zh" ( echo [ERROR] 【终止】：程序异常终止！ ) else ( echo [ERROR] [Abort]: Program Abort^^! )
+            goto:loop1_break
+        )
         if /I "%flag_nostart%" == "false" ( call "%launcher_worldwide_dest%" )
         if ERRORLEVEL 1 (
-            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist! )
+            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist^^! )
         )
     ) else if /I "%~1" == "bilibili" (
         if /I "%mLANG%" == "zh" ( echo [INFO] 启动B服 ) else ( echo [INFO] Start Option: bilibili )
         call :func_updateSymlink "%launcher_bilibili_dest%" "%launcher_bilibili%"
+        if ERRORLEVEL %threshold_abort% (
+            if /I "%mLANG%" == "zh" ( echo [ERROR] 【终止】：程序异常终止！ ) else ( echo [ERROR] [Abort]: Program Abort^^! )
+            goto:loop1_break
+        )
         if /I "%flag_nostart%" == "false" ( call "%launcher_bilibili_dest%" )
         if ERRORLEVEL 1 (
-            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist! )
+            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist^^! )
         )
     ) else if /I "%~1" == "kingsoft" (
         if /I "%mLANG%" == "zh" ( echo [INFO] 启动官服 ) else ( echo [INFO] Start Option: kingsoft )
         call :func_updateSymlink "%launcher_kingsoft_dest%" "%launcher_kingsoft%"
+        if ERRORLEVEL %threshold_abort% (
+            if /I "%mLANG%" == "zh" ( echo [ERROR] 【终止】：程序异常终止！ ) else ( echo [ERROR] [Abort]: Program Abort^^! )
+            goto:loop1_break
+        )
         if /I "%flag_nostart%" == "false" ( call "%launcher_kingsoft_dest%" )
         if ERRORLEVEL 1 (
-            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist! )
+            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist^^! )
         )
-    ) else if "%~1" NEQ "" (
-        if /I "%mLANG%" == "zh" ( echo [ERROR] 【未知】：未配置此服务器的启动器！【%~1】 ) else ( echo [ERROR] [Unknown]: Launcher to this server is not configured! [%~1] )
+    ) else (
+        if /I "%mLANG%" == "zh" ( echo [ERROR] 【未知】：未配置此服务器的启动器！【%~1】 ) else ( echo [ERROR] [Unknown]: Launcher to this server is not configured^^! [%~1] )
     )
 )
 shift /1
@@ -124,9 +138,10 @@ goto:loop1
 
 @REM ----------------------------------------------
 
-@endlocal
+
 @REM 程序正常退出
 if /I "%flag_nopause%" NEQ "true" ( pause )
+@endlocal
 @ EXIT /B 0
 
 :func_ensureACP
@@ -167,7 +182,7 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
 
     if ERRORLEVEL 1 (
         if exist "%launcherpath%" (
-            for /f "delims=" %%i in ('dir "%launcherpath%" ^| findstr "%launchername%"') do (
+            for /f "delims=" %%i in ('dir "%launcherpath%" ^| findstr /C:"%launchername%"') do (
                 echo [INFO] [Existed, old] %%i
             )
             dir "%launcherpath%" | findstr "<SYMLINK>"
@@ -175,13 +190,14 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
                 if /I "%mLANG%" == "zh" ( 
                     echo [ERROR] 目的地的启动器并非符号链接，非本程序创建。为保证真的启动器不被错删，程序终止。使用程序前，请按照说明做好准备。 
                 ) else ( 
-                    echo [ERROR] Launcher in destination is not a SYMLINK, which means it was not created by this program. ^
-                    To avoid deleting real launcher by mistake, this program will be terminated. ^
-                    Before using this program, please follow the instructions to set up. 
+                    echo ^
+[ERROR] Launcher in destination is not a SYMLINK, which means it was not created by this program. ^
+To avoid deleting real launcher by mistake, this program will be terminated. ^
+Before using this program, please follow the instructions to set up. 
                 )
-                endlocal
                 if /I "%flag_nopause%" NEQ "true" ( pause )
-                @ EXIT /B 1
+                endlocal
+                @ EXIT /B %threshold_abort%
             )
             if /I "%mLANG%" == "zh" ( echo [INFO] 删除旧符号链接 ) else ( echo [INFO] Deleting old SYMLINK... )
             del "%launcherpath%"
