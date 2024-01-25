@@ -15,11 +15,14 @@ setlocal enabledelayedexpansion
 
 @REM 1. 使用前请确认“用户变量设定区”的已经设置好了启动器路径。
 @REM 2. 除了“用户变量设定区”，其它都不要动。
+@REM 3. 请确保路径中不包含这些符号：“[]”
 
 @REM ----------------------------------------------
 @REM 运行环境注意（高级玩家）
 
 @REM 1. 从Powershell启动可能会存在LANG环境变量，缺省值优先从LANG选择。
+@REM 2. 启动参数必须选项在前服务器在后，指定多个服务器会依次触发操作。
+@REM 3. 上部分第三点具体说明：目的路径字符串不得包含启动器储存路径字符串。
 
 @REM ----------------------------------------------
 @REM 用户变量预设值区
@@ -29,10 +32,15 @@ setlocal enabledelayedexpansion
 @REM ----------------------------------------------
 @REM 用户变量设定区
 
-@REM 以下三行请填入启动器路径(不加引号，不可以为空，没有就填“%launcher_none%”)。
-@set launcher_worldwide=%launcher_none%
-@set launcher_bilibili=%launcher_none%
-@set launcher_kingsoft=%launcher_none%
+@REM 以下三行请填入启动器的储存路径(包含文件名，不加引号，不可以为空，没有就填“%launcher_none%”)。
+@set launcher_worldwide=.\Launchers\p1.exe
+@set launcher_bilibili=.\Launchers\p2.exe
+@set launcher_kingsoft=.\Launchers\p3.exe
+
+@REM 以下三行请填入启动器的目的地址(即原地址，包含文件名，不加引号，不可以为空)。路径完全相同时仅能启动一个，大概率出错。
+@set launcher_worldwide_dest=.\snow_launcher.exe
+@set launcher_bilibili_dest=.\snow_launcher.exe
+@set launcher_kingsoft_dest=.\snow_launcher.exe
 
 @REM 以下两句最多启用一个。
 @set LANG_default=zh
@@ -71,27 +79,54 @@ if /I "%mLANG%" EQU "zh" (
 @REM ----------------------------------------------
 @REM 程序加载完成，开始工作。
 
-set flag_need_replace=false
+set flag_nostart=false
+set flag_nopause=false
 
-@ if /I "%~1" == "worldwide" (
-    if /I "%mLANG%" == "zh" ( echo [INFO] 启动国际服 ) else ( echo [INFO] Start: worldwide )
-    call :func_updateSymlink "snow.exe" "%launcher_worldwide%"
-    call "snow_launcher.exe"
-    if ERRORLEVEL 1 (
-        if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist! )
+:loop1
+
+@ if "%~1" == "" (
+    @REM 无参数，仅输出程序信息。
+    goto:loop1_break
+) else if "%~1" == "-nostart" (
+    set flag_nostart=true
+) else if "%~1" == "-nopause" (
+    set flag_nopause=true
+) else (
+    @ if /I "%~1" == "worldwide" (
+        if /I "%mLANG%" == "zh" ( echo [INFO] 启动国际服 ) else ( echo [INFO] Start Option: worldwide )
+        call :func_updateSymlink "%launcher_worldwide_dest%" "%launcher_worldwide%"
+        if /I "%flag_nostart%" == "false" ( call "%launcher_worldwide_dest%" )
+        if ERRORLEVEL 1 (
+            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist! )
+        )
+    ) else if /I "%~1" == "bilibili" (
+        if /I "%mLANG%" == "zh" ( echo [INFO] 启动B服 ) else ( echo [INFO] Start Option: bilibili )
+        call :func_updateSymlink "%launcher_bilibili_dest%" "%launcher_bilibili%"
+        if /I "%flag_nostart%" == "false" ( call "%launcher_bilibili_dest%" )
+        if ERRORLEVEL 1 (
+            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist! )
+        )
+    ) else if /I "%~1" == "kingsoft" (
+        if /I "%mLANG%" == "zh" ( echo [INFO] 启动官服 ) else ( echo [INFO] Start Option: kingsoft )
+        call :func_updateSymlink "%launcher_kingsoft_dest%" "%launcher_kingsoft%"
+        if /I "%flag_nostart%" == "false" ( call "%launcher_kingsoft_dest%" )
+        if ERRORLEVEL 1 (
+            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist! )
+        )
+    ) else if "%~1" NEQ "" (
+        if /I "%mLANG%" == "zh" ( echo [ERROR] 【未知】：未配置此服务器的启动器！【%~1】 ) else ( echo [ERROR] [Unknown]: Launcher to this server is not configured! [%~1] )
     )
-) else if /I "%~1" == "bilibili" (
-    if /I "%mLANG%" == "zh" ( echo 启动B服 ) else ( echo Start: bilibili )
-    start "%launcher_bilibili%"
-) else if /I "%~1" == "kingsoft" (
-    if /I "%mLANG%" == "zh" ( echo 启动官服 ) else ( echo Start: kingsoft )
-    start "%launcher_kingsoft%"
 )
+shift /1
+
+goto:loop1
+:loop1_break
 
 @REM ----------------------------------------------
 
 @endlocal
 @REM 程序正常退出
+if /I "%flag_nopause%" NEQ "true" ( pause )
 @ EXIT /B 0
 
 :func_ensureACP
@@ -99,7 +134,7 @@ set flag_need_replace=false
         echo "[LOG]: Active code page is not 65001(UTF-8). [%codepage%]"
         chcp 65001
     )
-@goto:eof
+@ goto:eof
 
 :func_programinfo_en_us
     @echo Snowbreak_ServerSwitcher(CBJQ_SS)
@@ -107,7 +142,7 @@ set flag_need_replace=false
     @echo Author: LiuJiewenTT
     @echo Version: 1.0.0
     @echo Date: 2024-01-24
-@goto:eof
+@ goto:eof
 
 :func_programinfo_zh_cn
     @echo 尘白禁区服务器切换器(CBJQ_SS)
@@ -115,22 +150,27 @@ set flag_need_replace=false
     @echo 作者: LiuJiewenTT
     @echo 版本: 1.0.0
     @echo 日期: 2024-01-24
-@goto:eof
+@ goto:eof
 
 :func_updateSymlink
 @REM param1: Name of launcher (It can be a path).
 @REM param2: Path to expected real launcher (It can be a relative path).
 
+    set launcherpath=%~1
     set launchername=%~nx1
     set reallauncherpath=%~2
+    if /I "%mLANG%" == "zh" ( echo [INFO] 【启动器目的地路径】：%launcherpath% ) else ( echo [INFO] [Destination of Launcher]: %launcherpath% )
+    if /I "%mLANG%" == "zh" ( echo [INFO] 【启动器文件名】：%launchername%) else ( echo [INFO] [Filename of Launcher]: %launchername% )
+    if /I "%mLANG%" == "zh" ( echo [INFO] 【启动器储存路径】：%reallauncherpath%) else ( echo [INFO] [Store Path of Launcher]: %reallauncherpath% )
 
-    dir "%launchername%" | findstr "<SYMLINK>" | findstr "%reallauncherpath%"
+    dir "%launcherpath%" | findstr "<SYMLINK>" | findstr /E /C:"[%reallauncherpath%]"
+
     if ERRORLEVEL 1 (
-        if exist "%launchername%" (
-            for /f "delims=" %%i in ('dir "%launchername%" ^| findstr "%launchername%"') do (
+        if exist "%launcherpath%" (
+            for /f "delims=" %%i in ('dir "%launcherpath%" ^| findstr "%launchername%"') do (
                 echo [INFO] [Existed, old] %%i
             )
-            dir "%launchername%" | findstr "<SYMLINK>">nul
+            dir "%launcherpath%" | findstr "<SYMLINK>"
             if ERRORLEVEL 1 (
                 if /I "%mLANG%" == "zh" ( 
                     echo [ERROR] 目的地的启动器并非符号链接，非本程序创建。为保证真的启动器不被错删，程序终止。使用程序前，请按照说明做好准备。 
@@ -140,20 +180,23 @@ set flag_need_replace=false
                     Before using this program, please follow the instructions to set up. 
                 )
                 endlocal
+                if /I "%flag_nopause%" NEQ "true" ( pause )
                 @ EXIT /B 1
             )
             if /I "%mLANG%" == "zh" ( echo [INFO] 删除旧符号链接 ) else ( echo [INFO] Deleting old SYMLINK... )
-            @REM del "%launchername%"
+            del "%launcherpath%"
         ) else (
             if /I "%mLANG%" == "zh" ( echo [INFO] 目的地不存在启动器 ) else ( echo [INFO] Launcher does not exist in destination. )
         )
         if /I "%mLANG%" == "zh" ( echo [INFO] 准备替换 ) else ( echo [INFO] Replacing... )
-        @REM mklink "%launchername%" "%reallauncherpath%"
+        mklink "%launcherpath%" "%reallauncherpath%"
     ) else (
         if /I "%mLANG%" == "zh" ( echo [INFO] 新启动器已存在 ) else ( echo [INFO] New launcher has been ready. )
     )
-    dir "%launchername%" | findstr "<SYMLINK>" | findstr "[%reallauncherpath%]"
+    dir "%launcherpath%" | findstr "<SYMLINK>" | findstr /E /C:"[%reallauncherpath%]"
     if ERRORLEVEL 1 (
         if /I "%mLANG%" == "zh" ( echo [ERROR] 链接失败 ) else ( echo [ERROR] Failed to link. )
+    ) else (
+        if /I "%mLANG%" == "zh" ( echo [INFO] 已完全准备好。 ) else ( echo [INFO] Everything is ready. )
     )
-@goto:eof
+@ goto:eof
