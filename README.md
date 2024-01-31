@@ -1,6 +1,6 @@
 ---
 LANG: zh_CN.UTF-8
-date: 2024-01-25 19:57:00 +0800
+date: 2024-01-31 14:48:00 +0800
 ---
 
 
@@ -8,7 +8,7 @@ date: 2024-01-25 19:57:00 +0800
 
 简介：此程序用于切换不同渠道的启动器，以连接到不同的《尘白禁区》服务器。
 
-快速跳转：[使用](#使用), [配置方法](#配置方法).
+快速跳转：[使用](#使用), [配置方法](#配置方法), [GUI](#GUIs).
 
 ![icon](icon1.png)
 
@@ -78,6 +78,8 @@ date: 2024-01-25 19:57:00 +0800
 1. 从Powershell启动可能会存在`LANG`环境变量，程序将优先从`LANG`选择`mLANG`缺省值。
 2. 启动参数必须选项在前服务器在后，指定多个服务器会依次触发操作。
 3. 上部分第三点具体说明：目的路径字符串不得包含启动器储存路径字符串。
+
+完成配置后，可使用[<strong style="color:red">GUI</strong>](#GUIs)进行操作。
 
 ### 参数
 
@@ -161,12 +163,18 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
    @set launcher_kingsoft_dest=.\snow_launcher.exe
    ```
 
-9. 使用命令行按照上述参数示例启动/切换启动器。
+9. 使用命令行按照上述参数示例启动/切换启动器；或使用[<strong style="color:red">GUI</strong>](#GUIs)操作。
 
    > 也可以用配置好的几个文件，给这几个文件创好桌面快捷方式，然后双击启动：
    >
    > - 切换+启动：`尘白禁区**（切换+启动）.bat`
    > - 仅切换，不自动启动：`尘白禁区**（切换）.bat`
+
+## GUIs
+
+可用GUI程序：
+
+1. 项目：[CBJQ_SS_FrontEnd-tk](https://github.com/LiuJiewenTT/CBJQ_SS_FrontEnd-tk)。
 
 ## LICENSE
 
