@@ -8,7 +8,7 @@ date: 2024-01-31 14:48:00 +0800
 
 简介：此程序用于切换不同渠道的启动器，以连接到不同的《尘白禁区》服务器。
 
-快速跳转：[使用](#使用), [配置方法](#配置方法), [GUI](#GUIs).
+快速跳转：[使用](#使用), [配置方法](#配置方法), [GUI](#guis).
 
 ![icon](icon1.png)
 
@@ -69,6 +69,8 @@ date: 2024-01-31 14:48:00 +0800
 
 ### 注意事项
 
+*补充说明：请确保真正的启动器所在目录下有`preference.json`文件，如果没有这个文件，启动器会以为是第一次运行，进而无法定位到正确的游戏数据目录。*
+
 运行环境注意（普通玩家）
 1. 使用前请确认“用户变量设定区”的已经设置好了启动器路径。
 2. 除了“用户变量设定区”，其它都不要动。
@@ -79,7 +81,7 @@ date: 2024-01-31 14:48:00 +0800
 2. 启动参数必须选项在前服务器在后，指定多个服务器会依次触发操作。
 3. 上部分第三点具体说明：目的路径字符串不得包含启动器储存路径字符串。
 
-完成配置后，可使用[<strong style="color:red">GUI</strong>](#GUIs)进行操作。
+完成配置后，可使用[<strong style="color:red">GUI</strong>](#guis)进行操作。
 
 ### 参数
 
@@ -132,13 +134,15 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
 
 > 以下为示例，看得懂的可以自行配置。
 
-1. 选择一个位置，比如启动器所在的位置。
+1. 选择一个位置，比如启动器所在的位置。例如：`M:\Program Files\Snow\`。
 
-2. 新建一个文件夹，可以叫`Launchers`。
+2. 将发行的压缩包内的文件夹`Snowbreak_ServerSwitcher`解压到这个位置。
 
-3. 复制`CBJQ_SS.main.bat`当前目录。
+3. 把原启动器拖入：`Snowbreak_ServerSwitcher\Launchers\`文件夹内。
 
-4. 把原启动器拖入上面刚创建的那个文件夹。
+4. 把原启动器所在目录下的`preference.json`复制到启动器新位置。
+
+   > 补充说明：请确保真正的启动器所在目录下有`preference.json`文件，如果没有这个文件，启动器会以为是第一次运行，进而无法定位到正确的游戏数据目录。
 
 5. 把你要的其它渠道的安装包（如：`CBJQ_Setup.exe`）用解压软件打开，打开`app.7z`（压缩包内的压缩包）。
 
@@ -146,7 +150,7 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
 
 7. 给不同启动器重命名。
 
-8. 来到脚本中的“用户变量设定区”，设置说明了的*6个*变量。（没有就设为`%launcher_none%`）
+8. 来到脚本`Snowbreak_ServerSwitcher\CBJQ_SS.main.bat`中的“用户变量设定区”，设置说明了的*6个*变量。（没有就设为`%launcher_none%`）
 
    > `launcher_worldwide`, `launcher_bilibili`, `launcher_kingsoft`；（没有就设为`%launcher_none%`）
    > `launcher_worldwide_dest`, `launcher_bilibili_dest`, `launcher_kingsoft_dest`。（目的位置，就是原本应该在的路径）
@@ -154,16 +158,18 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
    **首尾不要有多余的空格！**示例：
 
    ``` bat
-   @set launcher_worldwide=.\Launchers\launcher_worldwide.exe
-   @set launcher_bilibili=.\Launchers\launcher_bilibili.exe
-   @set launcher_kingsoft=.\Launchers\launcher_kingsoft.exe
+   @set launcher_worldwide=%~dp0Launchers\snow_launcher-worldwide.exe
+   @set launcher_bilibili=%~dp0Launchers\snow_launcher-bilibili.exe
+   @set launcher_kingsoft=%~dp0Launchers\snow_launcher-kingsoft.exe
    
-   @set launcher_worldwide_dest=.\snow_launcher.exe
-   @set launcher_bilibili_dest=.\snow_launcher.exe
-   @set launcher_kingsoft_dest=.\snow_launcher.exe
+   @set launcher_worldwide_dest=..\snow_launcher.exe
+   @set launcher_bilibili_dest=..\snow_launcher.exe
+   @set launcher_kingsoft_dest=..\snow_launcher.exe
    ```
 
-9. 使用命令行按照上述参数示例启动/切换启动器；或使用[<strong style="color:red">GUI</strong>](#GUIs)操作。
+   不会改参数就按这里的命名，然后复制这一段将对应代码替换。
+
+9. 使用命令行按照上述参数示例启动/切换启动器；或使用[<strong style="color:red">GUI</strong>](#guis)操作。
 
    > 也可以用配置好的几个文件，给这几个文件创好桌面快捷方式，然后双击启动：
    >
