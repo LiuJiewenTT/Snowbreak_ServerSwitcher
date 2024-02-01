@@ -188,6 +188,7 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
    >
    > - 切换+启动：`尘白禁区**（切换+启动）.bat`
    > - 仅切换，不自动启动：`尘白禁区**（切换）.bat`
+   > - 仅启动，不切换：`尘白禁区**（启动）.bat`
 
 ## GUIs
 
