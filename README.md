@@ -1,6 +1,6 @@
 ---
 LANG: zh_CN.UTF-8
-date: 2024-01-31 14:48:00 +0800
+date: 2024-02-01 20:09:00 +0800
 ---
 
 
@@ -12,7 +12,7 @@ date: 2024-01-31 14:48:00 +0800
 
 ![icon](icon1.png)
 
-项目地址：<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher>
+项目地址：<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher><br/>
 说明页链接：<https://liujiewentt.github.io/Snowbreak_ServerSwitcher/README>
 
 ## 可行性分析
@@ -48,13 +48,13 @@ date: 2024-01-31 14:48:00 +0800
 
 <strong style= "color:red"> 此外，在游戏目录内（启动器原始位置），不同渠道的启动器可以共用相同的文件名。</strong>也就是说，如果你不是一起开那么一个桌面快捷方式就足够了。（此时也不用担心更新可能出现混乱导致快捷方式或是其它程序（如，Razor Cortex）出现路径错误。）
 
-当然，如果你就是要多个一起开，那，如果可以的话，本程序也可以通过修改配置满足你。
+当然，如果你就是要多个一起开，那，如果可以的话，本程序也可以通过修改配置满足你。可惜，启动器进行了限制，不允许多开。
 
 > 具体什么问题可以联系作者，有空会协助解决。
 
 ## 备注
 
-2. 支持中文（保证不乱码）和英文。（Support zh_CN and en_US.）
+1. 支持中文（保证不乱码）和英文。（Support zh_CN and en_US.）
 
 ## 使用
 
@@ -122,6 +122,8 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
 ## 配置方法
 
 > 请按照[注意事项](#注意事项)和脚本内的说明进行配置。
+>
+> 国际服的适配还在开发中，请暂时不要使用。
 
 **请在安装好一个版本后开始配置**。
 
@@ -133,9 +135,14 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
 
 3. 把原启动器拖入：`Snowbreak_ServerSwitcher\Launchers\`文件夹内。
 
+   > 如果是国际服，可以考虑使用此示例：`Snowbreak_ServerSwitcher\Launchers\worldwide`。
+
 4. 把原启动器所在目录下的`preference.json`复制到启动器新位置。
 
-   > 补充说明：请确保真正的启动器所在目录下有`preference.json`文件，如果没有这个文件，启动器会以为是第一次运行，进而无法定位到正确的游戏数据目录。
+   > 补充说明：
+   >
+   > 1. 请确保真正的启动器所在目录下有`preference.json`文件，如果没有这个文件，启动器会以为是第一次运行，进而无法定位到正确的游戏数据目录。
+   > 2. 国际服默认不可与国服共用文件，所以您应该安装在其它位置，使用的`preference.json`也同样不能与国服的共用。
 
 5. 把你要的其它渠道的安装包（如：`CBJQ_Setup.exe`）用解压软件打开，打开`app.7z`（压缩包内的压缩包）。
 
@@ -145,17 +152,17 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
 
 8. 来到脚本`Snowbreak_ServerSwitcher\CBJQ_SS.main.bat`中的“用户变量设定区”，设置说明了的*6个*变量。（没有就设为`%launcher_none%`）
 
-   > `launcher_worldwide`, `launcher_bilibili`, `launcher_kingsoft`；（没有就设为`%launcher_none%`）
+   > `launcher_worldwide`, `launcher_bilibili`, `launcher_kingsoft`；（没有就设为`%launcher_none%`）<br/>
    > `launcher_worldwide_dest`, `launcher_bilibili_dest`, `launcher_kingsoft_dest`。（目的位置，就是原本应该在的路径）
 
-   **首尾不要有多余的空格！**示例：
+   **首尾不要有多余的空格！**储存路径建议使用绝对路径而非相对路径。若移动了储存路径，可能会错误识别未存在，尝试切换或删除目的文件即可解决。目的目录必须存在，程序不会自动创建缺失的目录。**示例**：
 
    ``` bat
-   @set launcher_worldwide=%~dp0Launchers\snow_launcher-worldwide.exe
+   @set launcher_worldwide=%~dp0Launchers\worldwide\snow_launcher-worldwide.exe
    @set launcher_bilibili=%~dp0Launchers\snow_launcher-bilibili.exe
    @set launcher_kingsoft=%~dp0Launchers\snow_launcher-kingsoft.exe
    
-   @set launcher_worldwide_dest=..\snow_launcher.exe
+   @set launcher_worldwide_dest=..\worldwide\snow_launcher.exe
    @set launcher_bilibili_dest=..\snow_launcher.exe
    @set launcher_kingsoft_dest=..\snow_launcher.exe
    ```

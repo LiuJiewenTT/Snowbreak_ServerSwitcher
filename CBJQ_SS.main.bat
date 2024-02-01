@@ -6,24 +6,25 @@
 @REM Set codepage to UTF-8(65001)
 @for /F "tokens=2 delims=:" %%i in ('chcp') do @( set /A codepage=%%i ) 
 @call :func_ensureACP
-REM 已设定代码页，如遇乱码请检查文件编码或终端字体。
+REM 已设定代码页，如遇乱码请检查文件编码或终端字体，通常可以得到解决。
 
 setlocal enabledelayedexpansion
 
 @REM ----------------------------------------------
 @REM 运行环境注意（普通玩家）
 
-@REM 1. 使用前请确认“用户变量设定区”的已经设置好了启动器路径。
-@REM 2. 除了“用户变量设定区”，其它都不要动。
-@REM 3. 请确保路径中不包含这些符号：“[]”
+@REM 1 使用前请确认“用户变量设定区”的已经设置好了启动器路径。
+@REM 2 除了“用户变量设定区”，其它都不要动。
+@REM 3 请确保路径中不包含这些符号："[]"
 
 @REM ----------------------------------------------
 @REM 运行环境注意（高级玩家）
 
-@REM 1. 从Powershell启动可能会存在LANG环境变量，缺省值优先从LANG选择。
-@REM 2. 启动参数必须选项在前服务器在后，指定多个服务器会依次触发操作。
-@REM 3. 上部分第三点具体说明：目的路径字符串不得包含启动器储存路径字符串。
+@REM 1 从Powershell启动可能会存在LANG环境变量，缺省值优先从LANG选择。
+@REM 2 启动参数必须选项在前服务器在后，指定多个服务器会依次触发相应操作。
+@REM 3 上一节第三点具体说明：目的路径字符串不得包含启动器储存路径字符串。
 
+@REM pause
 @REM ----------------------------------------------
 @REM 用户变量预设值区
 
@@ -32,15 +33,17 @@ setlocal enabledelayedexpansion
 @REM ----------------------------------------------
 @REM 用户变量设定区
 
-@REM 以下三行请填入启动器的储存路径(包含文件名，不加引号，不可以为空，没有就填“%launcher_none%”)。
-@set launcher_worldwide=.\Launchers\p1.exe
-@set launcher_bilibili=.\Launchers\p2.exe
-@set launcher_kingsoft=.\Launchers\p3.exe
+@REM 请确保以下六项的每一项（若有需要）都存在，不存在的目录请先行创建，否则程序无法正常运行。
 
-@REM 以下三行请填入启动器的目的地址(即原地址，包含文件名，不加引号，不可以为空)。路径完全相同时仅能启动一个，大概率出错。
-@set launcher_worldwide_dest=.\snow_launcher.exe
-@set launcher_bilibili_dest=.\snow_launcher.exe
-@set launcher_kingsoft_dest=.\snow_launcher.exe
+@REM 以下三行请填入启动器的储存路径(包含文件名，不加引号，不可以为空，建议使用绝对路径，没有就填“%launcher_none%”)。若移动了储存路径，可能会错误识别未存在，尝试切换或删除目的文件即可解决。
+@set launcher_worldwide=%~dp0Launchers\worldwide\snow_launcher-worldwide.exe
+@set launcher_bilibili=%~dp0Launchers\snow_launcher-bilibili.exe
+@set launcher_kingsoft=%~dp0Launchers\snow_launcher-kingsoft.exe
+
+@REM 以下三行请填入启动器的目的地址(即原地址，包含文件名，不加引号，不可以为空)。路径完全相同时仅能启动一个，启动器限制。
+@set launcher_worldwide_dest=..\worldwide\snow_launcher.exe
+@set launcher_bilibili_dest=..\snow_launcher.exe
+@set launcher_kingsoft_dest=..\snow_launcher.exe
 
 @REM 以下两句最多启用一个。
 @set LANG_default=zh
@@ -83,6 +86,7 @@ set flag_nostart=false
 set flag_nopause=false
 
 set threshold_abort=10
+set exit_value=0
 
 :loop1
 
@@ -104,6 +108,7 @@ set threshold_abort=10
         if /I "%flag_nostart%" == "false" ( call "%launcher_worldwide_dest%" )
         if ERRORLEVEL 1 (
             if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist^^! )
+            set exit_value=2
         )
     ) else if /I "%~1" == "bilibili" (
         if /I "%mLANG%" == "zh" ( echo [INFO] 启动B服 ) else ( echo [INFO] Start Option: bilibili )
@@ -115,6 +120,7 @@ set threshold_abort=10
         if /I "%flag_nostart%" == "false" ( call "%launcher_bilibili_dest%" )
         if ERRORLEVEL 1 (
             if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist^^! )
+            set exit_value=2
         )
     ) else if /I "%~1" == "kingsoft" (
         if /I "%mLANG%" == "zh" ( echo [INFO] 启动官服 ) else ( echo [INFO] Start Option: kingsoft )
@@ -126,9 +132,11 @@ set threshold_abort=10
         if /I "%flag_nostart%" == "false" ( call "%launcher_kingsoft_dest%" )
         if ERRORLEVEL 1 (
             if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist^^! )
+            set exit_value=2
         )
     ) else (
         if /I "%mLANG%" == "zh" ( echo [ERROR] 【未知】：未配置此服务器的启动器！【%~1】 ) else ( echo [ERROR] [Unknown]: Launcher to this server is not configured^^! [%~1] )
+        set exit_value=3
     )
 )
 shift /1
@@ -139,10 +147,21 @@ goto:loop1
 @REM ----------------------------------------------
 
 
-@REM 程序正常退出
+@REM 程序退出
+echo exit_value=%exit_value%
 if /I "%flag_nopause%" NEQ "true" ( pause )
-@endlocal
-@ EXIT /B 0
+@REM @endlocal
+@ EXIT /B %exit_value%
+
+@REM ----------------------------------------------
+@REM exit_value含义
+
+@REM 1  指示未完成设定的错误，约等于未知错误。
+@REM 2  不存在可执行的启动器。
+@REM 3  切服器未找到此服务器启动选项的配置。
+@REM 4  目的地的启动器并非符号链接，非本程序创建。
+@REM 5  启动器链接失败。
+@REM ----------------------------------------------
 
 :func_ensureACP
     @if /I %codepage% NEQ 65001 ( 
@@ -155,8 +174,8 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
     @echo Snowbreak_ServerSwitcher(CBJQ_SS)
     @echo Description: This is a server switcher for CBJQ(Snowbreak: Containment Zone) implemented with Windows bat script.
     @echo Author: LiuJiewenTT
-    @echo Version: 1.0.0
-    @echo Date: 2024-01-25
+    @echo Version: 1.0.1
+    @echo Date: 2024-02-01
     @echo Note：Github Repo：^<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher^>
     @echo       Author's Email：^<liuljwtt@163.com^>
 @ goto:eof
@@ -165,8 +184,8 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
     @echo 尘白禁区服务器切换器(CBJQ_SS)
     @echo 描述: 这是一个使用Windows批处理脚本实现的尘白禁区服务器切换器。
     @echo 作者: LiuJiewenTT
-    @echo 版本: 1.0.0
-    @echo 日期: 2024-01-25
+    @echo 版本: 1.0.1
+    @echo 日期: 2024-02-01
     @echo 备注：Github项目链接：^<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher^>
     @echo       作者Email地址：^<liuljwtt@163.com^>
 @ goto:eof
@@ -182,7 +201,7 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
     if /I "%mLANG%" == "zh" ( echo [INFO] 【启动器文件名】：%launchername%) else ( echo [INFO] [Filename of Launcher]: %launchername% )
     if /I "%mLANG%" == "zh" ( echo [INFO] 【启动器储存路径】：%reallauncherpath%) else ( echo [INFO] [Store Path of Launcher]: %reallauncherpath% )
 
-    dir "%launcherpath%" | findstr "<SYMLINK>" | findstr /E /C:"[%reallauncherpath%]"
+    dir "%launcherpath%" 2>nul | findstr "<SYMLINK>" | findstr /E /C:"[%reallauncherpath%]"
 
     if ERRORLEVEL 1 (
         if exist "%launcherpath%" (
@@ -193,6 +212,7 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
             if ERRORLEVEL 1 (
                 if /I "%mLANG%" == "zh" ( 
                     echo [ERROR] 目的地的启动器并非符号链接，非本程序创建。为保证真的启动器不被错删，程序终止。使用程序前，请按照说明做好准备。 
+                    set exit_value=4
                 ) else ( 
                     echo ^
 [ERROR] Launcher in destination is not a SYMLINK, which means it was not created by this program. ^
@@ -216,6 +236,7 @@ Before using this program, please follow the instructions to set up.
     dir "%launcherpath%" | findstr "<SYMLINK>" | findstr /E /C:"[%reallauncherpath%]"
     if ERRORLEVEL 1 (
         if /I "%mLANG%" == "zh" ( echo [ERROR] 链接失败 ) else ( echo [ERROR] Failed to link. )
+        set exit_value=5
     ) else (
         if /I "%mLANG%" == "zh" ( echo [INFO] 已完全准备好。 ) else ( echo [INFO] Everything is ready. )
     )
