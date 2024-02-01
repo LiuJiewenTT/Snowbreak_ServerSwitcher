@@ -6,46 +6,46 @@
 @REM Set codepage to UTF-8(65001)
 @for /F "tokens=2 delims=:" %%i in ('chcp') do @( set /A codepage=%%i ) 
 @call :func_ensureACP
-REM 已设定代码页，如遇乱码请检查文件编码或终端字体，通常可以得到解决。
+REM 已设定代码页，如遇乱码请检查文件编码或终端字体，通常可以得到解决。 
 
 setlocal enabledelayedexpansion
 
 @REM ----------------------------------------------
-@REM 运行环境注意（普通玩家）
+@REM 运行环境注意（普通玩家） 
 
-@REM 1 使用前请确认“用户变量设定区”的已经设置好了启动器路径。
-@REM 2 除了“用户变量设定区”，其它都不要动。
-@REM 3 请确保路径中不包含这些符号："[]"
+@REM 1. 使用前请确认“用户变量设定区”的已经设置好了启动器路径。 
+@REM 2. 除了“用户变量设定区”，其它都不要动。 
+@REM 3. 请确保路径中不包含这些符号："[]" 
 
 @REM ----------------------------------------------
-@REM 运行环境注意（高级玩家）
+@REM 运行环境注意（高级玩家） 
 
-@REM 1 从Powershell启动可能会存在LANG环境变量，缺省值优先从LANG选择。
-@REM 2 启动参数必须选项在前服务器在后，指定多个服务器会依次触发相应操作。
-@REM 3 上一节第三点具体说明：目的路径字符串不得包含启动器储存路径字符串。
+@REM 1. 从Powershell启动可能会存在LANG环境变量，缺省值优先从LANG选择。 
+@REM 2. 启动参数必须选项在前服务器在后，指定多个服务器会依次触发相应操作。 
+@REM 3. 关于上一节第三点的补充说明：目的路径字符串不得包含启动器储存路径字符串。 
 
 @REM pause
 @REM ----------------------------------------------
-@REM 用户变量预设值区
+@REM 用户变量预设值区 
 
 @set launcher_none=none
 
 @REM ----------------------------------------------
-@REM 用户变量设定区
+@REM 用户变量设定区 
 
-@REM 请确保以下六项的每一项（若有需要）都存在，不存在的目录请先行创建，否则程序无法正常运行。
+@REM 请确保以下六项的每一项（若有需要）都存在，不存在的目录请先行创建，否则程序无法正常运行。 
 
-@REM 以下三行请填入启动器的储存路径(包含文件名，不加引号，不可以为空，建议使用绝对路径，没有就填“%launcher_none%”)。若移动了储存路径，可能会错误识别未存在，尝试切换或删除目的文件即可解决。
+@REM 以下三行请填入启动器的储存路径(包含文件名，不加引号，不可以为空，建议使用绝对路径，没有就填“%launcher_none%”)。若移动了储存路径，可能会错误识别未存在，尝试切换或删除目的文件即可解决。 
 @set launcher_worldwide=%~dp0Launchers\worldwide\snow_launcher-worldwide.exe
 @set launcher_bilibili=%~dp0Launchers\snow_launcher-bilibili.exe
 @set launcher_kingsoft=%~dp0Launchers\snow_launcher-kingsoft.exe
 
-@REM 以下三行请填入启动器的目的地址(即原地址，包含文件名，不加引号，不可以为空)。路径完全相同时仅能启动一个，启动器限制。
+@REM 以下三行请填入启动器的目的地址(即原地址，包含文件名，不加引号，不可以为空)。路径完全相同时仅能启动一个，启动器限制。 
 @set launcher_worldwide_dest=..\worldwide\snow_launcher.exe
 @set launcher_bilibili_dest=..\snow_launcher.exe
 @set launcher_kingsoft_dest=..\snow_launcher.exe
 
-@REM 以下两句最多启用一个。
+@REM 以下两句最多启用一个。 
 @set LANG_default=zh
 @REM @set LANG_default=en
 
@@ -55,13 +55,13 @@ setlocal enabledelayedexpansion
 @ if not defined mLANG (
     @REM mLANG: module's LANG
     if defined LANG (
-        @REM 使用环境变量选择语言
+        @REM 使用环境变量选择语言 
         for /f "tokens=1,* delims=_" %%i in ("%LANG%") do ( set mLANG=%%i)
     ) else (
-        @REM 使用预设默认语言
+        @REM 使用预设默认语言 
         set mLANG=%LANG_default%
         if not defined mLANG (
-            @REM 普通玩家不要动
+            @REM 普通玩家不要动 
             set mLANG=zh
             @REM set mLANG=en
         )
@@ -71,7 +71,7 @@ setlocal enabledelayedexpansion
 set mLANG
 
 @REM ----------------------------------------------
-@REM 初始化已完成，正式进入程序。
+@REM 初始化已完成，正式进入程序。 
 
 if /I "%mLANG%" EQU "zh" (
     call :func_programinfo_zh_cn
@@ -80,7 +80,7 @@ if /I "%mLANG%" EQU "zh" (
 )
 
 @REM ----------------------------------------------
-@REM 程序加载完成，开始工作。
+@REM 程序加载完成，开始工作。 
 
 set flag_nostart=false
 set flag_noswitch=false
@@ -92,7 +92,7 @@ set exit_value=0
 :loop1
 
 @ if "%~1" == "" (
-    @REM 无参数，仅输出程序信息。
+    @REM 无参数，仅输出程序信息。 
     goto:loop1_break
 ) else if "%~1" == "-nostart" (
     set flag_nostart=true
@@ -112,7 +112,7 @@ set exit_value=0
         )
         if /I "%flag_nostart%" == "false" ( call "%launcher_worldwide_dest%" )
         if ERRORLEVEL 1 (
-            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist^^! )
+            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
             set exit_value=2
         )
     ) else if /I "%~1" == "bilibili" (
@@ -126,7 +126,7 @@ set exit_value=0
         )
         if /I "%flag_nostart%" == "false" ( call "%launcher_bilibili_dest%" )
         if ERRORLEVEL 1 (
-            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist^^! )
+            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
             set exit_value=2
         )
     ) else if /I "%~1" == "kingsoft" (
@@ -140,7 +140,7 @@ set exit_value=0
         )
         if /I "%flag_nostart%" == "false" ( call "%launcher_kingsoft_dest%" )
         if ERRORLEVEL 1 (
-            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的启动器！ ) else ( echo [ERROR] [Detected]: Launcher to this server does not exist^^! )
+            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
             set exit_value=2
         )
     ) else (
@@ -156,20 +156,21 @@ goto:loop1
 @REM ----------------------------------------------
 
 
-@REM 程序退出
+@REM 程序退出 
 echo exit_value=%exit_value%
 if /I "%flag_nopause%" NEQ "true" ( pause )
 @REM @endlocal
 @ EXIT /B %exit_value%
 
 @REM ----------------------------------------------
-@REM exit_value含义
+@REM exit_value含义 
+@REM 备注：仅能返回最后的错误代码。 
 
-@REM 1  指示未完成设定的错误，约等于未知错误。
-@REM 2  不存在可执行的启动器。
-@REM 3  切服器未找到此服务器启动选项的配置。
-@REM 4  目的地的启动器并非符号链接，非本程序创建。
-@REM 5  启动器链接失败。
+@REM 1  指示未完成设定的错误，约等于未知错误。 
+@REM 2  不存在可执行的启动器。 
+@REM 3  切服器未找到此服务器启动选项的配置。 
+@REM 4  目的地的启动器并非符号链接，非本程序创建。 
+@REM 5  启动器链接失败。 
 @REM ----------------------------------------------
 
 :func_ensureACP
