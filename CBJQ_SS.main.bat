@@ -83,6 +83,7 @@ if /I "%mLANG%" EQU "zh" (
 @REM 程序加载完成，开始工作。
 
 set flag_nostart=false
+set flag_noswitch=false
 set flag_nopause=false
 
 set threshold_abort=10
@@ -95,15 +96,19 @@ set exit_value=0
     goto:loop1_break
 ) else if "%~1" == "-nostart" (
     set flag_nostart=true
+) else if "%~1" == "-noswitch" (
+    set flag_noswitch=true
 ) else if "%~1" == "-nopause" (
     set flag_nopause=true
 ) else (
     @ if /I "%~1" == "worldwide" (
         if /I "%mLANG%" == "zh" ( echo [INFO] 启动国际服 ) else ( echo [INFO] Start Option: worldwide )
-        call :func_updateSymlink "%launcher_worldwide_dest%" "%launcher_worldwide%"
-        if ERRORLEVEL %threshold_abort% (
-            if /I "%mLANG%" == "zh" ( echo [ERROR] 【终止】：程序异常终止！ ) else ( echo [ERROR] [Abort]: Program Abort^^! )
-            goto:loop1_break
+        if /I "%flag_noswitch%" == "false" (
+            call :func_updateSymlink "%launcher_worldwide_dest%" "%launcher_worldwide%"
+            if ERRORLEVEL %threshold_abort% (
+                if /I "%mLANG%" == "zh" ( echo [ERROR] 【终止】：程序异常终止！ ) else ( echo [ERROR] [Abort]: Program Abort^^! )
+                goto:loop1_break
+            )
         )
         if /I "%flag_nostart%" == "false" ( call "%launcher_worldwide_dest%" )
         if ERRORLEVEL 1 (
@@ -112,10 +117,12 @@ set exit_value=0
         )
     ) else if /I "%~1" == "bilibili" (
         if /I "%mLANG%" == "zh" ( echo [INFO] 启动B服 ) else ( echo [INFO] Start Option: bilibili )
-        call :func_updateSymlink "%launcher_bilibili_dest%" "%launcher_bilibili%"
-        if ERRORLEVEL %threshold_abort% (
-            if /I "%mLANG%" == "zh" ( echo [ERROR] 【终止】：程序异常终止！ ) else ( echo [ERROR] [Abort]: Program Abort^^! )
-            goto:loop1_break
+        if /I "%flag_noswitch%" == "false" (
+            call :func_updateSymlink "%launcher_bilibili_dest%" "%launcher_bilibili%"
+            if ERRORLEVEL %threshold_abort% (
+                if /I "%mLANG%" == "zh" ( echo [ERROR] 【终止】：程序异常终止！ ) else ( echo [ERROR] [Abort]: Program Abort^^! )
+                goto:loop1_break
+            )
         )
         if /I "%flag_nostart%" == "false" ( call "%launcher_bilibili_dest%" )
         if ERRORLEVEL 1 (
@@ -124,10 +131,12 @@ set exit_value=0
         )
     ) else if /I "%~1" == "kingsoft" (
         if /I "%mLANG%" == "zh" ( echo [INFO] 启动官服 ) else ( echo [INFO] Start Option: kingsoft )
-        call :func_updateSymlink "%launcher_kingsoft_dest%" "%launcher_kingsoft%"
-        if ERRORLEVEL %threshold_abort% (
-            if /I "%mLANG%" == "zh" ( echo [ERROR] 【终止】：程序异常终止！ ) else ( echo [ERROR] [Abort]: Program Abort^^! )
-            goto:loop1_break
+        if /I "%flag_noswitch%" == "false" (
+            call :func_updateSymlink "%launcher_kingsoft_dest%" "%launcher_kingsoft%"
+            if ERRORLEVEL %threshold_abort% (
+                if /I "%mLANG%" == "zh" ( echo [ERROR] 【终止】：程序异常终止！ ) else ( echo [ERROR] [Abort]: Program Abort^^! )
+                goto:loop1_break
+            )
         )
         if /I "%flag_nostart%" == "false" ( call "%launcher_kingsoft_dest%" )
         if ERRORLEVEL 1 (

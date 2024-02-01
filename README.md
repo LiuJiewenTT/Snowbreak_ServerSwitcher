@@ -60,6 +60,12 @@ date: 2024-02-01 20:09:00 +0800
 
 > 首次启动前需要完成配置，具体看[下一部分](#配置方法)说明。
 
+命令格式：
+
+``` bat
+CBJQ_SS.main [OPTIONS] [SERVER]
+```
+
 ### 注意事项
 
 *补充说明：请确保真正的启动器所在目录下有`preference.json`文件，如果没有这个文件，启动器会以为是第一次运行，进而无法定位到正确的游戏数据目录。*
@@ -81,7 +87,8 @@ date: 2024-02-01 20:09:00 +0800
 **启动参数必须选项在前服务器在后，指定多个服务器会依次触发操作。**
 
 1. `-nopause`：从命令行启动可以指定该参数，使得程序结束时不暂停。
-2. **`-nostart`**：仅切换启动器，不顺带启动程序。
+2. **`-nostart`**：**仅切换**启动器，**不顺带启动**程序。
+3. `-noswitch`：**仅启动**程序，**不切换**启动器。
 
 程序已经根据当前情况预设好了三种服务器（名）：
 
@@ -114,6 +121,12 @@ CBJQ_SS.main.bat -nostart -nopause bilibili
 ```
 
 例5：
+
+```bat
+CBJQ_SS.main.bat -noswitch -nopause bilibili
+```
+
+例6（没什么意义）：
 
 ``` bat
 CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
