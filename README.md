@@ -70,6 +70,8 @@ date: 2024-02-01 20:09:00 +0800
 CBJQ_SS.main [OPTIONS] [SERVER]
 ```
 
+完成配置后，可使用[<strong style="color:red">GUI</strong>](#guis)进行操作。
+
 ### 注意事项
 
 *补充说明：请确保真正的启动器所在目录下有`preference.json`文件，如果没有这个文件，启动器会以为是第一次运行，进而无法定位到正确的游戏数据目录。*
@@ -83,8 +85,6 @@ CBJQ_SS.main [OPTIONS] [SERVER]
 1. 从Powershell启动可能会存在`LANG`环境变量，程序将优先从`LANG`选择`mLANG`缺省值。
 2. 启动参数必须选项在前服务器在后，指定多个服务器会依次触发操作。
 3. 上部分第三点具体说明：目的路径字符串不得包含启动器储存路径字符串。
-
-完成配置后，可使用[<strong style="color:red">GUI</strong>](#guis)进行操作。
 
 ### 参数
 
@@ -140,7 +140,7 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
 
 > 请按照[注意事项](#注意事项)和脚本内的说明进行配置。
 >
-> **国际服的适配**<del>还在开发中，请暂时不要使用。</del>**默认支持，没有什么特殊的地方，只是不能和国服共用资源、启动器和启动器配置文件。**<br/>“要重装系统”是胡扯，“要重下资源”倒是有可能需要“2+1”次（详细原因见如下步骤4）。更多信息：<br/>
+> **国际服的适配**还在开发中，请暂时不要使用。<del>**默认支持，没有什么特殊的地方，只是不能和国服共用资源、启动器和启动器配置文件。**<br/>“要重装系统”是胡扯，“要重下资源”倒是有可能需要“2+1”次（详细原因见如下步骤4）。</del>罪魁祸首已经被我揪出来了，请等待后续措施。更多信息：<br/>
 > 探究实践日志见：[日志](国际服兼容研究/国际服兼容研究.md)。
 
 **请在安装好一个版本后开始配置**。(推荐优先国服)
@@ -153,7 +153,7 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
 
 3. 把原启动器拖入：`Snowbreak_ServerSwitcher\Launchers\`文件夹内。
 
-   > 如果是国际服，可以考虑使用此示例：`Snowbreak_ServerSwitcher\Launchers\worldwide`。
+   > 如果是国际服，可以考虑使用此示例：`Snowbreak_ServerSwitcher\Launchers\worldwide\`。
 
 4. 把原启动器所在目录下的`preference.json`复制到启动器新位置。
 
@@ -164,11 +164,11 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
    >
    >    > 启动器也不是非要放在另外的安装位置，只要和国服不在同一目录即可：
    >    >
-   >    > 更改`preference.json`中资源储存位置，无此文件直接启动可能导致当处于同一目录时属于国服的`manifest.json`被覆写而使国服需要重新下载资源。非要装在一起，请先设置好国际服的`preference.json`或备份一下国服的`preference.json`
+   >    > 更改`preference.json`中资源储存位置，无此文件直接启动可能导致当处于同一目录时属于国服的`data\manifest.json`被覆写而使国服需要重新下载资源。非要装在一起，请先设置好国际服的`preference.json`或备份一下国服的`manifest.json`。
 
 5. 把你要的其它渠道的安装包（如：`CBJQ_Setup.exe`）用解压软件打开，打开`app.7z`（压缩包内的压缩包）。
 
-6. 将里面的启动器复制到刚才那个启动器的新位置去，把它们放到一起（同一目录）。
+6. 将里面的启动器复制到刚才那个启动器的新位置去，把它们放到一起（同一目录）（<strong style="color:red">国际服启动器不要和国服启动器放一起！！！</strong>）。
 
 7. 给不同启动器重命名。
 
