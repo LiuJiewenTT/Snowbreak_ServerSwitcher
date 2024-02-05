@@ -41,7 +41,7 @@ setlocal enabledelayedexpansion
 @set launcher_kingsoft=%~dp0Launchers\snow_launcher-kingsoft.exe
 
 @REM 以下三行请填入启动器的目的地址(即原地址，包含文件名，不加引号，不可以为空)。路径完全相同时仅能启动一个，启动器限制。 
-@set launcher_worldwide_dest=..\worldwide\snow_launcher.exe
+@set launcher_worldwide_dest=..\snow_launcher.exe
 @set launcher_bilibili_dest=..\snow_launcher.exe
 @set launcher_kingsoft_dest=..\snow_launcher.exe
 

@@ -48,6 +48,8 @@ date: 2024-02-01 20:09:00 +0800
 
 <strong style= "color:red"> 此外，在游戏目录内（启动器原始位置），不同渠道的启动器可以共用相同的文件名。</strong>也就是说，如果你不是一起开那么一个桌面快捷方式就足够了。（此时也不用担心更新可能出现混乱导致快捷方式或是其它程序（如，Razor Cortex）出现路径错误。）
 
+> 本切服器已确认适配了*Razor Cortex (雷游)*，但暂未适配“桌面快捷方式”。
+
 当然，如果你就是要多个一起开，那，如果可以的话，本程序也可以通过修改配置满足你。可惜，启动器进行了限制，不允许多开。
 
 > 具体什么问题可以联系作者，有空会协助解决。
@@ -136,9 +138,10 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
 
 > 请按照[注意事项](#注意事项)和脚本内的说明进行配置。
 >
-> 国际服的适配还在开发中，请暂时不要使用。
+> **国际服的适配**<del>还在开发中，请暂时不要使用。</del>**默认支持，没有什么特殊的地方，只是不能和国服共用资源、启动器和启动器配置文件。**<br/>“要重装系统”是胡扯，“要重下资源”倒是有可能需要各“2+1”次（详细原因见如下步骤4）。更多信息：<br/>
+> 探究实践日志见：[日志](国际服兼容研究/国际服兼容研究.md)。
 
-**请在安装好一个版本后开始配置**。
+**请在安装好一个版本后开始配置**。(推荐优先国服)
 
 > 以下为示例，看得懂的可以自行配置。
 
@@ -155,7 +158,11 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
    > 补充说明：
    >
    > 1. 请确保真正的启动器所在目录下有`preference.json`文件，如果没有这个文件，启动器会以为是第一次运行，进而无法定位到正确的游戏数据目录。
-   > 2. 国际服默认不可与国服共用文件，所以您应该安装在其它位置，使用的`preference.json`也同样不能与国服的共用。
+   > 2. 国际服默认不可与国服共用文件，所以（简单的说最简单的办法是）您应该安装在其它位置，使用的`preference.json`也同样不能与国服的共用。
+   >
+   >    > 启动器也不是非要放在另外的安装位置，只要和国服不在同一目录即可：
+   >    >
+   >    > 更改`preference.json`中资源储存位置，无此文件直接启动可能导致当处于同一目录时属于国服的`manifest.json`被覆写而使国服需要重新下载资源。非要装在一起，请先设置好国际服的`preference.json`或备份一下国服的`preference.json`
 
 5. 把你要的其它渠道的安装包（如：`CBJQ_Setup.exe`）用解压软件打开，打开`app.7z`（压缩包内的压缩包）。
 
@@ -175,7 +182,7 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
    @set launcher_bilibili=%~dp0Launchers\snow_launcher-bilibili.exe
    @set launcher_kingsoft=%~dp0Launchers\snow_launcher-kingsoft.exe
    
-   @set launcher_worldwide_dest=..\worldwide\snow_launcher.exe
+   @set launcher_worldwide_dest=..\snow_launcher.exe
    @set launcher_bilibili_dest=..\snow_launcher.exe
    @set launcher_kingsoft_dest=..\snow_launcher.exe
    ```
