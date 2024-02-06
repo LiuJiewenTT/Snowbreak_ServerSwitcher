@@ -140,7 +140,7 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
 
 > 请按照[注意事项](#注意事项)和脚本内的说明进行配置。
 >
-> **国际服的适配**还在开发中，请暂时不要使用。<del>**默认支持，没有什么特殊的地方，只是不能和国服共用资源、启动器和启动器配置文件。**<br/>“要重装系统”是胡扯，“要重下资源”倒是有可能需要“2+1”次（详细原因见如下步骤4）。</del>罪魁祸首已经被我揪出来了，请等待后续措施。更多信息：<br/>
+> **国际服的适配**还在开发中，请暂时不要使用。<del>**默认支持，没有什么特殊的地方，只是不能和国服共用资源、启动器和启动器配置文件。**<br/>“要重装系统”是胡扯，“要重下资源”倒是有可能需要“2+1”次（详细原因见如下步骤4）。</del>罪魁祸首已经被我揪出来了，<del>请等待后续措施。</del>`v1.1.0`版已尝试适配。更多信息：<br/>
 > 探究实践日志见：[日志](国际服兼容研究/国际服兼容研究.md)。
 
 **请在安装好一个版本后开始配置**。(推荐优先国服)
@@ -190,6 +190,22 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
    ```
 
    不会改参数就按这里的命名，然后复制这一段将对应代码替换。
+
+   > 如果你既玩国服又玩国际服，请参照配置后续几行：
+   >
+   > ``` bat
+   > @set StartupSettingsName_homeland=startup-homeland.settings
+   > @set StartupSettingsName_worldwide=startup-worldwide.settings
+   > ```
+   >
+   > 如果不是，这样即可：
+   >
+   > ``` bat
+   > @REM @set StartupSettingsName_homeland=startup-homeland.settings
+   > @REM @set StartupSettingsName_worldwide=startup-worldwide.settings
+   > ```
+   >
+   > 即，在行首添加`@REM`注释掉命令使之不生效即可。如果用过上面的，配置且运行通过后，不想重新生成`startup.settings`（虽然无所谓），那只注释一个并留下自己要用的那个即可。
 
 9. 使用命令行按照上述参数示例启动/切换启动器；或使用[<strong style="color:red">GUI</strong>](#guis)操作。
 
