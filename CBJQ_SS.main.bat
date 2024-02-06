@@ -313,22 +313,26 @@ Before using this program, please follow the instructions to set up.
     ) else (
         set exit_value=7
         if /I "%mLANG%" == "zh" ( 
-            echo [INFO] 对应启动设置不存在，请做好重命名工作。 
+            echo [INFO] 对应的启动设置实际文件不存在，请做好重命名工作。 
             echo 目录：%StartupSettingsDir_path%
             echo 需要的文件名：%RealStartupSettingsName%
         ) else ( 
-            echo [INFO] Corresponding file does not exist, check your renaming work. 
+            echo [INFO] Corresponding actual file does not exist, check your renaming work. 
             echo Directory: %StartupSettingsDir_path%
             echo Required Filename: %RealStartupSettingsName%
         )
     )
     if "%~1" NEQ "%flag_StartupSettings%" (
         if /I "%mLANG%" == "zh" ( echo [INFO] 准备切换启动设置。 ) else ( echo [INFO] Switching Startup Settings. )
-        if /I "%mLANG%" == "zh" ( echo [INFO] 正在删除旧启动设置（或其链接）。 ) else ( echo [INFO] Deleting Old Startup Settings ^(or its link^). )
-        del "%StartupSettingsDir_path%\startup.settings"
-        if ERRORLEVEL 1 (
-            if /I "%mLANG%" == "zh" ( echo [INFO] 删除失败。 ) else ( echo [INFO] Failed to delete. )
-            goto:eof
+        if "%flag_StartupSettings%" NEQ "none" (
+            if /I "%mLANG%" == "zh" ( echo [INFO] 正在删除旧启动设置（或其链接）。 ) else ( echo [INFO] Deleting Old Startup Settings ^(or its link^). )
+            del "%StartupSettingsDir_path%\startup.settings"
+            if ERRORLEVEL 1 (
+                if /I "%mLANG%" == "zh" ( echo [INFO] 删除失败。 ) else ( echo [INFO] Failed to delete. )
+                goto:eof
+            )
+        ) else (
+            if /I "%mLANG%" == "zh" ( echo [INFO] 当前不存在启动设置链接。 ) else ( echo [INFO] There is no Startup Settings link existed for now. )
         )
         if /I "%mLANG%" == "zh" ( echo [INFO] 准备链接到新启动设置。 ) else ( echo [INFO] Linking to new Startup Settings. )
         @REM mklink "%StartupSettingsDir_path%\startup.settings" "%StartupSettingsDir_path%\%RealStartupSettingsName%"
