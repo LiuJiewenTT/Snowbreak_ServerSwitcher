@@ -116,13 +116,15 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
                 goto:loop1_break
             )
         )
-        call :switchStartupSetting "worldwide"
-        if "!exit_value!" GEQ "%retv_range_startup_start%" ( 
-            shift /1
-            goto:loop1
+        if exist "%launcher_worldwide%" ( 
+            call :switchStartupSetting "worldwide" 
+            if "!exit_value!" GEQ "%retv_range_startup_start%" ( 
+                shift /1
+                goto:loop1
+            )
         )
         if /I "%flag_nostart%" == "false" ( call "%launcher_worldwide_dest%" )
-        if ERRORLEVEL 1 (
+        if ERRORLEVEL 1 if /I "%flag_nostart%" EQU "false" (
             if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
             set exit_value=2
         )
@@ -135,13 +137,15 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
                 goto:loop1_break
             )
         )
-        call :switchStartupSetting "homeland"
-        if "!exit_value!" GEQ "%retv_range_startup_start%" ( 
-            shift /1
-            goto:loop1
+        if exist "%launcher_bilibili%" ( 
+            call :switchStartupSetting "homeland" 
+            if "!exit_value!" GEQ "%retv_range_startup_start%" ( 
+                shift /1
+                goto:loop1
+            )
         )
         if /I "%flag_nostart%" == "false" ( call "%launcher_bilibili_dest%" )
-        if ERRORLEVEL 1 (
+        if ERRORLEVEL 1 if /I "%flag_nostart%" EQU "false" (
             if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
             set exit_value=2
         )
@@ -154,13 +158,15 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
                 goto:loop1_break
             )
         )
-        call :switchStartupSetting "homeland"
-        if "!exit_value!" GEQ "%retv_range_startup_start%" ( 
-            shift /1
-            goto:loop1
+        if exist "%launcher_kingsoft%" ( 
+            call :switchStartupSetting "homeland" 
+            if "!exit_value!" GEQ "%retv_range_startup_start%" ( 
+                shift /1
+                goto:loop1
+            )
         )
         if /I "%flag_nostart%" == "false" ( call "%launcher_kingsoft_dest%" )
-        if ERRORLEVEL 1 (
+        if ERRORLEVEL 1 if /I "%flag_nostart%" EQU "false" (
             if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
             set exit_value=2
         )
@@ -197,6 +203,7 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
 @REM 6  目的地的启动设置文件并非符号链接，非本程序创建。 
 @REM 7  切服器未找到此服务器所需的启动配置实际文件。
 @REM 8  启动设置链接失败。
+@REM 9  在未启用国服国际服支持的情景下断开链接失败。
 @REM ----------------------------------------------
 
 :func_ensureACP
@@ -279,6 +286,8 @@ Before using this program, please follow the instructions to set up.
 @ goto:eof
 
 :switchStartupSetting
+    if /I "%mLANG%" == "zh" ( echo [INFO] 【启动设置目录】：%StartupSettingsDir_path%。 ) else ( echo [INFO] [Directory]: %StartupSettingsDir_path%. )
+
     @REM 出现此默认值表示运行错误 
     set RealStartupSettingsName=Startup.Settings.none
     set flag_StartupSettings=none
@@ -296,10 +305,10 @@ Before using this program, please follow the instructions to set up.
         if ERRORLEVEL 1 if /I "%flag_all_exist%" == "true" (
             if /I "%mLANG%" == "zh" ( 
                 echo [INFO] 当前启动设置文件并非符号链接，请继续配置。 
-                echo 【目录】：%StartupSettingsDir_path%
+                echo [INFO] 【目录】：%StartupSettingsDir_path%
             ) else ( 
                 echo [INFO] Current Startup Settings file is not a link, please configure further. 
-                echo [Directory]: %StartupSettingsDir_path%
+                echo [INFO] [Directory]: %StartupSettingsDir_path%
             )
             set exit_value=6
             goto:eof
@@ -338,15 +347,23 @@ Before using this program, please follow the instructions to set up.
             set exit_value=7
             if /I "%mLANG%" == "zh" ( 
                 echo [INFO] 对应的启动设置实际文件不存在，请做好重命名工作。 
-                echo 【目录】：%StartupSettingsDir_path%
-                echo 【需要的文件名】：%RealStartupSettingsName%
+                echo [INFO] 【目录】：%StartupSettingsDir_path%
+                echo [INFO] 【需要的文件名】：%RealStartupSettingsName%
             ) else ( 
                 echo [INFO] Corresponding actual file does not exist, check your renaming work. 
-                echo [Directory]: %StartupSettingsDir_path%
-                echo [Required Filename]: %RealStartupSettingsName%
+                echo [INFO] [Directory]: %StartupSettingsDir_path%
+                echo [INFO] [Required Filename]: %RealStartupSettingsName%
             )
         ) else (
             if /I "%mLANG%" == "zh" ( echo [INFO] 国服国际服兼容支持特性未在程序配置中启用。 ) else ( echo [INFO] Support for playing both homeland and worldwide is not enabled in program configuration. )
+            if /I "%mLANG%" == "zh" ( echo [INFO] 正在断开启动设置链接。 ) else ( echo [INFO] Breaking link to old Startup Settings. )
+            del "%StartupSettingsDir_path%\startup.settings"
+            if ERRORLEVEL 1 (
+                if /I "%mLANG%" == "zh" ( echo [INFO] 启动设置链接断开失败。 ) else ( echo [INFO] Fail to break the link to the Startup Settings. )
+                set exit_value=9
+            ) else (
+                if /I "%mLANG%" == "zh" ( echo [INFO] 启动设置链接断开成功。 ) else ( echo [INFO] Succeed to break the link to the Startup Settings. )
+            )
             goto:eof
         )
     )
