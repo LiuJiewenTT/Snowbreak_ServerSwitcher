@@ -49,8 +49,8 @@ setlocal enabledelayedexpansion
 @set LANG_default=zh
 @REM @set LANG_default=en
 
-@set StartupSettingsName_homeland=startup-homeland.settings
-@set StartupSettingsName_worldwide=startup-worldwide.settings
+@REM @set StartupSettingsName_homeland=startup-homeland.settings
+@REM @set StartupSettingsName_worldwide=startup-worldwide.settings
 
 @REM ----------------------------------------------
 @REM 程序初始化阶段2
@@ -91,6 +91,7 @@ set flag_nopause=false
 
 set threshold_abort=10
 set exit_value=0
+set retv_range_startup_start=6
 set GameConfigsHome=%APPDATA%\..\Local\Game\Saved
 set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
 
@@ -115,12 +116,16 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
                 goto:loop1_break
             )
         )
+        call :switchStartupSetting "worldwide"
+        if "!exit_value!" GEQ "%retv_range_startup_start%" ( 
+            shift /1
+            goto:loop1
+        )
         if /I "%flag_nostart%" == "false" ( call "%launcher_worldwide_dest%" )
         if ERRORLEVEL 1 (
             if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
             set exit_value=2
         )
-        if /I "%exit_value%" EQU "0" ( call :switchStartupSetting "worldwide" )
     ) else if /I "%~1" == "bilibili" (
         if /I "%mLANG%" == "zh" ( echo [INFO] 启动B服 ) else ( echo [INFO] Start Option: bilibili )
         if /I "%flag_noswitch%" == "false" (
@@ -130,12 +135,16 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
                 goto:loop1_break
             )
         )
+        call :switchStartupSetting "homeland"
+        if "!exit_value!" GEQ "%retv_range_startup_start%" ( 
+            shift /1
+            goto:loop1
+        )
         if /I "%flag_nostart%" == "false" ( call "%launcher_bilibili_dest%" )
         if ERRORLEVEL 1 (
             if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
             set exit_value=2
         )
-        if /I "%exit_value%" EQU "0" ( call :switchStartupSetting "homeland" )
     ) else if /I "%~1" == "kingsoft" (
         if /I "%mLANG%" == "zh" ( echo [INFO] 启动官服 ) else ( echo [INFO] Start Option: kingsoft )
         if /I "%flag_noswitch%" == "false" (
@@ -145,12 +154,16 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
                 goto:loop1_break
             )
         )
+        call :switchStartupSetting "homeland"
+        if "!exit_value!" GEQ "%retv_range_startup_start%" ( 
+            shift /1
+            goto:loop1
+        )
         if /I "%flag_nostart%" == "false" ( call "%launcher_kingsoft_dest%" )
         if ERRORLEVEL 1 (
             if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
             set exit_value=2
         )
-        if /I "%exit_value%" EQU "0" ( call :switchStartupSetting "homeland" )
     ) else (
         if /I "%mLANG%" == "zh" ( echo [ERROR] 【未知】：未配置此服务器的启动器！【%~1】 ) else ( echo [ERROR] [Unknown]: Launcher to this server is not configured^^! [%~1] )
         set exit_value=3
@@ -166,6 +179,8 @@ goto:loop1
 
 @REM 程序退出 
 echo exit_value=%exit_value%
+set "StartupSettingsName_homeland="
+set "StartupSettingsName_worldwide="
 if /I "%flag_nopause%" NEQ "true" ( pause )
 @REM @endlocal
 @ EXIT /B %exit_value%
@@ -269,19 +284,27 @@ Before using this program, please follow the instructions to set up.
     set flag_StartupSettings=none
     set flag_isHomeland=0
     set flag_isWorldwide=0
+    set flag_all_exist=false
+
+    if defined StartupSettingsName_homeland if defined StartupSettingsName_worldwide (
+        set flag_all_exist=true
+    )
     
     if /I "%mLANG%" == "zh" ( echo [INFO] 当前请求的启动设置拥有者：%~1。 ) else ( echo [INFO] Current requested owner of Startup Settings: %~1. )
     if exist "%StartupSettingsDir_path%\startup.settings" (
         dir "%StartupSettingsDir_path%\startup.settings" 2>nul | findstr "<SYMLINK>"
-        if ERRORLEVEL 1 (
+        if ERRORLEVEL 1 if /I "%flag_all_exist%" == "true" (
             if /I "%mLANG%" == "zh" ( 
                 echo [INFO] 当前启动设置文件并非符号链接，请继续配置。 
-                echo 目录：%StartupSettingsDir_path%
+                echo 【目录】：%StartupSettingsDir_path%
             ) else ( 
                 echo [INFO] Current Startup Settings file is not a link, please configure further. 
-                echo Directory: %StartupSettingsDir_path%
+                echo [Directory]: %StartupSettingsDir_path%
             )
             set exit_value=6
+            goto:eof
+        ) else (
+            if /I "%mLANG%" == "zh" ( echo [INFO] 国服国际服兼容支持特性未在程序配置中启用。 ) else ( echo [INFO] Support for playing both homeland and worldwide is not enabled in program configuration. )
             goto:eof
         )
         dir "%StartupSettingsDir_path%\startup.settings" 2>nul | findstr "<SYMLINK>" | findstr /E /C:"[.\%StartupSettingsName_homeland%]"
@@ -314,12 +337,12 @@ Before using this program, please follow the instructions to set up.
         set exit_value=7
         if /I "%mLANG%" == "zh" ( 
             echo [INFO] 对应的启动设置实际文件不存在，请做好重命名工作。 
-            echo 目录：%StartupSettingsDir_path%
-            echo 需要的文件名：%RealStartupSettingsName%
+            echo 【目录】：%StartupSettingsDir_path%
+            echo 【需要的文件名】：%RealStartupSettingsName%
         ) else ( 
             echo [INFO] Corresponding actual file does not exist, check your renaming work. 
-            echo Directory: %StartupSettingsDir_path%
-            echo Required Filename: %RealStartupSettingsName%
+            echo [Directory]: %StartupSettingsDir_path%
+            echo [Required Filename]: %RealStartupSettingsName%
         )
     )
     if "%~1" NEQ "%flag_StartupSettings%" (
@@ -338,8 +361,10 @@ Before using this program, please follow the instructions to set up.
         @REM mklink "%StartupSettingsDir_path%\startup.settings" "%StartupSettingsDir_path%\%RealStartupSettingsName%"
         mklink "%StartupSettingsDir_path%\startup.settings" ".\%RealStartupSettingsName%"
         if ERRORLEVEL 1 (
-            if /I "%mLANG%" == "zh" ( echo [INFO] 启动设置链接失败。 ) else ( echo [INFO] Failed to link Startup Settings. )
+            if /I "%mLANG%" == "zh" ( echo [INFO] 启动设置链接失败。 ) else ( echo [INFO] Fail to link Startup Settings. )
             set exit_value=8
+        ) else (
+            if /I "%mLANG%" == "zh" ( echo [INFO] 启动设置链接创建成功。 ) else ( echo [INFO] Succeed in creating Startup Settings link. )
         )
     ) else if /I "%exit_value%" LSS "6" (
         if /I "%mLANG%" == "zh" ( echo [INFO] 启动设置已就绪，无需操作。 ) else ( echo [INFO] Startup Settings have been ready and need no further operation. )
