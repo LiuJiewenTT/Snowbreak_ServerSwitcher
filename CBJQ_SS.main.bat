@@ -49,6 +49,10 @@ setlocal enabledelayedexpansion
 @set LANG_default=zh
 @REM @set LANG_default=en
 
+@REM 过去玩的是国服就填入homeland，是国际服就填入worldwide。 
+set flag_StartupSettings=homeland
+@REM set flag_StartupSettings=worldwide
+
 @REM ----------------------------------------------
 @REM 程序初始化阶段2
 
@@ -249,5 +253,18 @@ Before using this program, please follow the instructions to set up.
         set exit_value=5
     ) else (
         if /I "%mLANG%" == "zh" ( echo [INFO] 已完全准备好。 ) else ( echo [INFO] Everything is ready. )
+    )
+@ goto:eof
+
+:toggleStartupSettings
+
+@ goto:eof
+
+:switchStartupSetting
+    if "%~1" NEQ "%flag_StartupSettings%" (
+        if /I "%mLANG%" == "zh" ( echo [INFO] 准备切换启动设置。 ) else ( echo [INFO] Toggling Startup Settings. )
+        
+    ) else (
+        if /I "%mLANG%" == "zh" ( echo [INFO] 启动设置已就绪，无需操作。 ) else ( echo [INFO] Startup Settings have been ready and need no further operation. )
     )
 @ goto:eof
