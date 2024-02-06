@@ -118,7 +118,7 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
         )
         if exist "%launcher_worldwide%" ( 
             call :switchStartupSetting "worldwide" 
-            if "!exit_value!" GEQ "%retv_range_startup_start%" ( 
+            if /I "!exit_value!" GEQ "%retv_range_startup_start%" if /I "!exit_value!" NEQ "7" ( 
                 shift /1
                 goto:loop1
             )
@@ -139,7 +139,7 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
         )
         if exist "%launcher_bilibili%" ( 
             call :switchStartupSetting "homeland" 
-            if "!exit_value!" GEQ "%retv_range_startup_start%" ( 
+            if /I "!exit_value!" GEQ "%retv_range_startup_start%" if /I "!exit_value!" NEQ "7" ( 
                 shift /1
                 goto:loop1
             )
@@ -160,7 +160,7 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
         )
         if exist "%launcher_kingsoft%" ( 
             call :switchStartupSetting "homeland" 
-            if "!exit_value!" GEQ "%retv_range_startup_start%" ( 
+            if /I "!exit_value!" GEQ "%retv_range_startup_start%" if /I "!exit_value!" NEQ "7" ( 
                 shift /1
                 goto:loop1
             )
@@ -304,10 +304,10 @@ Before using this program, please follow the instructions to set up.
         dir "%StartupSettingsDir_path%\startup.settings" 2>nul | findstr "<SYMLINK>"
         if ERRORLEVEL 1 if /I "%flag_all_exist%" == "true" (
             if /I "%mLANG%" == "zh" ( 
-                echo [INFO] 当前启动设置文件并非符号链接，请继续配置。 
+                echo [ERROR] 当前启动设置文件并非符号链接，请继续配置。 
                 echo [INFO] 【目录】：%StartupSettingsDir_path%
             ) else ( 
-                echo [INFO] Current Startup Settings file is not a link, please configure further. 
+                echo [ERROR] Current Startup Settings file is not a link, please configure further. 
                 echo [INFO] [Directory]: %StartupSettingsDir_path%
             )
             set exit_value=6
