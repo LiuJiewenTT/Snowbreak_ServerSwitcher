@@ -324,25 +324,30 @@ Before using this program, please follow the instructions to set up.
             set flag_StartupSettings=worldwide
         )
     )
-
+    @REM echo %RealStartupSettingsName%
     if "%~1" == "homeland" (
-        set RealStartupSettingsName=%StartupSettingsName_homeland%
+        if defined StartupSettingsName_homeland set RealStartupSettingsName=%StartupSettingsName_homeland%
     ) else if "%~1" == "worldwide" (
-        set RealStartupSettingsName=%StartupSettingsName_worldwide%
+        if defined StartupSettingsName_worldwide set RealStartupSettingsName=%StartupSettingsName_worldwide%
     )
-
+    @REM echo %RealStartupSettingsName%
     if exist "%StartupSettingsDir_path%\%RealStartupSettingsName%" (
         if /I "%mLANG%" == "zh" ( echo [INFO] 对应启动设置存在，可以继续。 ) else ( echo [INFO] Corresponding file exists, good to go. )
     ) else (
-        set exit_value=7
-        if /I "%mLANG%" == "zh" ( 
-            echo [INFO] 对应的启动设置实际文件不存在，请做好重命名工作。 
-            echo 【目录】：%StartupSettingsDir_path%
-            echo 【需要的文件名】：%RealStartupSettingsName%
-        ) else ( 
-            echo [INFO] Corresponding actual file does not exist, check your renaming work. 
-            echo [Directory]: %StartupSettingsDir_path%
-            echo [Required Filename]: %RealStartupSettingsName%
+        if /I "%flag_all_exist%" == "true" (
+            set exit_value=7
+            if /I "%mLANG%" == "zh" ( 
+                echo [INFO] 对应的启动设置实际文件不存在，请做好重命名工作。 
+                echo 【目录】：%StartupSettingsDir_path%
+                echo 【需要的文件名】：%RealStartupSettingsName%
+            ) else ( 
+                echo [INFO] Corresponding actual file does not exist, check your renaming work. 
+                echo [Directory]: %StartupSettingsDir_path%
+                echo [Required Filename]: %RealStartupSettingsName%
+            )
+        ) else (
+            if /I "%mLANG%" == "zh" ( echo [INFO] 国服国际服兼容支持特性未在程序配置中启用。 ) else ( echo [INFO] Support for playing both homeland and worldwide is not enabled in program configuration. )
+            goto:eof
         )
     )
     if "%~1" NEQ "%flag_StartupSettings%" (
