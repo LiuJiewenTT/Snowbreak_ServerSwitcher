@@ -69,7 +69,7 @@ setlocal enabledelayedexpansion
 @set launcher_exslot_2_dest=
 @set launcher_exslot_3_dest=
 
-@set launcher_exslot_1_localization_type=
+@set launcher_exslot_1_localization_type=homeland
 @set launcher_exslot_2_localization_type=
 @set launcher_exslot_3_localization_type=
 
@@ -114,7 +114,7 @@ set flag_nostart=false
 set flag_noswitch=false
 set flag_nopause=false
 
-set threshold_abort=10
+set threshold_abort=11
 set exit_value=0
 set retv_range_startup_start=6
 set GameConfigsHome=%APPDATA%\..\Local\Game\Saved
@@ -217,22 +217,30 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
                             if /I "%mLANG%" == "zh" ( echo [ERROR] 【终止】：程序异常终止！ ) else ( echo [ERROR] [Abort]: Program Abort^^! )
                             goto:loop1_break
                         )
-                    )
-                    if exist "!launcher_exslot_%%i!" ( 
-                        if /I "%mLANG%" == "zh" ( echo [INFO] 存在启动器文件。 ) else ( echo [INFO] The launcher file exists. ) 
+
                         call :switchStartupSetting "!launcher_exslot_%%i_localization_type!" 
                         if /I "!exit_value!" GEQ "%retv_range_startup_start%" if /I "!exit_value!" NEQ "7" ( 
                             shift /1
                             goto:loop1
                         )
+                    )
+                    if exist "!launcher_exslot_%%i!" ( 
+                        if /I "%mLANG%" == "zh" ( echo [INFO] 存在实际启动器文件。 ) else ( echo [INFO] The real launcher file exists. ) 
                     ) else (
-                        if /I "%mLANG%" == "zh" ( echo [INFO] 不存在启动器文件。 ) else ( echo [INFO] The launcher file does not exist. ) 
+                        if /I "%mLANG%" == "zh" ( echo [INFO] 不存在实际启动器文件。 ) else ( echo [INFO] The real launcher file does not exist. ) 
                     )
-                    if /I "%flag_nostart%" == "false" ( call "!launcher_exslot_%%i_dest!" )
-                    if ERRORLEVEL 1 if /I "%flag_nostart%" EQU "false" (
-                        if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
-                        set exit_value=2
+                    if /I "%flag_nostart%" == "false" ( 
+                        call "!launcher_exslot_%%i_dest!" 
+                        if ERRORLEVEL 1 (
+                            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
+                            set exit_value=2
+                            if not exist "!launcher_exslot_%%i!" (
+                                if /I "%mLANG%" == "zh" ( echo [ERROR] 不存在实际启动器文件。 ) else ( echo [ERROR] The real launcher file does not exist. ) 
+                                set exit_value=10
+                            )
+                        )
                     )
+                    
                 )
             )
 
@@ -270,9 +278,10 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
 @REM 4  目的地的启动器并非符号链接，非本程序创建。 
 @REM 5  启动器链接失败。 
 @REM 6  目的地的启动设置文件并非符号链接，非本程序创建。 
-@REM 7  切服器未找到此服务器所需的启动配置实际文件。
-@REM 8  启动设置链接失败。
-@REM 9  在未启用国服国际服支持的情景下断开链接失败。
+@REM 7  切服器未找到此服务器所需的启动配置实际文件。 
+@REM 8  启动设置链接失败。 
+@REM 9  在未启用国服国际服支持的情景下断开链接失败。 
+@REM 10 不存在实际启动器文件。 
 @REM ----------------------------------------------
 
 :func_ensureACP
@@ -438,7 +447,10 @@ Before using this program, please follow the instructions to set up.
     )
     if "%~1" NEQ "%flag_StartupSettings%" (
         if /I "%mLANG%" == "zh" ( echo [INFO] 准备切换启动设置。 ) else ( echo [INFO] Switching Startup Settings. )
-        if "%flag_StartupSettings%" NEQ "none" (
+        set flag_delete_startupsettings=false
+        if exist "%StartupSettingsDir_path%\startup.settings" set flag_delete_startupsettings=true
+        if "%flag_StartupSettings%" NEQ "none" set flag_delete_startupsettings=true
+        if /I "!flag_delete_startupsettings!" == "true" (
             if /I "%mLANG%" == "zh" ( echo [INFO] 正在删除旧启动设置（或其链接）。 ) else ( echo [INFO] Deleting Old Startup Settings ^(or its link^). )
             del "%StartupSettingsDir_path%\startup.settings"
             if ERRORLEVEL 1 (
