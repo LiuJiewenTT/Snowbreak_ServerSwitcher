@@ -57,6 +57,8 @@ setlocal enabledelayedexpansion
 
 @REM 用户区 
 
+@set flag_enable_match_with_exslots=true
+
 @set launcher_exslot_1_nickname=slot1
 @set launcher_exslot_2_nickname=
 @set launcher_exslot_3_nickname=
@@ -229,57 +231,59 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
         )
         
     ) else (
-        if /I "%mLANG%" == "zh" ( echo [INFO] 尝试在预留槽位匹配此服务器的启动器配置。【%~1】 ) else ( echo [INFO] Try to match the launcher of this server in the reserved slots. [%~1] )
         set flag_matched_on_exslots=false
         set flag_exslot_match_loopbreak=false
-        
-        for /L %%i in (1, 1, 3) do (            
-            if /I "!flag_exslot_match_loopbreak!" == "false" (
-                if /I "%mLANG%" == "zh" ( echo [INFO] 尝试在预留槽位【%%i】匹配此服务器的启动器配置。 ) else ( echo [INFO] Try to match the launcher of this server in the reserved slot No.%%i. ) 
-                if "%~1" == "!launcher_exslot_%%i_nickname!" (
-                    if /I "%mLANG%" == "zh" ( echo [INFO] 匹配成功。 ) else ( echo [INFO] The match was successful. )
-                    set flag_matched_on_exslots=true
-                    if /I "%flag_allow_multimatch_on_exslots%" == "false" (
-                        set flag_exslot_match_loopbreak=true
-                    )
-                    
-                    if /I "%mLANG%" == "zh" ( echo [INFO] 启动!launcher_exslot_%%i_nickname! ) else ( echo [INFO] Start Option: !launcher_exslot_%%i_nickname! )
-                    if /I "%flag_noswitch%" == "false" (
-                        call :func_updateSymlink "!launcher_exslot_%%i_dest!" "!launcher_exslot_%%i!"
-                        if ERRORLEVEL %threshold_abort% (
-                            if /I "%mLANG%" == "zh" ( echo [ERROR] 【终止】：程序异常终止！ ) else ( echo [ERROR] [Abort]: Program Abort^^! )
-                            goto:loop1_break
+        if /I "%flag_enable_match_with_exslots%" == "true" (
+            if /I "%mLANG%" == "zh" ( echo [INFO] 尝试在预留槽位匹配此服务器的启动器配置。【%~1】 ) else ( echo [INFO] Try to match the launcher of this server in the reserved slots. [%~1] )
+            
+            for /L %%i in (1, 1, 3) do (            
+                if /I "!flag_exslot_match_loopbreak!" == "false" (
+                    if /I "%mLANG%" == "zh" ( echo [INFO] 尝试在预留槽位【%%i】匹配此服务器的启动器配置。 ) else ( echo [INFO] Try to match the launcher of this server in the reserved slot No.%%i. ) 
+                    if "%~1" == "!launcher_exslot_%%i_nickname!" (
+                        if /I "%mLANG%" == "zh" ( echo [INFO] 匹配成功。 ) else ( echo [INFO] The match was successful. )
+                        set flag_matched_on_exslots=true
+                        if /I "%flag_allow_multimatch_on_exslots%" == "false" (
+                            set flag_exslot_match_loopbreak=true
                         )
+                        
+                        if /I "%mLANG%" == "zh" ( echo [INFO] 启动!launcher_exslot_%%i_nickname! ) else ( echo [INFO] Start Option: !launcher_exslot_%%i_nickname! )
+                        if /I "%flag_noswitch%" == "false" (
+                            call :func_updateSymlink "!launcher_exslot_%%i_dest!" "!launcher_exslot_%%i!"
+                            if ERRORLEVEL %threshold_abort% (
+                                if /I "%mLANG%" == "zh" ( echo [ERROR] 【终止】：程序异常终止！ ) else ( echo [ERROR] [Abort]: Program Abort^^! )
+                                goto:loop1_break
+                            )
 
-                        call :switchStartupSetting "!launcher_exslot_%%i_localization_type!" 
-                        if /I "!exit_value!" GEQ "%retv_range_startup_start%" if /I "!exit_value!" NEQ "7" ( 
-                            shift /1
-                            goto:loop1
-                        )
-                    )
-                    if exist "!launcher_exslot_%%i!" ( 
-                        if /I "%mLANG%" == "zh" ( echo [INFO] 存在实际启动器文件。 ) else ( echo [INFO] The real launcher file exists. ) 
-                    ) else (
-                        if /I "%mLANG%" == "zh" ( echo [INFO] 不存在实际启动器文件。 ) else ( echo [INFO] The real launcher file does not exist. ) 
-                    )
-                    if /I "%flag_nostart%" == "false" ( 
-                        call "!launcher_exslot_%%i_dest!" 
-                        if ERRORLEVEL 1 (
-                            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
-                            set exit_value=2
-                            if not exist "!launcher_exslot_%%i!" (
-                                if /I "%mLANG%" == "zh" ( echo [ERROR] 不存在实际启动器文件。 ) else ( echo [ERROR] The real launcher file does not exist. ) 
-                                set exit_value=10
+                            call :switchStartupSetting "!launcher_exslot_%%i_localization_type!" 
+                            if /I "!exit_value!" GEQ "%retv_range_startup_start%" if /I "!exit_value!" NEQ "7" ( 
+                                shift /1
+                                goto:loop1
                             )
                         )
+                        if exist "!launcher_exslot_%%i!" ( 
+                            if /I "%mLANG%" == "zh" ( echo [INFO] 存在实际启动器文件。 ) else ( echo [INFO] The real launcher file exists. ) 
+                        ) else (
+                            if /I "%mLANG%" == "zh" ( echo [INFO] 不存在实际启动器文件。 ) else ( echo [INFO] The real launcher file does not exist. ) 
+                        )
+                        if /I "%flag_nostart%" == "false" ( 
+                            call "!launcher_exslot_%%i_dest!" 
+                            if ERRORLEVEL 1 (
+                                if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
+                                set exit_value=2
+                                if not exist "!launcher_exslot_%%i!" (
+                                    if /I "%mLANG%" == "zh" ( echo [ERROR] 不存在实际启动器文件。 ) else ( echo [ERROR] The real launcher file does not exist. ) 
+                                    set exit_value=10
+                                )
+                            )
+                        )
+                        
                     )
-                    
                 )
-            )
 
+            )
         )
 
-        if /I "%flag_matched_on_exslots%" == "false" (
+        if /I "!flag_matched_on_exslots!" == "false" (
             if /I "%mLANG%" == "zh" ( echo [ERROR] 【未知】：未配置此服务器的启动器！【%~1】 ) else ( echo [ERROR] [Unknown]: Launcher to this server is not configured^^! [%~1] )
             set exit_value=3
         )
@@ -328,8 +332,8 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
     @echo Snowbreak_ServerSwitcher(CBJQ_SS)
     @echo Description: This is a server switcher for CBJQ(Snowbreak: Containment Zone) implemented with Windows bat script.
     @echo Author: LiuJiewenTT
-    @echo Version: 1.1.0
-    @echo Date: 2024-02-06
+    @echo Version: 1.2.0
+    @echo Date: 2024-05-20
     @echo Note：Github Repo：^<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher^>
     @echo       Author's Email：^<liuljwtt@163.com^>
 @ goto:eof
@@ -338,8 +342,8 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
     @echo 尘白禁区服务器切换器(CBJQ_SS)
     @echo 描述: 这是一个使用Windows批处理脚本实现的尘白禁区服务器切换器。
     @echo 作者: LiuJiewenTT
-    @echo 版本: 1.1.0
-    @echo 日期: 2024-02-06
+    @echo 版本: 1.2.0
+    @echo 日期: 2024-05-20
     @echo 备注：Github项目链接：^<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher^>
     @echo       作者Email地址：^<liuljwtt@163.com^>
 @ goto:eof
