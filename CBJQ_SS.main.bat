@@ -53,6 +53,31 @@ setlocal enabledelayedexpansion
 @REM @set StartupSettingsName_worldwide=startup-worldwide.settings
 
 @REM ----------------------------------------------
+@REM 预留的额外选项槽，可匹配测试服渠道。 
+
+@REM 用户区 
+
+@set launcher_exslot_1_nickname=slot1
+@set launcher_exslot_2_nickname=
+@set launcher_exslot_3_nickname=
+
+@set launcher_exslot_1=
+@set launcher_exslot_2=
+@set launcher_exslot_3=
+
+@set launcher_exslot_1_dest=
+@set launcher_exslot_2_dest=
+@set launcher_exslot_3_dest=
+
+@set launcher_exslot_1_localization_type=
+@set launcher_exslot_2_localization_type=
+@set launcher_exslot_3_localization_type=
+
+@REM 非用户区（高级） 
+
+@set flag_allow_multimatch_on_exslots=false
+
+@REM ----------------------------------------------
 @REM 程序初始化阶段2
 
 @ if not defined mLANG (
@@ -171,8 +196,53 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
             set exit_value=2
         )
     ) else (
-        if /I "%mLANG%" == "zh" ( echo [ERROR] 【未知】：未配置此服务器的启动器！【%~1】 ) else ( echo [ERROR] [Unknown]: Launcher to this server is not configured^^! [%~1] )
-        set exit_value=3
+        if /I "%mLANG%" == "zh" ( echo [INFO] 尝试在预留槽位匹配此服务器的启动器配置。【%~1】 ) else ( echo [INFO] Try to match the launcher of this server in the reserved slots. [%~1] )
+        set flag_matched_on_exslots=false
+        set "exslot_match_assert_1=if /I 1==1"
+        @REM echo "!exslot_match_assert_1!"
+        for /L %%i in (1, 1, 3) do (
+            if /I "%flag_allow_multimatch_on_exslots%" == "false" if /I "!flag_matched_on_exslots!" == "true" (
+                set "exslot_match_assert_1=if /I 1==0"
+            )
+            echo +++
+            echo exslot_match_assert_1="!exslot_match_assert_1!"
+            if /I "%mLANG%" == "zh" ( echo [INFO] 尝试在预留槽位【%%i】匹配此服务器的启动器配置。 ) else ( echo [INFO] Try to match the launcher of this server in the reserved slot No.%%i. ) 
+
+            !exslot_match_assert_1! 2>nul (
+                echo ok1
+                if "%~1" == "!launcher_exslot_%%i_nickname!" (
+                    echo ok2
+                    set flag_matched_on_exslots=true
+                    if /I "%mLANG%" == "zh" ( echo [INFO] 启动!launcher_exslot_%%i_nickname! ) else ( echo [INFO] Start Option: !launcher_exslot_%%i_nickname! )
+                    if /I "%flag_noswitch%" == "false" (
+                        call :func_updateSymlink "!launcher_exslot_%%i_dest!" "!launcher_exslot_%%i!"
+                        if ERRORLEVEL %threshold_abort% (
+                            if /I "%mLANG%" == "zh" ( echo [ERROR] 【终止】：程序异常终止！ ) else ( echo [ERROR] [Abort]: Program Abort^^! )
+                            goto:loop1_break
+                        )
+                    )
+                    if exist "!launcher_exslot_%%i!" ( 
+                        call :switchStartupSetting "!launcher_exslot_%%i_localization_type!" 
+                        if /I "!exit_value!" GEQ "%retv_range_startup_start%" if /I "!exit_value!" NEQ "7" ( 
+                            shift /1
+                            goto:loop1
+                        )
+                    )
+                    if /I "%flag_nostart%" == "false" ( call "!launcher_exslot_%%i_dest!" )
+                    if ERRORLEVEL 1 if /I "%flag_nostart%" EQU "false" (
+                        if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
+                        set exit_value=2
+                    )
+                )
+            )
+            echo ----
+            echo wgere
+        )
+
+        if /I "%flag_matched_on_exslots%" == "false" (
+            if /I "%mLANG%" == "zh" ( echo [ERROR] 【未知】：未配置此服务器的启动器！【%~1】 ) else ( echo [ERROR] [Unknown]: Launcher to this server is not configured^^! [%~1] )
+            set exit_value=3
+        )
     )
 )
 shift /1
