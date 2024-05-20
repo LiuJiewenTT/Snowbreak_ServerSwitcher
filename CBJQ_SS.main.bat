@@ -49,8 +49,8 @@ setlocal enabledelayedexpansion
 @set LANG_default=zh
 @REM @set LANG_default=en
 
-@REM @set StartupSettingsName_homeland=startup-homeland.settings
-@REM @set StartupSettingsName_worldwide=startup-worldwide.settings
+@set StartupSettingsName_homeland=startup-homeland.settings
+@set StartupSettingsName_worldwide=startup-worldwide.settings
 
 @REM ----------------------------------------------
 @REM 预留的额外选项槽，可匹配测试服渠道。 
@@ -61,11 +61,11 @@ setlocal enabledelayedexpansion
 @set launcher_exslot_2_nickname=
 @set launcher_exslot_3_nickname=
 
-@set launcher_exslot_1=
+@set launcher_exslot_1=%launcher_none%
 @set launcher_exslot_2=
 @set launcher_exslot_3=
 
-@set launcher_exslot_1_dest=
+@set launcher_exslot_1_dest=..\snow_launcher-test.exe
 @set launcher_exslot_2_dest=
 @set launcher_exslot_3_dest=
 
@@ -198,21 +198,18 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
     ) else (
         if /I "%mLANG%" == "zh" ( echo [INFO] 尝试在预留槽位匹配此服务器的启动器配置。【%~1】 ) else ( echo [INFO] Try to match the launcher of this server in the reserved slots. [%~1] )
         set flag_matched_on_exslots=false
-        set "exslot_match_assert_1=if /I 1==1"
-        @REM echo "!exslot_match_assert_1!"
-        for /L %%i in (1, 1, 3) do (
-            if /I "%flag_allow_multimatch_on_exslots%" == "false" if /I "!flag_matched_on_exslots!" == "true" (
-                set "exslot_match_assert_1=if /I 1==0"
-            )
-            echo +++
-            echo exslot_match_assert_1="!exslot_match_assert_1!"
-            if /I "%mLANG%" == "zh" ( echo [INFO] 尝试在预留槽位【%%i】匹配此服务器的启动器配置。 ) else ( echo [INFO] Try to match the launcher of this server in the reserved slot No.%%i. ) 
-
-            !exslot_match_assert_1! 2>nul (
-                echo ok1
+        set flag_exslot_match_loopbreak=false
+        
+        for /L %%i in (1, 1, 3) do (            
+            if /I "!flag_exslot_match_loopbreak!" == "false" (
+                if /I "%mLANG%" == "zh" ( echo [INFO] 尝试在预留槽位【%%i】匹配此服务器的启动器配置。 ) else ( echo [INFO] Try to match the launcher of this server in the reserved slot No.%%i. ) 
                 if "%~1" == "!launcher_exslot_%%i_nickname!" (
-                    echo ok2
+                    if /I "%mLANG%" == "zh" ( echo [INFO] 匹配成功。 ) else ( echo [INFO] The match was successful. )
                     set flag_matched_on_exslots=true
+                    if /I "%flag_allow_multimatch_on_exslots%" == "false" (
+                        set flag_exslot_match_loopbreak=true
+                    )
+                    
                     if /I "%mLANG%" == "zh" ( echo [INFO] 启动!launcher_exslot_%%i_nickname! ) else ( echo [INFO] Start Option: !launcher_exslot_%%i_nickname! )
                     if /I "%flag_noswitch%" == "false" (
                         call :func_updateSymlink "!launcher_exslot_%%i_dest!" "!launcher_exslot_%%i!"
@@ -222,11 +219,14 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
                         )
                     )
                     if exist "!launcher_exslot_%%i!" ( 
+                        if /I "%mLANG%" == "zh" ( echo [INFO] 存在启动器文件。 ) else ( echo [INFO] The launcher file exists. ) 
                         call :switchStartupSetting "!launcher_exslot_%%i_localization_type!" 
                         if /I "!exit_value!" GEQ "%retv_range_startup_start%" if /I "!exit_value!" NEQ "7" ( 
                             shift /1
                             goto:loop1
                         )
+                    ) else (
+                        if /I "%mLANG%" == "zh" ( echo [INFO] 不存在启动器文件。 ) else ( echo [INFO] The launcher file does not exist. ) 
                     )
                     if /I "%flag_nostart%" == "false" ( call "!launcher_exslot_%%i_dest!" )
                     if ERRORLEVEL 1 if /I "%flag_nostart%" EQU "false" (
@@ -235,8 +235,7 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
                     )
                 )
             )
-            echo ----
-            echo wgere
+
         )
 
         if /I "%flag_matched_on_exslots%" == "false" (
@@ -344,14 +343,14 @@ Before using this program, please follow the instructions to set up.
         if /I "%mLANG%" == "zh" ( echo [INFO] 准备替换 ) else ( echo [INFO] Replacing... )
         mklink "%launcherpath%" "%reallauncherpath%"
     ) else (
-        if /I "%mLANG%" == "zh" ( echo [INFO] 新启动器已存在 ) else ( echo [INFO] New launcher has been ready. )
+        if /I "%mLANG%" == "zh" ( echo [INFO] 新启动器链接已存在 ) else ( echo [INFO] Link to the new launcher has been ready. )
     )
     dir "%launcherpath%" | findstr "<SYMLINK>" | findstr /E /C:"[%reallauncherpath%]"
     if ERRORLEVEL 1 (
         if /I "%mLANG%" == "zh" ( echo [ERROR] 链接失败 ) else ( echo [ERROR] Failed to link. )
         set exit_value=5
     ) else (
-        if /I "%mLANG%" == "zh" ( echo [INFO] 启动器已完全准备好。 ) else ( echo [INFO] Everything about launcher is ready. )
+        if /I "%mLANG%" == "zh" ( echo [INFO] 启动器链接已完全准备好。 ) else ( echo [INFO] Everything about the link to the launcher is ready. )
     )
 @ goto:eof
 
