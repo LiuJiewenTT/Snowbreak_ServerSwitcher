@@ -140,19 +140,30 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
                 if /I "%mLANG%" == "zh" ( echo [ERROR] 【终止】：程序异常终止！ ) else ( echo [ERROR] [Abort]: Program Abort^^! )
                 goto:loop1_break
             )
-        )
-        if exist "%launcher_worldwide%" ( 
+
             call :switchStartupSetting "worldwide" 
             if /I "!exit_value!" GEQ "%retv_range_startup_start%" if /I "!exit_value!" NEQ "7" ( 
                 shift /1
                 goto:loop1
             )
         )
-        if /I "%flag_nostart%" == "false" ( call "%launcher_worldwide_dest%" )
-        if ERRORLEVEL 1 if /I "%flag_nostart%" EQU "false" (
-            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
-            set exit_value=2
+        if exist "%launcher_worldwide%" ( 
+            if /I "%mLANG%" == "zh" ( echo [INFO] 存在实际启动器文件。 ) else ( echo [INFO] The real launcher file exists. ) 
+        ) else (
+            if /I "%mLANG%" == "zh" ( echo [INFO] 不存在实际启动器文件。 ) else ( echo [INFO] The real launcher file does not exist. ) 
         )
+        if /I "%flag_nostart%" == "false" ( 
+            call "%launcher_worldwide_dest%" 
+            if ERRORLEVEL 1 (
+                if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
+                set exit_value=2
+                if not exist "%launcher_worldwide%" (
+                    if /I "%mLANG%" == "zh" ( echo [ERROR] 不存在实际启动器文件。 ) else ( echo [ERROR] The real launcher file does not exist. ) 
+                    set exit_value=10
+                )
+            )
+        )
+        
     ) else if /I "%~1" == "bilibili" (
         if /I "%mLANG%" == "zh" ( echo [INFO] 启动B服 ) else ( echo [INFO] Start Option: bilibili )
         if /I "%flag_noswitch%" == "false" (
@@ -161,19 +172,30 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
                 if /I "%mLANG%" == "zh" ( echo [ERROR] 【终止】：程序异常终止！ ) else ( echo [ERROR] [Abort]: Program Abort^^! )
                 goto:loop1_break
             )
-        )
-        if exist "%launcher_bilibili%" ( 
+
             call :switchStartupSetting "homeland" 
             if /I "!exit_value!" GEQ "%retv_range_startup_start%" if /I "!exit_value!" NEQ "7" ( 
                 shift /1
                 goto:loop1
             )
         )
-        if /I "%flag_nostart%" == "false" ( call "%launcher_bilibili_dest%" )
-        if ERRORLEVEL 1 if /I "%flag_nostart%" EQU "false" (
-            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
-            set exit_value=2
+        if exist "%launcher_bilibili%" ( 
+            if /I "%mLANG%" == "zh" ( echo [INFO] 存在实际启动器文件。 ) else ( echo [INFO] The real launcher file exists. ) 
+        ) else (
+            if /I "%mLANG%" == "zh" ( echo [INFO] 不存在实际启动器文件。 ) else ( echo [INFO] The real launcher file does not exist. ) 
         )
+        if /I "%flag_nostart%" == "false" ( 
+            call "%launcher_bilibili_dest%" 
+            if ERRORLEVEL 1 (
+                if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
+                set exit_value=2
+                if not exist "%launcher_bilibili%" (
+                    if /I "%mLANG%" == "zh" ( echo [ERROR] 不存在实际启动器文件。 ) else ( echo [ERROR] The real launcher file does not exist. ) 
+                    set exit_value=10
+                )
+            )
+        )
+        
     ) else if /I "%~1" == "kingsoft" (
         if /I "%mLANG%" == "zh" ( echo [INFO] 启动官服 ) else ( echo [INFO] Start Option: kingsoft )
         if /I "%flag_noswitch%" == "false" (
@@ -182,19 +204,30 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
                 if /I "%mLANG%" == "zh" ( echo [ERROR] 【终止】：程序异常终止！ ) else ( echo [ERROR] [Abort]: Program Abort^^! )
                 goto:loop1_break
             )
-        )
-        if exist "%launcher_kingsoft%" ( 
+
             call :switchStartupSetting "homeland" 
             if /I "!exit_value!" GEQ "%retv_range_startup_start%" if /I "!exit_value!" NEQ "7" ( 
                 shift /1
                 goto:loop1
             )
         )
-        if /I "%flag_nostart%" == "false" ( call "%launcher_kingsoft_dest%" )
-        if ERRORLEVEL 1 if /I "%flag_nostart%" EQU "false" (
-            if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
-            set exit_value=2
+        if exist "%launcher_kingsoft%" ( 
+            if /I "%mLANG%" == "zh" ( echo [INFO] 存在实际启动器文件。 ) else ( echo [INFO] The real launcher file exists. ) 
+        ) else (
+            if /I "%mLANG%" == "zh" ( echo [INFO] 不存在实际启动器文件。 ) else ( echo [INFO] The real launcher file does not exist. ) 
         )
+        if /I "%flag_nostart%" == "false" ( 
+            call "%launcher_kingsoft_dest%" 
+            if ERRORLEVEL 1 (
+                if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
+                set exit_value=2
+                if not exist "%launcher_kingsoft%" (
+                    if /I "%mLANG%" == "zh" ( echo [ERROR] 不存在实际启动器文件。 ) else ( echo [ERROR] The real launcher file does not exist. ) 
+                    set exit_value=10
+                )
+            )
+        )
+        
     ) else (
         if /I "%mLANG%" == "zh" ( echo [INFO] 尝试在预留槽位匹配此服务器的启动器配置。【%~1】 ) else ( echo [INFO] Try to match the launcher of this server in the reserved slots. [%~1] )
         set flag_matched_on_exslots=false
