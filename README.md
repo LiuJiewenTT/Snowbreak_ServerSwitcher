@@ -1,6 +1,6 @@
 ---
 LANG: zh_CN.UTF-8
-date: 2024-02-06 17:53:00 +0800
+date: 2024-05-20 22:52:00 +0800
 ---
 
 
@@ -13,7 +13,7 @@ date: 2024-02-06 17:53:00 +0800
 ![icon](icon1.png)
 
 项目地址：<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher><br/>
-说明页链接：<https://liujiewentt.github.io/Snowbreak_ServerSwitcher/README>
+说明页链接：<https://liujiewentt.github.io/Snowbreak_ServerSwitcher/README><br/>下载请到Release区：<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/releases>
 
 如果有bug欢迎反馈！[到这里来添加 *Issue*](https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/issues)
 
@@ -46,6 +46,7 @@ date: 2024-02-06 17:53:00 +0800
 > - 非powershell脚本(.ps1)，没有麻烦。
 > - 没有高危操作，不需要管理员权限启动。（但启动启动器时，启动器会要求管理员权限。此提权请求与本程序无关。）
 > - 支持国服国际服切换！
+> - 预留**扩展槽可供测试服**使用！
 
 > 如果不放心担心被其它程序或其它人修改程序产生不良影响，可以在【属性】->【安全】删除普通用户“写入”权限、保留“执行”权限。
 
@@ -63,7 +64,7 @@ date: 2024-02-06 17:53:00 +0800
 
 ## 备注
 
-1. 支持中文（保证不乱码）和英文。（Support zh_CN and en_US.）
+1. 双语特性：支持中文（保证不乱码）和英文。（Support zh_CN and en_US.）
 
 ## 使用
 
@@ -128,16 +129,24 @@ CBJQ_SS.main.bat -nostart bilibili
 例4：
 
 ``` bat
+CBJQ_SS.main.bat -nostart slot1
+```
+
+> `slot1`是自带的示例预留扩展槽的昵称（"*nickname*"）。
+
+例5：
+
+``` bat
 CBJQ_SS.main.bat -nostart -nopause bilibili
 ```
 
-例5：
+例6：
 
 ```bat
 CBJQ_SS.main.bat -noswitch -nopause bilibili
 ```
 
-例6（没什么意义）：
+例7（没什么意义）：
 
 ``` bat
 CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
@@ -167,15 +176,20 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
    > 补充说明：
    >
    > 1. 请确保真正的启动器所在目录下有`preference.json`文件，如果没有这个文件，启动器会以为是第一次运行，进而无法定位到正确的游戏数据目录。
+   >
    > 2. 国际服默认不可与国服共用文件，所以（简单的说最简单的办法是）您应该安装在其它位置，使用的`preference.json`也同样不能与国服的共用。
    >
-   >    > 启动器也不是非要放在另外的安装位置，只要和国服不在同一目录即可：
+   >    > 启动器也不是非要放在另外的安装位置，只要和国服不在同一目录即可, 详细方法如下：
    >    >
-   >    > 更改`preference.json`中资源储存位置，无此文件直接启动可能导致当处于同一目录时属于国服的`data\manifest.json`被覆写而使国服需要重新下载资源。非要装在一起，请先设置好国际服的`preference.json`或备份一下国服的`manifest.json`。
+   >    > 更改`preference.json`中资源储存位置`dataPath`，无此文件直接启动可能导致当处于同一目录时属于国服的`data\manifest.json`被覆写而使国服需要重新下载资源。非要装在一起，请先设置好国际服的`preference.json`或备份一下国服的`manifest.json`。
+   >    
+   > 3. 同大类（国际服/国服）同版本是共用资源的基础，而**国服正式版和国服测试版资源版本不同**，所以不能完全共用。（想啥呢，要是都一样，只是新增没有修改，那是玩笑！）
+   >    所以如果差异不大，没关系共用资源，差异部分让它重新下载就行了（或者自己修改`manifest.json`）；
+   >    如果大或者单纯不想折腾，打算分开装，请把它当国际服一样配置（除了切服器的对应localization要为`homeland`）。
 
 5. 把你要的其它渠道的安装包（如：`CBJQ_Setup.exe`）用解压软件打开，打开`app.7z`（压缩包内的压缩包）。
 
-6. 将里面的启动器复制到刚才那个启动器的新位置去，把它们放到一起（同一目录）（<strong style="color:red">国际服启动器不要和国服启动器放一起！！！</strong>）。
+6. 将里面的启动器复制到刚才那个启动器的新位置去，把它们放到一起（同一目录）（<strong style="color:red">国际服启动器不要和国服启动器放一起！！！测试服也是！</strong>）。
 
 7. 给不同启动器重命名。
 
@@ -195,6 +209,8 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
    @set launcher_bilibili_dest=..\snow_launcher.exe
    @set launcher_kingsoft_dest=..\snow_launcher.exe
    ```
+
+   （**预留扩展槽的配置方法**同理，在“用户区”内，额外的一个必要项就是“*nickname*”，启动时是按照它来匹配的。对应的对国际服的兼容项为“*localization*”，只能在`homeland`和`worldwide`之间选择。如果是这段时间的国服测试服，那么用自带的扩展槽位配置即可：把启动器放到合适位置并重命名。）
 
    不会改参数就按这里的命名，然后复制这一段将对应代码替换。
 
@@ -223,6 +239,8 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
    > - 切换+启动：`尘白禁区**（切换+启动）.bat`
    > - 仅切换，不自动启动：`尘白禁区**（切换）.bat`
    > - 仅启动，不切换：`尘白禁区**（启动）.bat`
+   >
+   > 您也可以为测试服配置启动脚本！
 
 ## GUIs
 

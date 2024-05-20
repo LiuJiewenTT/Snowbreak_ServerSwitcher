@@ -53,26 +53,26 @@ setlocal enabledelayedexpansion
 @set StartupSettingsName_worldwide=startup-worldwide.settings
 
 @REM ----------------------------------------------
-@REM 预留的额外选项槽，可匹配测试服渠道。 
+@REM 预留的扩展选项槽，可匹配测试服渠道。 
 
 @REM 用户区 
 
 @set flag_enable_match_with_exslots=true
 
 @set launcher_exslot_1_nickname=slot1
-@set launcher_exslot_2_nickname=
+@set launcher_exslot_2_nickname=slot2
 @set launcher_exslot_3_nickname=
 
 @set launcher_exslot_1=%launcher_none%
-@set launcher_exslot_2=
+@set launcher_exslot_2=%~dp0Launchers\slot2\snow_launcher-slot2.exe
 @set launcher_exslot_3=
 
 @set launcher_exslot_1_dest=..\snow_launcher-test.exe
-@set launcher_exslot_2_dest=
+@set launcher_exslot_2_dest=..\snow_launcher-test.exe
 @set launcher_exslot_3_dest=
 
 @set launcher_exslot_1_localization_type=homeland
-@set launcher_exslot_2_localization_type=
+@set launcher_exslot_2_localization_type=homeland
 @set launcher_exslot_3_localization_type=
 
 @REM 非用户区（高级） 
