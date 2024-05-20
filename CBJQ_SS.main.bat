@@ -198,17 +198,19 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
     ) else (
         if /I "%mLANG%" == "zh" ( echo [INFO] 尝试在预留槽位匹配此服务器的启动器配置。【%~1】 ) else ( echo [INFO] Try to match the launcher of this server in the reserved slots. [%~1] )
         set flag_matched_on_exslots=false
-        set exslot_match_assert_1=if /I 1==1
+        set "exslot_match_assert_1=if /I 1==1"
         @REM echo "!exslot_match_assert_1!"
         for /L %%i in (1, 1, 3) do (
             if /I "%flag_allow_multimatch_on_exslots%" == "false" if /I "!flag_matched_on_exslots!" == "true" (
-                set exslot_match_assert_1=if /I 1==0
+                set "exslot_match_assert_1=if /I 1==0"
             )
             echo +++
             echo exslot_match_assert_1="!exslot_match_assert_1!"
             if /I "%mLANG%" == "zh" ( echo [INFO] 尝试在预留槽位【%%i】匹配此服务器的启动器配置。 ) else ( echo [INFO] Try to match the launcher of this server in the reserved slot No.%%i. ) 
 
-            !exslot_match_assert_1! if "%~1" == "!launcher_exslot_%%i_nickname!" (
+            !exslot_match_assert_1! 2>nul (
+                echo ok1
+                if "%~1" == "!launcher_exslot_%%i_nickname!" (
                     echo ok2
                     set flag_matched_on_exslots=true
                     if /I "%mLANG%" == "zh" ( echo [INFO] 启动!launcher_exslot_%%i_nickname! ) else ( echo [INFO] Start Option: !launcher_exslot_%%i_nickname! )
@@ -232,7 +234,7 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
                         set exit_value=2
                     )
                 )
-            
+            )
             echo ----
             echo wgere
         )
