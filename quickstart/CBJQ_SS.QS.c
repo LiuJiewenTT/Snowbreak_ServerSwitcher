@@ -47,7 +47,6 @@ int main(int argc, char **argv){
     setlocale(LC_CTYPE, "zh_cn.UTF-8");
     // ShowWindow(hwnd, SW_HIDE);
     // Sleep(3000);
-
     
     char config_content[config_content_maxsize];    // 512 KB
     char *p1 = NULL;
@@ -76,7 +75,6 @@ int main(int argc, char **argv){
     if( val1 != 0 ){
         sprintf(tempstr1, "错误：程序文件名不符合要求，应以\"%s\"起始。", valid_server_filename_prefix);
         printf("%s\n", tempstr1);
-        // swprintf(tempwstr1, MultiByteToWideChar(CP_UTF8, 0, tempstr1, -1, NULL, 0), L"%s", tempstr1);
         pw1 = WCharChar(tempstr1);
         pw2 = WCharChar(internal_program_name);
         MessageBoxW(hwnd, (pw1), (pw2), MB_OK);
@@ -96,7 +94,6 @@ int main(int argc, char **argv){
     if( server_name_length <= 0 ){
         sprintf(tempstr1, "错误：程序文件名内不含server指示信息。");
         printf("%s\n", tempstr1);
-        // swprintf(tempwstr1, MultiByteToWideChar(CP_UTF8, 0, tempstr1, -1, NULL, 0), L"%s", tempstr1);
         pw1 = WCharChar(tempstr1);
         pw2 = WCharChar(internal_program_name);
         MessageBoxW(hwnd, (pw1), (pw2), MB_OK);
@@ -119,65 +116,38 @@ int main(int argc, char **argv){
             printf("配置文件创建失败。\n");
             return 0;
         }
+        // 创建并写入配置信息。
         cjson_root1 =  createConfig();
         memset(config_content, 0, config_content_maxsize);
-        sprintf(config_content, "%s\n\0", cJSON_Print(cjson_root1));
+        sprintf(config_content, "%s", cJSON_Print(cjson_root1));
         // strcpy(config_content, cJSON_Print(cjson_root1));
-        printf("%d\n", ftell(f1));
-        printf("%d\n", strlen(config_content));
-        config_content[strlen(config_content)] = 0;
-        config_content[strlen(config_content)+1] = 0;
-        config_content[strlen(config_content)+2] = 0;
-        config_content[strlen(config_content)+3] = 0;
-        config_content[strlen(config_content)+4] = 0;
-        // memset(config_content+strlen(config_content), 0, config_content_maxsize-strlen(config_content));
-        fflush(f1);
         fprintf_s(f1, "%s", config_content);
-        fflush(f1);
-        // fprintf(f1, "a");
-        printf("%d\n", ftell(f1));
-
-        fseek(f1, 0, SEEK_END);
-        printf("%d\n", ftell(f1));
-        fseek(f1, 0, SEEK_SET);
-        printf("config_content:\n==%s=%d=\n", config_content, strlen(config_content));
+        printf("config_content(%d):\n===%s===\n", config_content, strlen(config_content));
         fclose(f1);
         cJSON_Delete(cjson_root1);
     }
     // 读取配置信息。
-    f1 = fopen(config_filename, "r");
+    f1 = fopen(config_filename, "rb");
     if( f1 == NULL ){
         printf("配置文件打开失败。\n");
         return 0;
     }
     memset(config_content, 0, config_content_maxsize);
-    // fread(config_content, sizeof(char), config_content_maxsize, f1);
-    // fread(config_content, sizeof(char), 4095, f1);  // 4K 出问题。
-    // fread(config_content, config_content_maxsize, 1, f1);
-    // fread(config_content, 4095, 1, f1);     // 4K 出问题。
-    fread(config_content, 4096, 1, f1);     // 4K 出问题。
-    // fread(config_content, sizeof(char), 200, f1);
-    if(feof(f1)){
-        printf("eof:%d\n", ftell(f1));
-    }
-    printf("config_content:\n===%s=%d==\n", config_content, strlen(config_content));
-    fseek(f1, -4, SEEK_END);
-    memset(config_content, 0, config_content_maxsize);
     fread(config_content, sizeof(char), config_content_maxsize, f1);
-    printf("config_content:\n==%s=%d=\n", config_content+3, strlen(config_content));
-    fseek(f1, 0, SEEK_END);
-    printf("%d", ftell(f1));
-    fseek(f1, 0, SEEK_SET);
+    printf("config_content(%d):\n===%s===\n", config_content, strlen(config_content));
     cjson_root1 = cJSON_Parse(config_content);
     if( cjson_root1 == NULL ){
-        printf("错误：配置解析失败。\n");
+        sprintf(tempstr1, "错误：配置解析失败。");
+        printf("%s\n", tempstr1);
+        fclose(f1);
+        pw1 = WCharChar(tempstr1);
+        pw2 = WCharChar(internal_program_name);
+        MessageBoxW(hwnd, (pw1), (pw2), MB_OK);
+        free2NULL(pw1);
+        free2NULL(pw2);
+        return 0;
     }
     fclose(f1);
-
-    // 这里是看起来没问题，但是写进文件里就发现strlen和ftell的结果插值与换行的次数总是对得上。
-    printf("CRLF=%d\n", strlen("\n\r"));
-    printf("CR=%d\n", strlen("\n"));
-    printf("LF=%d\n", strlen("\r"));
 
     return 0;
 }
