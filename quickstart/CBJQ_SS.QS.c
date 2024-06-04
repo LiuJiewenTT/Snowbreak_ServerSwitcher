@@ -17,13 +17,9 @@ wchar_t *convertCharToWChar(const char* message){
 }
 #define WCharChar(x) (convertCharToWChar(x))
 
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, wchar_t *lpCmdLine, int nShowCmd){
-    LPWSTR *argv;
-    int argc;
-
-    argv = CommandLineToArgvW(GetCommandLine(), &argc);
-
+int main(int argc, char **argv){
     HWND hwnd = GetConsoleWindow();
+    SetConsoleOutputCP(CP_UTF8);
     // ShowWindow(hwnd, SW_HIDE);
     // Sleep(3000);
     char path_delimeter = '\\';
@@ -53,7 +49,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, wchar_t *lpCmdL
     if( val1 != 0 ){
         sprintf(tempstr1, "错误：程序文件名不符合要求，应以\"%s\"起始。", valid_server_filename_prefix);
         printf("%s\n", tempstr1);
-        MessageBox(hwnd, WCharChar(tempstr1), WCharChar(internal_program_name), MB_OK);
+        MessageBox(hwnd, (tempstr1), (internal_program_name), MB_OK);
         return 0;
     }
     p1 = strrchr(program_name, '.');
@@ -67,7 +63,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, wchar_t *lpCmdL
         sprintf(tempstr1, "错误：程序文件名内不含server指示信息。");
         printf("%s\n", tempstr1);
         // swprintf(tempwstr1, "%s", tempstr1);
-        MessageBox(hwnd, WCharChar(tempstr1), WCharChar(internal_program_name), MB_OK);
+        MessageBox(hwnd, (tempstr1), (internal_program_name), MB_OK);
         return 0;
     }
     strncpy(server_name, program_name + valid_server_filename_prefix_length, (p1-program_name)-valid_server_filename_prefix_length);
