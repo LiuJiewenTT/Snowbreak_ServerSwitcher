@@ -154,7 +154,8 @@ int main(int argc, char **argv){
     // fread(config_content, sizeof(char), config_content_maxsize, f1);
     // fread(config_content, sizeof(char), 4095, f1);  // 4K 出问题。
     // fread(config_content, config_content_maxsize, 1, f1);
-    fread(config_content, 4095, 1, f1);     // 4K 出问题。
+    // fread(config_content, 4095, 1, f1);     // 4K 出问题。
+    fread(config_content, 4096, 1, f1);     // 4K 出问题。
     // fread(config_content, sizeof(char), 200, f1);
     if(feof(f1)){
         printf("eof:%d\n", ftell(f1));
