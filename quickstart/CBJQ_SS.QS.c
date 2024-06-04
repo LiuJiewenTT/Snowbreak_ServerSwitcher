@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <io.h>
 #include <string.h>
+#include <utils/cJSON/cJSON.h>
 #define TEMPSTR_LENGTH 2048
 #define TEMPWSTR_LENGTH 2048
 
@@ -21,7 +22,24 @@ wchar_t *convertCharToWChar(const char* message){
 
 #define free2NULL(x) free(x);x=NULL;
 
-int createConfig();
+
+char path_delimeter = '\\';
+char program_name[2048];
+char program_name_noext[2048];
+char internal_program_name[2048] = {"CBJQ_SS.QS Core"};
+char server_name[2048];
+int server_name_length = 0;
+char valid_server_filename_prefix[2048] = {"CBJQ_SS.QS."};
+int valid_server_filename_prefix_length = 0;
+char config_filename[2048];
+char config_filename_suffix[] = {".config.json"};
+const int config_content_maxsize = 512000;
+const char default_start_option_str[] = {"-nopause"};
+const char default_path_of_main[] = {".\\CBJQ_SS.main.bat"};
+
+
+cJSON *createConfig();
+
 
 int main(int argc, char **argv){
     HWND hwnd = GetConsoleWindow();
@@ -30,17 +48,7 @@ int main(int argc, char **argv){
     // ShowWindow(hwnd, SW_HIDE);
     // Sleep(3000);
 
-    char path_delimeter = '\\';
-    char program_name[2048];
-    char program_name_noext[2048];
-    char internal_program_name[2048] = {"CBJQ_SS.QS Core"};
-    char server_name[2048];
-    int server_name_length = 0;
-    char valid_server_filename_prefix[2048] = {"CBJQ_SS.QS."};
-    int valid_server_filename_prefix_length = 0;
-    char config_filename[2048];
-    char config_filename_suffix[] = {".config.json"};
-    const int config_content_maxsize = 512000;
+    
     char config_content[config_content_maxsize];    // 512 KB
     char *p1 = NULL;
     char tempstr1[TEMPSTR_LENGTH];
@@ -49,6 +57,7 @@ int main(int argc, char **argv){
             *pw2 = NULL;
     FILE *f1 = NULL,
          *f2 = NULL;
+    cJSON *cjson_root1 = NULL;
     int val1 = 0;
 
     printf("cmd=%s\n", argv[0]);
@@ -104,13 +113,36 @@ int main(int argc, char **argv){
     // 检查配置文件。
     sprintf(config_filename, "%s%s", program_name_noext, config_filename_suffix);
     if( access(config_filename, 0|2|4) ){
-        printf("不存在配置文件。\n");
+        printf("不存在(可读取、写入的)配置文件。\n");
         f1 = fopen(config_filename, "w");
         if( f1 == NULL ){
             printf("配置文件创建失败。\n");
             return 0;
         }
+        cjson_root1 =  createConfig();
+        memset(config_content, 0, config_content_maxsize);
+        sprintf(config_content, "%s\n\0", cJSON_Print(cjson_root1));
+        // strcpy(config_content, cJSON_Print(cjson_root1));
+        printf("%d\n", ftell(f1));
+        printf("%d\n", strlen(config_content));
+        config_content[strlen(config_content)] = 0;
+        config_content[strlen(config_content)+1] = 0;
+        config_content[strlen(config_content)+2] = 0;
+        config_content[strlen(config_content)+3] = 0;
+        config_content[strlen(config_content)+4] = 0;
+        // memset(config_content+strlen(config_content), 0, config_content_maxsize-strlen(config_content));
+        fflush(f1);
+        fprintf_s(f1, "%s", config_content);
+        fflush(f1);
+        // fprintf(f1, "a");
+        printf("%d\n", ftell(f1));
+
+        fseek(f1, 0, SEEK_END);
+        printf("%d\n", ftell(f1));
+        fseek(f1, 0, SEEK_SET);
+        printf("config_content:\n==%s=%d=\n", config_content, strlen(config_content));
         fclose(f1);
+        cJSON_Delete(cjson_root1);
     }
     // 读取配置信息。
     f1 = fopen(config_filename, "r");
@@ -118,14 +150,42 @@ int main(int argc, char **argv){
         printf("配置文件打开失败。\n");
         return 0;
     }
+    memset(config_content, 0, config_content_maxsize);
+    // fread(config_content, sizeof(char), config_content_maxsize, f1);
+    fread(config_content, sizeof(char), 4095, f1);  // 4K 出问题。
+    // fread(config_content, sizeof(char), 200, f1);
+    if(feof(f1)){
+        printf("eof:%d\n", ftell(f1));
+    }
+    printf("config_content:\n===%s=%d==\n", config_content, strlen(config_content));
+    fseek(f1, -4, SEEK_END);
+    memset(config_content, 0, config_content_maxsize);
     fread(config_content, sizeof(char), config_content_maxsize, f1);
-    printf("config_content:\n%s\n", config_content);
+    printf("config_content:\n==%s=%d=\n", config_content+3, strlen(config_content));
+    fseek(f1, 0, SEEK_END);
+    printf("%d", ftell(f1));
+    fseek(f1, 0, SEEK_SET);
+    cjson_root1 = cJSON_Parse(config_content);
+    if( cjson_root1 == NULL ){
+        printf("错误：配置解析失败。\n");
+    }
     fclose(f1);
+
+    // 这里是看起来没问题，但是写进文件里就发现strlen和ftell的结果插值与换行的次数总是对得上。
+    printf("CRLF=%d\n", strlen("\n\r"));
+    printf("CR=%d\n", strlen("\n"));
+    printf("LF=%d\n", strlen("\r"));
 
     return 0;
 }
 
 
-int createConfig(){
+cJSON *createConfig(){
+    cJSON *root = cJSON_CreateObject();
+
+    cJSON_AddStringToObject(root, "server_nickname", server_name);
+    cJSON_AddStringToObject(root, "start_option_str", default_start_option_str);
+    cJSON_AddStringToObject(root, "path_of_main", default_path_of_main);
     
+    return root;
 }
