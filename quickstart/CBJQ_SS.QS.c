@@ -27,6 +27,7 @@ char path_delimeter = '\\';
 char program_name[2048];
 char program_name_noext[2048];
 char internal_program_name[2048] = {"CBJQ_SS.QS Core"};
+wchar_t internal_program_name_wstr[2048] = {L"CBJQ_SS.QS Core"};
 char server_name[2048];
 int server_name_length = 0;
 char valid_server_filename_prefix[2048] = {"CBJQ_SS.QS."};
@@ -73,13 +74,9 @@ int main(int argc, char **argv){
     valid_server_filename_prefix_length = strlen(valid_server_filename_prefix);
     val1 = strncmp(program_name, valid_server_filename_prefix, valid_server_filename_prefix_length);
     if( val1 != 0 ){
-        sprintf(tempstr1, "错误：程序文件名不符合要求，应以\"%s\"起始。", valid_server_filename_prefix);
-        printf("%s\n", tempstr1);
-        pw1 = WCharChar(tempstr1);
-        pw2 = WCharChar(internal_program_name);
-        MessageBoxW(hwnd, (pw1), (pw2), MB_OK);
-        free2NULL(pw1);
-        free2NULL(pw2);
+        swprintf(tempwstr1, TEMPWSTR_LENGTH, L"错误：程序文件名不符合要求，应以\"%s\"起始。", valid_server_filename_prefix);
+        printf("%ls\n", tempwstr1);
+        MessageBoxW(hwnd, (tempwstr1), (internal_program_name_wstr), MB_OK);
         return 0;
     }
 
@@ -92,13 +89,9 @@ int main(int argc, char **argv){
     server_name_length = (p1-program_name)-valid_server_filename_prefix_length;
     printf("server_name_length=%d\n", server_name_length);
     if( server_name_length <= 0 ){
-        sprintf(tempstr1, "错误：程序文件名内不含server指示信息。");
-        printf("%s\n", tempstr1);
-        pw1 = WCharChar(tempstr1);
-        pw2 = WCharChar(internal_program_name);
-        MessageBoxW(hwnd, (pw1), (pw2), MB_OK);
-        free2NULL(pw1);
-        free2NULL(pw2);
+        swprintf(tempwstr1, TEMPWSTR_LENGTH, L"错误：程序文件名内不含server指示信息。");
+        printf("%ls\n", tempwstr1);
+        MessageBoxW(hwnd, (tempwstr1), (internal_program_name_wstr), MB_OK);
         return 0;
     }
     strncpy(program_name_noext, program_name, p1-program_name);
@@ -122,7 +115,7 @@ int main(int argc, char **argv){
         sprintf(config_content, "%s", cJSON_Print(cjson_root1));
         // strcpy(config_content, cJSON_Print(cjson_root1));
         fprintf_s(f1, "%s", config_content);
-        printf("config_content(%d):\n===%s===\n", config_content, strlen(config_content));
+        printf("config_content(%d):\n===%s===\n", strlen(config_content), config_content);
         fclose(f1);
         cJSON_Delete(cjson_root1);
     }
@@ -134,17 +127,13 @@ int main(int argc, char **argv){
     }
     memset(config_content, 0, config_content_maxsize);
     fread(config_content, sizeof(char), config_content_maxsize, f1);
-    printf("config_content(%d):\n===%s===\n", config_content, strlen(config_content));
+    printf("config_content(%d):\n===%s===\n", strlen(config_content), config_content);
     cjson_root1 = cJSON_Parse(config_content);
     if( cjson_root1 == NULL ){
-        sprintf(tempstr1, "错误：配置解析失败。");
-        printf("%s\n", tempstr1);
+        swprintf(tempwstr1, TEMPWSTR_LENGTH, L"错误：配置解析失败。");
+        printf("%ls\n", tempwstr1);
         fclose(f1);
-        pw1 = WCharChar(tempstr1);
-        pw2 = WCharChar(internal_program_name);
-        MessageBoxW(hwnd, (pw1), (pw2), MB_OK);
-        free2NULL(pw1);
-        free2NULL(pw2);
+        MessageBoxW(hwnd, (tempwstr1), (internal_program_name_wstr), MB_OK);
         return 0;
     }
     fclose(f1);
