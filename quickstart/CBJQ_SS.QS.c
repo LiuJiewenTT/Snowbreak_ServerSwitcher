@@ -1,6 +1,7 @@
 #include <windows.h>
 #define UNICODE
 #define _UNICODE
+#include <locale.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -10,9 +11,9 @@
 
 wchar_t *convertCharToWChar(const char* message){
     // 将 char 字符串转换为 wchar_t 字符串
-    int len = MultiByteToWideChar(CP_ACP, 0, message, -1, NULL, 0);
+    int len = MultiByteToWideChar(CP_UTF8, 0, message, -1, NULL, 0);
     wchar_t* wMessage = (wchar_t*)malloc(len * sizeof(wchar_t));
-    MultiByteToWideChar(CP_ACP, 0, message, -1, wMessage, len);
+    MultiByteToWideChar(CP_UTF8, 0, message, -1, wMessage, len);
     return wMessage;
 }
 #define WCharChar(x) (convertCharToWChar(x))
@@ -20,6 +21,7 @@ wchar_t *convertCharToWChar(const char* message){
 int main(int argc, char **argv){
     HWND hwnd = GetConsoleWindow();
     SetConsoleOutputCP(CP_UTF8);
+    setlocale(LC_CTYPE, "zh_cn.UTF-8");
     // ShowWindow(hwnd, SW_HIDE);
     // Sleep(3000);
     char path_delimeter = '\\';
@@ -32,6 +34,8 @@ int main(int argc, char **argv){
     char *p1 = NULL;
     char tempstr1[TEMPSTR_LENGTH];
     wchar_t tempwstr1[TEMPWSTR_LENGTH];
+    wchar_t *pw1 = NULL, 
+            *pw2 = NULL;
     int val1 = 0;
 
     printf("cmd=%s\n", argv[0]);
@@ -49,7 +53,12 @@ int main(int argc, char **argv){
     if( val1 != 0 ){
         sprintf(tempstr1, "错误：程序文件名不符合要求，应以\"%s\"起始。", valid_server_filename_prefix);
         printf("%s\n", tempstr1);
-        MessageBox(hwnd, (tempstr1), (internal_program_name), MB_OK);
+        // swprintf(tempwstr1, MultiByteToWideChar(CP_UTF8, 0, tempstr1, -1, NULL, 0), L"%s", tempstr1);
+        pw1 = WCharChar(tempstr1);
+        pw2 = WCharChar(internal_program_name);
+        MessageBoxW(hwnd, (pw1), (pw2), MB_OK);
+        free(pw1);
+        free(pw2);
         return 0;
     }
     p1 = strrchr(program_name, '.');
@@ -62,8 +71,13 @@ int main(int argc, char **argv){
     if( server_name_length <= 0 ){
         sprintf(tempstr1, "错误：程序文件名内不含server指示信息。");
         printf("%s\n", tempstr1);
-        // swprintf(tempwstr1, "%s", tempstr1);
-        MessageBox(hwnd, (tempstr1), (internal_program_name), MB_OK);
+        // swprintf(tempwstr1, MultiByteToWideChar(CP_UTF8, 0, tempstr1, -1, NULL, 0), L"%s", tempstr1);
+        pw1 = WCharChar(tempstr1);
+        pw2 = WCharChar(internal_program_name);
+        wprintf(L"%ls\n", pw1);
+        MessageBoxW(hwnd, (pw1), (pw2), MB_OK);
+        free(pw1);
+        free(pw2);
         return 0;
     }
     strncpy(server_name, program_name + valid_server_filename_prefix_length, (p1-program_name)-valid_server_filename_prefix_length);
