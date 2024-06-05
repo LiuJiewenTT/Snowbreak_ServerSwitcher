@@ -10,6 +10,8 @@ wchar_t *convertCharToWChar(const char* message);
 
 #define free2NULL(x) free(x);x=NULL;
 
+#define cjson_pcheck_judgeInvalidString(x) (x == NULL || !cJSON_IsString(x))
+
 // 拼接命令行参数成一个字符串
 char* concatenateArgs(int argc, const char *argv[]);
 

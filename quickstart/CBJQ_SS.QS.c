@@ -13,6 +13,13 @@
 #define TEMPSTR_LENGTH 2048
 #define TEMPWSTR_LENGTH 2048
 
+// 本页特设宏定义区
+#define cjson_pcheck_IsString(x) \
+    if(cjson_pcheck_judgeInvalidString(x)){\
+        printf("Error: %s 的值不是合法字符串。\n", #x );\
+        return EXIT_FAILURE;\
+    }\
+
 
 char path_delimeter = '\\';
 char program_name[2048];
@@ -29,6 +36,7 @@ char config_filename_suffix[] = {".config.json"};
 const int config_content_maxsize = 512000;
 const char default_start_option_str[] = {"-nopause"};
 const char default_path_of_main[] = {".\\CBJQ_SS.main.bat"};
+char icon_path[2048];
 
 
 cJSON *createConfig();
@@ -38,6 +46,7 @@ int main(int argc, char **argv){
     HWND hwnd = GetConsoleWindow();
     SetConsoleOutputCP(CP_UTF8);
     setlocale(LC_CTYPE, "zh_cn.UTF-8");
+    HICON hIcon = NULL;
     // ShowWindow(hwnd, SW_HIDE);
     // Sleep(3000);
     
@@ -141,19 +150,48 @@ int main(int argc, char **argv){
     fclose(f1);
     
     memset(backend_path, 0, sizeof(backend_path)*1.0/sizeof(char));
-    memset(backend_path_abspath, 0, sizeof(backend_path)*1.0/sizeof(char));
+    memset(backend_path_abspath, 0, sizeof(backend_path_abspath)*1.0/sizeof(char));
     memset(executeCmd, 0, sizeof(executeCmd)*1.0/sizeof(char));
 
     // 获取json参数
+
     cJSON *cjson_main = cJSON_GetObjectItem(cjson_root1, "path_of_main");
+    cjson_pcheck_IsString(cjson_main);
     strncpy(backend_path, cJSON_GetStringValue(cjson_main), sizeof(backend_path)*1.0/sizeof(char));
     printf("backend_path=%s\n", backend_path);
     cJSON *cjson_startOptions = cJSON_GetObjectItem(cjson_root1, "start_option_str");
+    cjson_pcheck_IsString(cjson_startOptions);
     strncpy(start_options_str, cJSON_GetStringValue(cjson_startOptions), sizeof(start_options_str)*1.0/sizeof(char));
     printf("start_options_str=%s\n", start_options_str);
     cJSON *cjson_serverName = cJSON_GetObjectItem(cjson_root1, "server_nickname");
+    cjson_pcheck_IsString(cjson_serverName);
     strncpy(server_name, cJSON_GetStringValue(cjson_serverName), sizeof(server_name)*1.0/sizeof(char));
     printf("server_name=%s\n", server_name);
+    cJSON *cjson_icon = cJSON_GetObjectItem(cjson_root1, "icon");
+    
+    // 加载并设置图标
+    if( !cjson_pcheck_judgeInvalidString(cjson_icon) ){
+        strncpy(icon_path, cJSON_GetStringValue(cjson_icon), sizeof(icon_path)*1.0/sizeof(char));
+        printf("icon_path=%s\n", icon_path);
+        swprintf(tempwstr1, TEMPWSTR_LENGTH, L"%hs", icon_path);
+        hIcon = (HICON)LoadImage(NULL, tempwstr1, IMAGE_ICON, 0, 0, LR_LOADFROMFILE); 
+        // 图标加载失败处理
+        if (hIcon == NULL) {
+            swprintf(tempwstr1, TEMPWSTR_LENGTH, L"Error: Failed to load icon from file!\nIcon File: %hs", icon_path);
+            printf("%ls\n", tempwstr1);
+            MessageBox(hwnd, tempwstr1, internal_program_name_wstr, MB_ICONERROR);
+            // return EXIT_FAILURE;
+        }
+        else {
+            // 设置图标
+            SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
+            SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+            SendMessage(hwnd, WM_SETICON, ICON_SMALL2, (LPARAM)hIcon);
+            // 释放图标句柄
+            DestroyIcon(hIcon);
+            // system("pause");
+        }        
+    }
 
 
     // 处理路径
@@ -168,7 +206,8 @@ int main(int argc, char **argv){
     
     // 启动！
     printf("启动！\n");
-    execlp("cmd", "/C", backend_path_abspath, start_options_str, server_name);
+    // execlp("cmd", "/C", backend_path_abspath, start_options_str, server_name);
+    spawnlp(_P_WAIT, "cmd", "/C", backend_path_abspath, start_options_str, server_name, NULL);
 
     return 0;
 }
@@ -180,6 +219,7 @@ cJSON *createConfig(){
     cJSON_AddStringToObject(root, "server_nickname", server_name);
     cJSON_AddStringToObject(root, "start_option_str", default_start_option_str);
     cJSON_AddStringToObject(root, "path_of_main", default_path_of_main);
-    
+    cJSON_AddNullToObject(root, "icon");
+
     return root;
 }
