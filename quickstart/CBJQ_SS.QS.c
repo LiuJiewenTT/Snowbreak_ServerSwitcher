@@ -71,6 +71,8 @@ int main(int argc, char **argv){
         program_working_dir[p1-argv[0]] = 0;
     }
     printf("program_name=%s\n", program_name);
+    
+    // 检查程序文件名。
     valid_server_filename_prefix_length = strlen(valid_server_filename_prefix);
     val1 = strncmp(program_name, valid_server_filename_prefix, valid_server_filename_prefix_length);
     if( val1 != 0 ){
@@ -164,6 +166,9 @@ int main(int argc, char **argv){
     }
     printf("backend_path_abspath=%s\n", backend_path_abspath);
     
+    // 启动！
+    printf("启动！\n");
+    execlp("cmd", "/C", backend_path_abspath, start_options_str, server_name);
 
     return 0;
 }
