@@ -3,6 +3,12 @@
 #include <string.h>
 #include <stdio.h>
 #include <windows.h>
+#include <unistd.h>
+
+
+int file_exists(const char *filename) {
+    return access(filename, F_OK) != -1;
+}
 
 
 wchar_t *convertCharToWChar(const char* message){
