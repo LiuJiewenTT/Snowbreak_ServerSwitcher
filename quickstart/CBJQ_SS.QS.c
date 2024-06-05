@@ -1,26 +1,16 @@
-#include <windows.h>
 #define UNICODE
 #define _UNICODE
+#include <windows.h>
+#include <unistd.h>
 #include <locale.h>
 
 #include <stdio.h>
 #include <io.h>
 #include <string.h>
-#include <utils/cJSON/cJSON.h>
+#include "utils/utils.h"
+#include "utils/cJSON/cJSON.h"
 #define TEMPSTR_LENGTH 2048
 #define TEMPWSTR_LENGTH 2048
-
-
-wchar_t *convertCharToWChar(const char* message){
-    // 将 char 字符串转换为 wchar_t 字符串
-    int len = MultiByteToWideChar(CP_UTF8, 0, message, -1, NULL, 0);
-    wchar_t* wMessage = (wchar_t*)malloc(len * sizeof(wchar_t));
-    MultiByteToWideChar(CP_UTF8, 0, message, -1, wMessage, len);
-    return wMessage;
-}
-#define WCharChar(x) (convertCharToWChar(x))
-
-#define free2NULL(x) free(x);x=NULL;
 
 
 char path_delimeter = '\\';
@@ -50,6 +40,10 @@ int main(int argc, char **argv){
     // Sleep(3000);
     
     char config_content[config_content_maxsize];    // 512 KB
+    char backend_path[2048];
+    JaggedArray *executeCmd_args = NULL;
+    char executeCmd[2048];
+
     char *p1 = NULL;
     char tempstr1[TEMPSTR_LENGTH];
     wchar_t tempwstr1[TEMPWSTR_LENGTH];
@@ -76,7 +70,7 @@ int main(int argc, char **argv){
     if( val1 != 0 ){
         swprintf(tempwstr1, TEMPWSTR_LENGTH, L"错误：程序文件名不符合要求，应以\"%s\"起始。", valid_server_filename_prefix);
         printf("%ls\n", tempwstr1);
-        MessageBoxW(hwnd, (tempwstr1), (internal_program_name_wstr), MB_OK);
+        MessageBox(hwnd, (tempwstr1), (internal_program_name_wstr), MB_OK);
         return 0;
     }
 
@@ -91,7 +85,7 @@ int main(int argc, char **argv){
     if( server_name_length <= 0 ){
         swprintf(tempwstr1, TEMPWSTR_LENGTH, L"错误：程序文件名内不含server指示信息。");
         printf("%ls\n", tempwstr1);
-        MessageBoxW(hwnd, (tempwstr1), (internal_program_name_wstr), MB_OK);
+        MessageBox(hwnd, (tempwstr1), (internal_program_name_wstr), MB_OK);
         return 0;
     }
     strncpy(program_name_noext, program_name, p1-program_name);
@@ -133,10 +127,19 @@ int main(int argc, char **argv){
         swprintf(tempwstr1, TEMPWSTR_LENGTH, L"错误：配置解析失败。");
         printf("%ls\n", tempwstr1);
         fclose(f1);
-        MessageBoxW(hwnd, (tempwstr1), (internal_program_name_wstr), MB_OK);
+        MessageBox(hwnd, (tempwstr1), (internal_program_name_wstr), MB_OK);
         return 0;
     }
     fclose(f1);
+    
+    memset(backend_path, 0, sizeof(backend_path)*1.0/sizeof(char));
+    memset(executeCmd, 0, sizeof(executeCmd)*1.0/sizeof(char));
+
+    cJSON *cjson_main = cJSON_GetObjectItem(cjson_root1, "path_of_main");
+    strncpy(backend_path, cJSON_GetStringValue(cjson_main), sizeof(backend_path)*1.0/sizeof(char));
+    
+    executeCmd_args = create_empty_jagged_array();
+    append_row_element(executeCmd_args, )
 
     return 0;
 }

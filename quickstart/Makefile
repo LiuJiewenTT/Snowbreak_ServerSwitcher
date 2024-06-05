@@ -10,6 +10,8 @@ CFLAGS = -I"./"
 SRC = CBJQ_SS.QS.c
 OBJ = \
 build/build/main.o\
+build/build/utils.o\
+build/build/jagged_array.o\
 build/build/cJSON.o
 
 # 目标可执行文件
@@ -26,6 +28,12 @@ $(TARGET): $(OBJ)
 # build/%.o: src/%.c
 # 	$(CC) $(CFLAGS) -c $< -o $@
 build/build/main.o: CBJQ_SS.QS.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+build/build/utils.o: utils/utils.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+build/build/jagged_array.o: utils/jagged_array.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 build/build/cJSON.o: utils/cJSON/cJSON.c
