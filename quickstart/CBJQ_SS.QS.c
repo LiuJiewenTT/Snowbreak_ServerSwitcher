@@ -8,8 +8,7 @@
 #include <io.h>
 #include <string.h>
 #include "utils/utils.h"
-#include "utils/utils_cpp.h"
-
+// #include "utils/utils_cpp.h"
 #include "utils/cJSON/cJSON.h"
 #define TEMPSTR_LENGTH 2048
 #define TEMPWSTR_LENGTH 2048
@@ -45,7 +44,7 @@ int main(int argc, char **argv){
     char config_content[config_content_maxsize];    // 512 KB
     char backend_path[2048];
     char backend_path_abspath[2048];
-    JaggedArray<char> *executeCmd_args = NULL;
+    char start_options_str[2048];
     char executeCmd[2048];
 
     char *p1 = NULL;
@@ -146,6 +145,14 @@ int main(int argc, char **argv){
     // 获取json参数
     cJSON *cjson_main = cJSON_GetObjectItem(cjson_root1, "path_of_main");
     strncpy(backend_path, cJSON_GetStringValue(cjson_main), sizeof(backend_path)*1.0/sizeof(char));
+    printf("backend_path=%s\n", backend_path);
+    cJSON *cjson_startOptions = cJSON_GetObjectItem(cjson_root1, "start_option_str");
+    strncpy(start_options_str, cJSON_GetStringValue(cjson_startOptions), sizeof(start_options_str)*1.0/sizeof(char));
+    printf("start_options_str=%s\n", start_options_str);
+    cJSON *cjson_serverName = cJSON_GetObjectItem(cjson_root1, "server_nickname");
+    strncpy(server_name, cJSON_GetStringValue(cjson_serverName), sizeof(server_name)*1.0/sizeof(char));
+    printf("server_name=%s\n", server_name);
+
 
     // 处理路径
     p1 = _fullpath(backend_path_abspath, backend_path, 2048);
@@ -157,10 +164,6 @@ int main(int argc, char **argv){
     }
     printf("backend_path_abspath=%s\n", backend_path_abspath);
     
-    executeCmd_args = (JaggedArray<char> *)create_empty_jagged_array(char);
-    val1 = append_row_element(executeCmd_args, backend_path_abspath, strlen(backend_path_abspath));
-
-    destroy_jagged_array(executeCmd_args);
 
     return 0;
 }

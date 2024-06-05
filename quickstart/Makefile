@@ -24,13 +24,13 @@ all: $(TARGET)
 
 # 链接目标文件生成可执行文件
 $(TARGET): $(OBJ)
-	$(CPPC) $(OBJ) -o $(TARGET)
+	$(CC) $(OBJ) -o $(TARGET)
 
 # 编译源文件生成目标文件
 # build/%.o: src/%.c
 # 	$(CC) $(CFLAGS) -c $< -o $@
-build/build/main.o: CBJQ_SS.QS.cpp
-	$(CPPC) $(CFLAGS) -c $< -o $@
+build/build/main.o: CBJQ_SS.QS.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 build/build/utils.o: utils/utils.c
 	$(CC) $(CFLAGS) -c $< -o $@
