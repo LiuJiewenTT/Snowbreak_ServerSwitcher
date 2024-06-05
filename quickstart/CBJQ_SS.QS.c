@@ -38,8 +38,6 @@ int main(int argc, char **argv){
     HWND hwnd = GetConsoleWindow();
     SetConsoleOutputCP(CP_UTF8);
     setlocale(LC_CTYPE, "zh_cn.UTF-8");
-    FILE *f_log = NULL;
-    int stdout_fd = 0;
     // ShowWindow(hwnd, SW_HIDE);
     // Sleep(3000);
     
@@ -58,14 +56,6 @@ int main(int argc, char **argv){
          *f2 = NULL;
     cJSON *cjson_root1 = NULL;
     int val1 = 0;
-
-    // 开启日志，复制标准输出。
-    sprintf(tempstr1, "%s.log", argv[0]);
-    f_log = fopen(tempstr1, "w");
-    stdout_fd = _dup(_fileno(stdout));  // 复制标准输出的文件描述符
-    _dup2(_fileno(f_log), _fileno(stdout));  // 将标准输出重定向到文件
-    // _dup2(stdout_fd, _fileno(stdout));  // 将标准输出重定向到原始的标准输出
-
 
     printf("cmd=%s\n", argv[0]);
     
