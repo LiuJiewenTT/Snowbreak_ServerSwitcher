@@ -8,6 +8,8 @@
 #include <io.h>
 #include <string.h>
 #include "utils/utils.h"
+#include "utils/utils_cpp.h"
+
 #include "utils/cJSON/cJSON.h"
 #define TEMPSTR_LENGTH 2048
 #define TEMPWSTR_LENGTH 2048
@@ -16,6 +18,7 @@
 char path_delimeter = '\\';
 char program_name[2048];
 char program_name_noext[2048];
+char program_working_dir[2048];
 char internal_program_name[2048] = {"CBJQ_SS.QS Core"};
 wchar_t internal_program_name_wstr[2048] = {L"CBJQ_SS.QS Core"};
 char server_name[2048];
@@ -41,7 +44,8 @@ int main(int argc, char **argv){
     
     char config_content[config_content_maxsize];    // 512 KB
     char backend_path[2048];
-    JaggedArray *executeCmd_args = NULL;
+    char backend_path_abspath[2048];
+    JaggedArray<char> *executeCmd_args = NULL;
     char executeCmd[2048];
 
     char *p1 = NULL;
@@ -60,9 +64,12 @@ int main(int argc, char **argv){
     p1 = strrchr(argv[0], path_delimeter);
     if( p1 == NULL ){
         strcpy(program_name, argv[0]);
+        sprintf(program_working_dir, ".\\");
     }
     else {
         strcpy(program_name, p1+1);
+        strncpy(program_working_dir, argv[0], p1-argv[0]);
+        program_working_dir[p1-argv[0]] = 0;
     }
     printf("program_name=%s\n", program_name);
     valid_server_filename_prefix_length = strlen(valid_server_filename_prefix);
@@ -133,13 +140,27 @@ int main(int argc, char **argv){
     fclose(f1);
     
     memset(backend_path, 0, sizeof(backend_path)*1.0/sizeof(char));
+    memset(backend_path_abspath, 0, sizeof(backend_path)*1.0/sizeof(char));
     memset(executeCmd, 0, sizeof(executeCmd)*1.0/sizeof(char));
 
+    // 获取json参数
     cJSON *cjson_main = cJSON_GetObjectItem(cjson_root1, "path_of_main");
     strncpy(backend_path, cJSON_GetStringValue(cjson_main), sizeof(backend_path)*1.0/sizeof(char));
+
+    // 处理路径
+    p1 = _fullpath(backend_path_abspath, backend_path, 2048);
+    if( p1 ==NULL ){
+        swprintf(tempwstr1, TEMPWSTR_LENGTH, L"错误：绝对路径推算失败。");
+        printf("%ls\n", tempwstr1);
+        MessageBox(hwnd, (tempwstr1), (internal_program_name_wstr), MB_OK);
+        return 0;
+    }
+    printf("backend_path_abspath=%s\n", backend_path_abspath);
     
-    executeCmd_args = create_empty_jagged_array();
-    append_row_element(executeCmd_args, )
+    executeCmd_args = (JaggedArray<char> *)create_empty_jagged_array(char);
+    val1 = append_row_element(executeCmd_args, backend_path_abspath, strlen(backend_path_abspath));
+
+    destroy_jagged_array(executeCmd_args);
 
     return 0;
 }

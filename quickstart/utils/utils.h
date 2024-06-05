@@ -13,7 +13,4 @@ wchar_t *convertCharToWChar(const char* message);
 // 拼接命令行参数成一个字符串
 char* concatenateArgs(int argc, const char *argv[]);
 
-#include <jagged_array.h>
-
-
 #endif // UTILS_UTILS_H
