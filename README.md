@@ -1,6 +1,6 @@
 ---
 LANG: zh_CN.UTF-8
-date: 2024-05-20 22:52:00 +0800
+date: 2024-06-05 17:12:00 +0800
 ---
 
 
@@ -8,7 +8,7 @@ date: 2024-05-20 22:52:00 +0800
 
 简介：此程序用于切换不同渠道的启动器，以连接到不同的《尘白禁区》服务器。
 
-快速跳转：[使用](#使用), [配置方法](#配置方法), [GUI](#guis).
+快速跳转：[使用](#使用), [配置方法](#配置方法), [GUI](#guis)，[一键启动](#一键启动).
 
 ![icon](icon1.png)
 
@@ -247,6 +247,10 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
 可用GUI程序：
 
 1. 项目：[CBJQ_SS_FrontEnd-tk](https://github.com/LiuJiewenTT/CBJQ_SS_FrontEnd-tk)。（目前仅支持中文）
+
+## 一键启动
+
+2024.6.5: 快了，就快了，已经可以用了，等我把配套完善一下就好。
 
 ## LICENSE
 
