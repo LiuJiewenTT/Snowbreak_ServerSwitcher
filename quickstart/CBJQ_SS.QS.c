@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <unistd.h>
 #include <locale.h>
+#include <fcntl.h>
 
 #include <stdio.h>
 #include <io.h>
@@ -38,6 +39,8 @@ int main(int argc, char **argv){
     HWND hwnd = GetConsoleWindow();
     SetConsoleOutputCP(CP_UTF8);
     setlocale(LC_CTYPE, "zh_cn.UTF-8");
+    int log_fd = 0;
+    int stdout_fd = 0;
     // ShowWindow(hwnd, SW_HIDE);
     // Sleep(3000);
     
@@ -57,6 +60,13 @@ int main(int argc, char **argv){
     cJSON *cjson_root1 = NULL;
     int val1 = 0;
 
+    // 启动日志记录
+    sprintf(tempstr1, "%s.log", argv[0]);
+    log_fd = _open(tempstr1, _O_WRONLY | _O_CREAT | _O_APPEND);     // 日志文件句柄
+    stdout_fd = _dup(_fileno(stdout));      // 新的指向标准输出的句柄
+    _dup2(log_fd, _fileno(stdout));         // 把标准输出句柄改到文件去
+    // _dup2(stdout_fd, _fileno(stdout));      // 用默认标准输出句柄重置输出句柄
+
     printf("cmd=%s\n", argv[0]);
     
     // 获取程序文件名。
@@ -71,6 +81,8 @@ int main(int argc, char **argv){
         program_working_dir[p1-argv[0]] = 0;
     }
     printf("program_name=%s\n", program_name);
+
+    // 检查程序文件名。
     valid_server_filename_prefix_length = strlen(valid_server_filename_prefix);
     val1 = strncmp(program_name, valid_server_filename_prefix, valid_server_filename_prefix_length);
     if( val1 != 0 ){
@@ -164,6 +176,9 @@ int main(int argc, char **argv){
     }
     printf("backend_path_abspath=%s\n", backend_path_abspath);
     
+    // 启动！
+    printf("启动！\n");
+    execlp("cmd", "/C", backend_path_abspath, start_options_str, server_name);
 
     return 0;
 }
