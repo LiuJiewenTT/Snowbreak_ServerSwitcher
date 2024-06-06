@@ -1,0 +1,3 @@
+[submodule "quickstart"]
+	path = quickstart
+	url = https://github.com/LiuJiewenTT/CBJQ_SS.QS.git
