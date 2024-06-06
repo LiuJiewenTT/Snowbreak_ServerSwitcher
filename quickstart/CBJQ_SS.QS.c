@@ -186,11 +186,11 @@ int main(int argc, char **argv){
         strncpy(start_options_str, cJSON_GetStringValue(cjson_startOptions), sizeof(start_options_str)*1.0/sizeof(char));
         printf("start_options_str=%s\n", start_options_str);
     }
-    cJSON *cjson_serverName = cJSON_GetObjectItem(cjson_root1, "server_nickname");
-    cjson_pcheck_IsNotString(cjson_serverName, exit_flag1) else {
-        strncpy(server_name, cJSON_GetStringValue(cjson_serverName), sizeof(server_name)*1.0/sizeof(char));
-        printf("server_name=%s\n", server_name);
-    }
+    // cJSON *cjson_serverName = cJSON_GetObjectItem(cjson_root1, "server_nickname");
+    // cjson_pcheck_IsNotString(cjson_serverName, exit_flag1) else {
+    //     strncpy(server_name, cJSON_GetStringValue(cjson_serverName), sizeof(server_name)*1.0/sizeof(char));
+    //     printf("server_name=%s\n", server_name);
+    // }
     cJSON *cjson_icon = cJSON_GetObjectItem(cjson_root1, "icon");
     
     // 补充并更新配置，随后退出。
@@ -246,7 +246,7 @@ int main(int argc, char **argv){
 cJSON *createConfig(){
     cJSON *root = cJSON_CreateObject();
 
-    cJSON_AddStringToObject(root, "server_nickname", server_name);
+    // cJSON_AddStringToObject(root, "server_nickname", server_name);
     cJSON_AddStringToObject(root, "start_option_str", default_start_option_str);
     cJSON_AddStringToObject(root, "path_of_main", default_path_of_main);
     cJSON_AddNullToObject(root, "icon");
@@ -257,7 +257,7 @@ cJSON *createConfig(){
 
 cJSON *collectConfig(){
     cJSON *root = cJSON_CreateObject();
-    cJSON_AddStringToObject(root, "server_nickname", server_name);
+    // cJSON_AddStringToObject(root, "server_nickname", server_name);
     cJSON_AddStringToObject(root, "start_option_str", default_start_option_str);
     cJSON_AddStringToObject(root, "path_of_main", default_path_of_main);
     if( icon_path[0] ){
