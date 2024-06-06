@@ -83,7 +83,7 @@ int main(int argc, char **argv){
     // 打印程序信息。
     #define temp_divider "####################################"
     printf("%s\n", temp_divider);
-    printf("%s\nVersion: %s\nAuthor Name: %s\nAuthor Email: %s\n", PROGRAM_NAME_PRETTY, PROGRAM_VERSION, AUTHOR_NAME, AUTHOR_EMAIL);
+    printf("%s\nVersion: %s\nAuthor Name: %s\nAuthor Email: %s\n\nBuild Description:\n%s\n", PROGRAM_NAME_PRETTY, PROGRAM_VERSION, AUTHOR_NAME, AUTHOR_EMAIL, BUILD_DESCRIPTION);
     printf("%s\n", temp_divider);
     #undef temp_divider
 

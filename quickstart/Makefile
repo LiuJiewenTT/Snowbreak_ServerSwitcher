@@ -12,7 +12,8 @@ SRC = CBJQ_SS.QS.cpp
 OBJ = \
 build/build/main.o\
 build/build/utils.o\
-build/build/cJSON.o 
+build/build/program_info.o\
+build/build/cJSON.o
 
 # build/build/jagged_array.o
 
@@ -37,6 +38,9 @@ build/build/utils.o: utils/utils.c
 
 # build/build/jagged_array.o: utils/jagged_array.tpp
 # 	$(CPPC) $(CFLAGS) -c $< -o $@
+
+build/build/program_info.o: program_info.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 build/build/cJSON.o: utils/cJSON/cJSON.c
 	$(CC) $(CFLAGS) -c $< -o $@
