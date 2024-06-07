@@ -121,6 +121,7 @@ set exit_value=0
 set retv_range_startup_start=6
 set GameConfigsHome=%APPDATA%\..\Local\Game\Saved
 set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
+set startwrapper=CBJQ_SS.StartWrapper.exe
 
 :loop1
 
@@ -155,7 +156,7 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
             if /I "%mLANG%" == "zh" ( echo [INFO] 不存在实际启动器文件。 ) else ( echo [INFO] The real launcher file does not exist. ) 
         )
         if /I "%flag_nostart%" == "false" ( 
-            call "%launcher_worldwide_dest%" 
+            call "%startwrapper%" "%launcher_worldwide_dest%" 
             if ERRORLEVEL 1 (
                 if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
                 set exit_value=2
@@ -187,7 +188,7 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
             if /I "%mLANG%" == "zh" ( echo [INFO] 不存在实际启动器文件。 ) else ( echo [INFO] The real launcher file does not exist. ) 
         )
         if /I "%flag_nostart%" == "false" ( 
-            call "%launcher_bilibili_dest%" 
+            call "%startwrapper%" "%launcher_bilibili_dest%" 
             if ERRORLEVEL 1 (
                 if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
                 set exit_value=2
@@ -219,7 +220,7 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
             if /I "%mLANG%" == "zh" ( echo [INFO] 不存在实际启动器文件。 ) else ( echo [INFO] The real launcher file does not exist. ) 
         )
         if /I "%flag_nostart%" == "false" ( 
-            call "%launcher_kingsoft_dest%" 
+            call "%startwrapper%" "%launcher_kingsoft_dest%" 
             if ERRORLEVEL 1 (
                 if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
                 set exit_value=2
@@ -266,7 +267,7 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
                             if /I "%mLANG%" == "zh" ( echo [INFO] 不存在实际启动器文件。 ) else ( echo [INFO] The real launcher file does not exist. ) 
                         )
                         if /I "%flag_nostart%" == "false" ( 
-                            call "!launcher_exslot_%%i_dest!" 
+                            call "%startwrapper%" "!launcher_exslot_%%i_dest!" 
                             if ERRORLEVEL 1 (
                                 if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
                                 set exit_value=2
@@ -332,8 +333,8 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
     @echo Snowbreak_ServerSwitcher(CBJQ_SS)
     @echo Description: This is a server switcher for CBJQ(Snowbreak: Containment Zone) implemented with Windows bat script.
     @echo Author: LiuJiewenTT
-    @echo Version: 1.2.0
-    @echo Date: 2024-05-20
+    @echo Version: 1.2.1
+    @echo Date: 2024-06-07
     @echo Note：Github Repo：^<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher^>
     @echo       Author's Email：^<liuljwtt@163.com^>
 @ goto:eof
@@ -342,8 +343,8 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
     @echo 尘白禁区服务器切换器(CBJQ_SS)
     @echo 描述: 这是一个使用Windows批处理脚本实现的尘白禁区服务器切换器。
     @echo 作者: LiuJiewenTT
-    @echo 版本: 1.2.0
-    @echo 日期: 2024-05-20
+    @echo 版本: 1.2.1
+    @echo 日期: 2024-06-07
     @echo 备注：Github项目链接：^<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher^>
     @echo       作者Email地址：^<liuljwtt@163.com^>
 @ goto:eof
