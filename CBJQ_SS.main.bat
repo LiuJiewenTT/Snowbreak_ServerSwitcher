@@ -52,6 +52,8 @@ setlocal enabledelayedexpansion
 @set StartupSettingsName_homeland=startup-homeland.settings
 @set StartupSettingsName_worldwide=startup-worldwide.settings
 
+@set flag_enable_admin_autodetect=true
+
 @REM ----------------------------------------------
 @REM 预留的扩展选项槽，可匹配测试服渠道。 
 
@@ -115,13 +117,25 @@ if /I "%mLANG%" EQU "zh" (
 set flag_nostart=false
 set flag_noswitch=false
 set flag_nopause=false
+set flag_hasAdminPrivilege=false
 
 set threshold_abort=11
 set exit_value=0
 set retv_range_startup_start=6
 set GameConfigsHome=%APPDATA%\..\Local\Game\Saved
 set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
-@REM set startwrapper=CBJQ_SS.StartWrapper.exe
+set startwrapper=CBJQ_SS.StartWrapper.exe
+
+if /I "%flag_enable_admin_autodetect%" == "true" (
+    call :detect_admin_privilege
+    if /I "!flag_hasAdminPrivilege!" == "true" (
+        if /I "%mLANG%" == "zh" ( echo [INFO] 已检测到管理员权限。 ) else ( echo [INFO] Administrator privileges detected. )
+        @REM 不经过wrapper可以在GUI看到启动器运行信息。（当前版本） 
+        @REM set "startwrapper="
+    ) else (
+        if /I "%mLANG%" == "zh" ( echo [INFO] 未检测到管理员权限。 ) else ( echo [INFO] Administrator privileges not detected. )
+    )
+)
 
 if defined startwrapper (
     set startwrapper="%startwrapper%"
@@ -338,7 +352,7 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
     @echo Description: This is a server switcher for CBJQ(Snowbreak: Containment Zone) implemented with Windows bat script.
     @echo Author: LiuJiewenTT
     @echo Version: 1.2.1
-    @echo File Version: 1.2.0
+    @echo File Version: 1.2.1
     @echo Date: 2024-06-08
     @echo Note：Github Repo：^<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher^>
     @echo       Author's Email：^<liuljwtt@163.com^>
@@ -349,10 +363,22 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
     @echo 描述: 这是一个使用Windows批处理脚本实现的尘白禁区服务器切换器。
     @echo 作者: LiuJiewenTT
     @echo 版本: 1.2.1
-    @echo File Version: 1.2.0
+    @echo 文件版本: 1.2.1
     @echo 日期: 2024-06-08
     @echo 备注：Github项目链接：^<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher^>
     @echo       作者Email地址：^<liuljwtt@163.com^>
+@ goto:eof
+
+:detect_admin_privilege
+    @REM method 1
+    net session >nul 2>&1 
+    @REM method 2
+    @REM openfiles >nul 2>&1 
+    if ERRORLEVEL 1 (
+        set flag_hasAdminPrivilege=false
+    ) else (
+        set flag_hasAdminPrivilege=true
+    )
 @ goto:eof
 
 :func_updateSymlink
