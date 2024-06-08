@@ -1,3 +1,6 @@
 [submodule "quickstart"]
 	path = quickstart
 	url = https://github.com/LiuJiewenTT/CBJQ_SS.QS.git
+[submodule "startwrapper"]
+	path = startwrapper
+	url = https://github.com/LiuJiewenTT/CBJQ_SS.StartWrapper.git
