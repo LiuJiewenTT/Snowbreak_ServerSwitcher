@@ -15,3 +15,4 @@ CBJQ_SS.QS.kingsoft.config.json
 CBJQ_SS.StartWrapper.exe
 *.test
 *.unhide
+*.supervise
