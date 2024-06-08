@@ -121,6 +121,11 @@ set exit_value=0
 set retv_range_startup_start=6
 set GameConfigsHome=%APPDATA%\..\Local\Game\Saved
 set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
+@REM set startwrapper=CBJQ_SS.StartWrapper.exe
+
+if defined startwrapper (
+    set startwrapper="%startwrapper%"
+)
 
 :loop1
 
@@ -155,7 +160,7 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
             if /I "%mLANG%" == "zh" ( echo [INFO] 不存在实际启动器文件。 ) else ( echo [INFO] The real launcher file does not exist. ) 
         )
         if /I "%flag_nostart%" == "false" ( 
-            call "%launcher_worldwide_dest%" 
+            call %startwrapper% "%launcher_worldwide_dest%" 
             if ERRORLEVEL 1 (
                 if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
                 set exit_value=2
@@ -187,7 +192,7 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
             if /I "%mLANG%" == "zh" ( echo [INFO] 不存在实际启动器文件。 ) else ( echo [INFO] The real launcher file does not exist. ) 
         )
         if /I "%flag_nostart%" == "false" ( 
-            call "%launcher_bilibili_dest%" 
+            call %startwrapper% "%launcher_bilibili_dest%" 
             if ERRORLEVEL 1 (
                 if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
                 set exit_value=2
@@ -219,7 +224,7 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
             if /I "%mLANG%" == "zh" ( echo [INFO] 不存在实际启动器文件。 ) else ( echo [INFO] The real launcher file does not exist. ) 
         )
         if /I "%flag_nostart%" == "false" ( 
-            call "%launcher_kingsoft_dest%" 
+            call %startwrapper% "%launcher_kingsoft_dest%" 
             if ERRORLEVEL 1 (
                 if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
                 set exit_value=2
@@ -266,7 +271,7 @@ set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
                             if /I "%mLANG%" == "zh" ( echo [INFO] 不存在实际启动器文件。 ) else ( echo [INFO] The real launcher file does not exist. ) 
                         )
                         if /I "%flag_nostart%" == "false" ( 
-                            call "!launcher_exslot_%%i_dest!" 
+                            call %startwrapper% "!launcher_exslot_%%i_dest!" 
                             if ERRORLEVEL 1 (
                                 if /I "%mLANG%" == "zh" ( echo [ERROR] 【已检测到】：不存在此服务器的可执行启动器！ ) else ( echo [ERROR] [Detected]: Runnable launcher to this server does not exist^^! )
                                 set exit_value=2
