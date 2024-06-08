@@ -12,3 +12,5 @@ CBJQ_SS.QS.kingsoft.exe
 CBJQ_SS.QS.kingsoft.config.json
 *.hide
 *.log
+CBJQ_SS.StartWrapper.exe
+*.unhide
