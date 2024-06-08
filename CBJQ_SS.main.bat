@@ -337,8 +337,9 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
     @echo Snowbreak_ServerSwitcher(CBJQ_SS)
     @echo Description: This is a server switcher for CBJQ(Snowbreak: Containment Zone) implemented with Windows bat script.
     @echo Author: LiuJiewenTT
-    @echo Version: 1.2.0
-    @echo Date: 2024-05-20
+    @echo Version: 1.2.1
+    @echo File Version: 1.2.0
+    @echo Date: 2024-06-08
     @echo Note：Github Repo：^<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher^>
     @echo       Author's Email：^<liuljwtt@163.com^>
 @ goto:eof
@@ -347,8 +348,9 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
     @echo 尘白禁区服务器切换器(CBJQ_SS)
     @echo 描述: 这是一个使用Windows批处理脚本实现的尘白禁区服务器切换器。
     @echo 作者: LiuJiewenTT
-    @echo 版本: 1.2.0
-    @echo 日期: 2024-05-20
+    @echo 版本: 1.2.1
+    @echo File Version: 1.2.0
+    @echo 日期: 2024-06-08
     @echo 备注：Github项目链接：^<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher^>
     @echo       作者Email地址：^<liuljwtt@163.com^>
 @ goto:eof
