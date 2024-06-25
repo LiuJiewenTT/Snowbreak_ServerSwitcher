@@ -1,0 +1,6 @@
+[FILENAMES]
+Open=   "..\..\..\CBJQ_SS.QS.worldwide.exe"
+Save=   "..\..\..\CBJQ_SS.QS.worldwide.exe"
+Log=    CONSOLE
+[COMMANDS]
+-addoverwrite "..\..\..\IconGroup-worldwide.ico",ICONGROUP,MAINICON,

@@ -16,3 +16,9 @@ CBJQ_SS.StartWrapper.exe
 *.test
 *.unhide
 *.supervise
+CBJQ_SS_FrontEnd-tk.config.json
+log.txt
+__pycache__
+CBJQ_SS.QS.bilibili.exe
+CBJQ_SS.QS.worldwide.exe
+CBJQ_SS.QS.exe

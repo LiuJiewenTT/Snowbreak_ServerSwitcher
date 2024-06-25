@@ -1,0 +1,6 @@
+[FILENAMES]
+Open=   "..\..\..\CBJQ_SS.QS.kingsoft.exe"
+Save=   "..\..\..\CBJQ_SS.QS.kingsoft.exe"
+Log=    CONSOLE
+[COMMANDS]
+-addoverwrite "..\..\..\IconGroup-kingsoft.ico",ICONGROUP,MAINICON,

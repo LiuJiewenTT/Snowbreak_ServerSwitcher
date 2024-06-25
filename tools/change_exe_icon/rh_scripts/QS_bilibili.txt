@@ -1,0 +1,6 @@
+[FILENAMES]
+Open=   "..\..\..\CBJQ_SS.QS.bilibili.exe"
+Save=   "..\..\..\CBJQ_SS.QS.bilibili.exe"
+Log=    CONSOLE
+[COMMANDS]
+-addoverwrite "..\..\..\IconGroup-bilibili.ico",ICONGROUP,MAINICON,
