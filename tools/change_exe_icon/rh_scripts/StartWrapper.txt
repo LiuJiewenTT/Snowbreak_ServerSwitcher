@@ -1,0 +1,6 @@
+[FILENAMES]
+Open=   "..\..\..\CBJQ_SS.StartWrapper.exe"
+Save=   "..\..\..\CBJQ_SS.StartWrapper.exe"
+Log=    CONSOLE
+[COMMANDS]
+-addoverwrite "..\..\..\icon1.ico",ICONGROUP,MAINICON,
