@@ -1,6 +1,6 @@
 ---
 LANG: zh_CN.UTF-8
-date: 2024-06-25 12:08:00 +0800
+date: 2024-06-27 18:30:00 +0800
 ---
 
 
@@ -15,7 +15,7 @@ date: 2024-06-25 12:08:00 +0800
 项目地址：<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher><br/>
 说明页链接：<https://liujiewentt.github.io/Snowbreak_ServerSwitcher/README><br/>下载请到Release区：<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/releases>
 
-如果有bug欢迎反馈！[到这里来添加 *Issue*](https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/issues)
+如果有bug欢迎反馈！[到这里来添加 *Issue*](https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/issues)<br/>参与更多讨论可以来 [*Discussions *区](https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/discussions)
 
 ## 可行性分析
 
@@ -250,6 +250,20 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
    > - 仅启动，不切换：`尘白禁区**（启动）.bat`
    >
    > 您也可以为测试服配置启动脚本！
+   
+   > 配置GUI (CBJQ_SS_FrontEnd-tk)时您可以使用如下方式完成cwd参数和配置文件的初始化：
+   >
+   > 1. 运行cmd（命令行）。（`Win`+`R`，输入`cmd`，回车）
+   >
+   > 2. 转到GUI程序所在目录，示例：`cd /d "M:\Program Files\Snow\Snowbreak_ServerSwitcher\GUIs\CBJQ_SS_FrontEnd_tk-B-I2\CBJQ_SS_FrontEnd_tk-B-I2"`
+   >
+   > 3. 把`Snowbreak_ServerSwitcher`的完整路径作为启动参数传入，示例：
+   >
+   >    ``` shell
+   >    M:\Program Files\Snow\Snowbreak_ServerSwitcher\GUIs\CBJQ_SS_FrontEnd_tk-B-I2\CBJQ_SS_FrontEnd_tk-B-I2> CBJQ_SS_FrontEnd_tk-B-I2.exe -cwd "M:\Program Files\Snow\Snowbreak_ServerSwitcher"
+   >    ```
+   >
+   > 4. 关闭弹出的图形窗口，配置得到保存。（如果有启动页，进入）
 
 ## GUIs
 
