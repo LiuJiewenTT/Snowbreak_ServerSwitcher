@@ -1,6 +1,6 @@
 ---
 LANG: zh_CN.UTF-8
-date: 2024-06-27 18:30:00 +0800
+date: 2024-08-15 09:23:00 +0800
 ---
 
 
@@ -8,12 +8,23 @@ date: 2024-06-27 18:30:00 +0800
 
 简介：此程序用于切换不同渠道的启动器，以连接到不同的《尘白禁区》服务器。
 
+> 自尘白一周年开始，lhm启用了西山居尘白启动器，新用户下载到的不是旧版的尘白启动器。截止至2024年8月15日，西山居启动器存在诸多问题，包括缩放错误、闪退、蓝屏、无法开机（收集自启动器交流群群友自述内容）。因此，推荐暂时使用旧版启动器v2.0（群友说已经更新不了了）。
+>
+> 旧版启动器下载链接：[跳转至v1.2.2发行](https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/releases/tag/v1.2.2)
+
 快速跳转：[使用](#使用), [配置方法](#配置方法), [GUI](#guis)，[一键启动](#一键启动).
 
 ![icon](icon1.png)
 
 项目地址：<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher><br/>
-说明页链接：<https://liujiewentt.github.io/Snowbreak_ServerSwitcher/README><br/>下载请到Release区：<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/releases>
+说明页链接：<https://liujiewentt.github.io/Snowbreak_ServerSwitcher/README><br/>下载请到Release区：<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/releases><br />视频教程：
+
+- [尘白禁区切服器-特点一览](https://www.bilibili.com/video/BV1rH4y1u7Zh/)
+- [尘白禁区切服器 - 安装及美化](https://www.bilibili.com/video/BV1sE421F7m3/)
+- [尘白禁区切服器 - 使用演示 - 技术演示版](https://www.bilibili.com/video/BV1Wt421T7GP/)
+- [尘白禁区切服器 - 添加测试服](https://www.bilibili.com/video/BV1Nx4y1p7us/)
+
+
 
 如果有bug欢迎反馈！[到这里来添加 *Issue*](https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/issues)<br/>参与更多讨论可以来 [*Discussions *区](https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/discussions)
 
@@ -71,6 +82,7 @@ date: 2024-06-27 18:30:00 +0800
 ## 备注
 
 1. 双语特性：支持中文（保证不乱码）和英文。（Support zh_CN and en_US.）
+2. 暂未添加游戏语言配置文件链接。（预计下版本添加）
 
 ## 使用
 
@@ -251,7 +263,7 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
    >
    > 您也可以为测试服配置启动脚本！
    
-   > 配置GUI (CBJQ_SS_FrontEnd-tk)时您可以使用如下方式完成cwd参数和配置文件的初始化：
+   > 配置**GUI** (CBJQ_SS_FrontEnd-tk)时您可以使用如下方式完成cwd参数和配置文件的**初始化**：
    >
    > 1. 运行cmd（命令行）。（`Win`+`R`，输入`cmd`，回车）
    >
