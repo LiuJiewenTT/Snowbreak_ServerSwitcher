@@ -1,6 +1,6 @@
 ---
 LANG: zh_CN.UTF-8
-date: 2024-08-15 09:23:00 +0800
+date: 2024-11-02 14:04:00 +0800
 ---
 
 
@@ -14,7 +14,7 @@ date: 2024-08-15 09:23:00 +0800
 
 快速跳转：[使用](#使用), [配置方法](#配置方法), [GUI](#guis)，[一键启动](#一键启动).
 
-![icon](icon1.png)
+![icon](辰星-云篆 团子.jpg)
 
 项目地址：<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher><br/>
 说明页链接：<https://liujiewentt.github.io/Snowbreak_ServerSwitcher/README><br/>下载请到Release区：<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/releases><br />视频教程：
@@ -300,4 +300,12 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
 本项目含子项目[`CBJQ_SS.QS` (`.\quickstart`)](https://github.com/LiuJiewenTT/CBJQ_SS.QS)（MIT开源协议）实现一键切换并启动。构建产品推荐在`main`所在目录使用；
 
 本项目内置[`IconFold` `v1.0.0` (`.\tools\IconFold\v1.0.0`)](https://github.com/LiuJiewenTT/IconFold) （MIT开源协议）实现文件夹图标的设置。可以删除tools文件夹。
+
+## Copyrights
+
+此部分主要是关于资源的版权声明。（排序不分先后）
+
+| 资源位置           | 版权所有者                                   | 备注 |
+| ------------------ | -------------------------------------------- | ---- |
+| 辰星-云篆 团子.jpg | *魔法少女鱼鱼熏Kaori* (B站用户UID: 66874794) |      |
 
