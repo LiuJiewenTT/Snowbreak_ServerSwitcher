@@ -1,6 +1,6 @@
 ---
 LANG: zh_CN.UTF-8
-date: 2024-11-02 14:04:00 +0800
+date: 2024-11-02 17:56:00 +0800
 ---
 
 
@@ -14,7 +14,7 @@ date: 2024-11-02 14:04:00 +0800
 
 快速跳转：[使用](#使用), [配置方法](#配置方法), [GUI](#guis)，[一键启动](#一键启动).
 
-![icon](辰星-云篆 团子.jpg)
+<img src="辰星-云篆 团子.jpg" style="max-width:75%">
 
 项目地址：<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher><br/>
 说明页链接：<https://liujiewentt.github.io/Snowbreak_ServerSwitcher/README><br/>下载请到Release区：<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/releases><br />视频教程：
