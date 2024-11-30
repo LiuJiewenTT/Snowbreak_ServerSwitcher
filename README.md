@@ -1,6 +1,9 @@
 ---
 LANG: zh_CN.UTF-8
-date: 2024-11-03 21:35:00 +0800
+date: 2024-11-30 19:36:00 +0800
+permalink: /
+redirect_from:
+  - /README/
 ---
 
 
