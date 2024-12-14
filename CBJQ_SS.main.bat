@@ -51,13 +51,19 @@ setlocal enabledelayedexpansion
 @set LANG_default=zh
 @REM @set LANG_default=en
 
+@REM 如果需要启用国际服支持，请取消下面两行的注释状态，否则请添加注释状态。 
 @set StartupSettingsName_homeland=startup-homeland.settings
 @set StartupSettingsName_worldwide=startup-worldwide.settings
 
-@set GameIniName_worldwide=Game-worldwide.ini
-@set GameIniName_bilibili=Game-bilibili.ini
-@set GameIniName_jinshan=Game-jinshan.ini
+@REM 如果要启用GameIni切换功能，请设置以下变量为true，并设置相应的GameIni文件名变量。 
+@set flag_enable_GameIni_switching=true
 
+@REM 以下三行请填入启动器的GameIni文件路径(包含文件名，不加引号，不可以为空，且必须包含.ini扩展名)。 
+@set launcher_worldwide_GameIniName=Game-worldwide.ini
+@set launcher_bilibili_GameIniName=Game-bilibili.ini
+@set launcher_kingsoft_GameIniName=Game-kingsoft.ini
+
+@REM 是否启用管理员权限自动检测，默认启用。 
 @set flag_enable_admin_autodetect=true
 
 @REM ----------------------------------------------
@@ -129,11 +135,14 @@ set flag_noswitch=false
 set flag_nopause=false
 set flag_hasAdminPrivilege=false
 
-set threshold_abort=11
+set threshold_abort=101
 set exit_value=0
 set retv_range_startup_start=6
-set GameConfigsHome=%APPDATA%\..\Local\Game\Saved
+set retv_range_gameini_start=11
+
+set GameConfigsHome=%LOCALAPPDATA%\Game\Saved
 set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
+set GameIniDir_path=%GameConfigsHome%\Config\WindowsNoEditor
 set startwrapper=CBJQ_SS.StartWrapper.exe
 
 @REM # Dectect Admin Privilege
@@ -180,6 +189,12 @@ if defined startwrapper (
                 shift /1
                 goto:loop1
             )
+
+            call :func_switchGameIni "%launcher_worldwide_GameIniName%"
+            if /I "!exit_value!" GEQ "%retv_range_gameini_start%" if /I "!exit_value!" NEQ "12" ( 
+                shift /1
+                goto:loop1
+            )
         )
         if exist "%launcher_worldwide%" ( 
             if /I "%mLANG%" == "zh" ( echo [INFO] 存在实际启动器文件。 ) else ( echo [INFO] The real launcher file exists. ) 
@@ -213,6 +228,12 @@ if defined startwrapper (
                 shift /1
                 goto:loop1
             )
+
+            call :func_switchGameIni "%launcher_bilibili_GameIniName%"
+            if /I "!exit_value!" GEQ "%retv_range_gameini_start%" if /I "!exit_value!" NEQ "12" ( 
+                shift /1
+                goto:loop1
+            )
         )
         if exist "%launcher_bilibili%" ( 
             if /I "%mLANG%" == "zh" ( echo [INFO] 存在实际启动器文件。 ) else ( echo [INFO] The real launcher file exists. ) 
@@ -243,6 +264,12 @@ if defined startwrapper (
 
             call :switchStartupSetting "homeland" 
             if /I "!exit_value!" GEQ "%retv_range_startup_start%" if /I "!exit_value!" NEQ "7" ( 
+                shift /1
+                goto:loop1
+            )
+
+            call :func_switchGameIni "%launcher_kingsoft_GameIniName%"
+            if /I "!exit_value!" GEQ "%retv_range_gameini_start%" if /I "!exit_value!" NEQ "12" ( 
                 shift /1
                 goto:loop1
             )
@@ -291,6 +318,12 @@ if defined startwrapper (
 
                             call :switchStartupSetting "!launcher_exslot_%%i_localization_type!" 
                             if /I "!exit_value!" GEQ "%retv_range_startup_start%" if /I "!exit_value!" NEQ "7" ( 
+                                shift /1
+                                goto:loop1
+                            )
+
+                            call :func_switchGameIni "!launcher_exslot_%%i_GameIniName!"
+                            if /I "!exit_value!" GEQ "%retv_range_gameini_start%" if /I "!exit_value!" NEQ "12" ( 
                                 shift /1
                                 goto:loop1
                             )
@@ -356,6 +389,11 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
 @REM 8  启动设置链接失败。 
 @REM 9  在未启用国服国际服支持的情景下断开链接失败。 
 @REM 10 不存在实际启动器文件。 
+@REM 11 目的地的Game.ini文件并非符号链接，非本程序创建。 
+@REM 12 切服器未找到此服务器所需的Game.ini实际文件。 
+@REM 13 Game.ini链接失败。 
+@REM 14 Game.ini链接断开失败。 
+@REM 15 服务器对应的Game.ini条目文件名不合法。 
 @REM ----------------------------------------------
 
 @REM # func_ensureACP
@@ -411,9 +449,12 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
     set launcherpath=%~1
     set launchername=%~nx1
     set reallauncherpath=%~2
+    set reallaunchername=%~nx2
+
     if /I "%mLANG%" == "zh" ( echo [INFO] 【启动器目的地路径】：%launcherpath% ) else ( echo [INFO] [Destination of Launcher]: %launcherpath% )
-    if /I "%mLANG%" == "zh" ( echo [INFO] 【启动器文件名】：%launchername%) else ( echo [INFO] [Filename of Launcher]: %launchername% )
-    if /I "%mLANG%" == "zh" ( echo [INFO] 【启动器储存路径】：%reallauncherpath%) else ( echo [INFO] [Store Path of Launcher]: %reallauncherpath% )
+    if /I "%mLANG%" == "zh" ( echo [INFO] 【启动器文件名】：%launchername% ) else ( echo [INFO] [Filename of Launcher]: %launchername% )
+    if /I "%mLANG%" == "zh" ( echo [INFO] 【启动器储存路径】：%reallauncherpath% ) else ( echo [INFO] [Store Path of Launcher]: %reallauncherpath% )
+    if /I "%mLANG%" == "zh" ( echo [INFO] 【启动器实际文件名】：%reallaunchername% ) else ( echo [INFO] [Filename of Real Launcher]: %reallaunchername% )
 
     dir "%launcherpath%" 2>nul | findstr "<SYMLINK>" | findstr /E /C:"[%reallauncherpath%]"
 
@@ -518,11 +559,11 @@ Before using this program, please follow the instructions to set up.
         if /I "%flag_all_exist%" == "true" (
             set exit_value=7
             if /I "%mLANG%" == "zh" ( 
-                echo [INFO] 对应的启动设置实际文件不存在，请做好重命名工作。 
+                echo [ERROR] 对应的启动设置实际文件不存在，请做好重命名工作。 
                 echo [INFO] 【目录】：%StartupSettingsDir_path%
                 echo [INFO] 【需要的文件名】：%RealStartupSettingsName%
             ) else ( 
-                echo [INFO] Corresponding actual file does not exist, check your renaming work. 
+                echo [ERROR] Corresponding actual file does not exist, check your renaming work. 
                 echo [INFO] [Directory]: %StartupSettingsDir_path%
                 echo [INFO] [Required Filename]: %RealStartupSettingsName%
             )
@@ -567,3 +608,106 @@ Before using this program, please follow the instructions to set up.
         if /I "%mLANG%" == "zh" ( echo [INFO] 启动设置已就绪，无需操作。 ) else ( echo [INFO] Startup Settings have been ready and need no further operation. )
     )
 @ goto:eof
+
+@REM # func_switchGameIni
+:func_switchGameIni
+    @REM param1: source path of real game.ini
+
+    set gameinipath=%GameIniDir_path%\Game.ini
+    set gameininame=Game.ini
+    set realgameinipath=%~1
+    set realgameininame=%~nx1
+
+    set flag_switchGameIni_invalidRealGameIniName=false
+    set flag_switchGameIni_skipMklink=false
+
+    if /I "%flag_enable_GameIni_switching%" == "false" (
+        if /I "%mLANG%" == "zh" ( echo [INFO] Game.ini功能出于禁用状态。 ) else ( echo [INFO] Game.ini switching is disabled. )
+        @ EXIT /B 0
+    ) else (
+        if /I "%mLANG%" == "zh" ( echo [INFO] Game.ini功能已启用。 ) else ( echo [INFO] Game.ini switching is enabled. )
+
+        if /I "%realgameininame%" == "" (
+            set flag_switchGameIni_invalidRealGameIniName=true
+            if /I "%mLANG%" == "zh" ( echo [ERROR] 未指定Game.ini实际文件名。 ) else ( echo [ERROR] No Game.ini actual filename specified. )
+        ) else if /I "%~x1" NEQ ".ini" (
+            set flag_switchGameIni_invalidRealGameIniName=true
+            if /I "%mLANG%" == "zh" ( echo [ERROR] 指定的Game.ini实际文件扩展名不匹配。 ) else ( echo [ERROR] Specified Game.ini actual file extension does not match. )
+        )
+        @ EXIT /B 15
+    )
+
+    if /I "%mLANG%" == "zh" ( echo [INFO] 【Game.ini目的地路径】：%gameinipath% ) else ( echo [INFO] [Destination of Game.ini]: %gameinipath% )
+    if /I "%mLANG%" == "zh" ( echo [INFO] 【Game.ini文件名】：%gameininame% ) else ( echo [INFO] [Filename of Real Game.ini]: %gameininame% )
+    if /I "%mLANG%" == "zh" ( echo [INFO] 【Game.ini储存路径】：%realgameinipath% ) else ( echo [INFO] [Store Path of Real Game.ini]: %realgameinipath% )
+    if /I "%mLANG%" == "zh" ( echo [INFO] 【Game.ini储存文件名】：%realgameininame% ) else ( echo [INFO] [Filename of Real Game.ini]: %realgameininame% )
+
+    if not exist "%realgameinipath%" (
+        set exit_value=12
+        if /I "%mLANG%" == "zh" ( 
+            echo [ERROR] Game.ini实际文件不存在，请做好重命名工作（创建空文件也可）。 
+            echo [INFO] 【目录】：%GameIniDir_path%
+            echo [INFO] 【需要的文件名】：%realgameininame%
+        ) else (
+            echo [ERROR] Game.ini actual file does not exist, please check your renaming work (create an empty file also can). 
+            echo [INFO] [Directory]: %GameIniDir_path%
+            echo [INFO] [Required Filename]: %realgameininame%
+        )
+    ) else (
+        if /I "%mLANG%" == "zh" ( echo [INFO] Game.ini实际文件存在。 ) else ( echo [INFO] Game.ini actual file exists. )
+    )
+
+    if not exist "%gameinipath%" (
+        if /I "%mLANG%" == "zh" ( echo [INFO] Game.ini不存在。 ) else ( echo [INFO] Game.ini does not exist. )
+    ) else (
+        if /I "%mLANG%" == "zh" ( echo [INFO] Game.ini已存在。 ) else ( echo [INFO] Game.ini already exists. )
+
+        dir "%gameinipath%" 2>nul | findstr "<SYMLINK>"
+        if ERRORLEVEL 1 (
+            set exit_value=11
+            if /I "%mLANG%" == "zh" ( 
+                echo [ERROR] Game.ini实际文件并非符号链接，非本程序创建。为保证真正的Game.ini不被错删，程序终止。使用程序前，请按照说明做好准备。 
+            ) else ( 
+                echo ^
+[ERROR] Game.ini actual file is not a SYMLINK, which means it was not created by this program. ^
+To avoid deleting real Game.ini by mistake, this program will be terminated. ^
+Before using this program, please follow the instructions to set up. 
+            )
+            if /I "%flag_nopause%" NEQ "true" ( pause )
+            @ EXIT /B %threshold_abort%
+        )
+
+        dir "%gameinipath%" 2>nul | findstr "<SYMLINK>" | findstr /E /C:"[%realgameinipath%]" >nul
+        if ERRORLEVEL 1 (
+            if /I "%mLANG%" == "zh" ( echo [INFO] 已存在链接并非新Game.ini。 ) else ( echo [INFO] There is a link but it is not the new Game.ini. )
+            if /I "%mLANG%" == "zh" ( echo [INFO] 准备删除旧Game.ini。 ) else ( echo [INFO] Deleting old Game.ini. )
+            del "%gameinipath%"
+            if ERRORLEVEL 1 (
+                set exit_value=14
+                if /I "%mLANG%" == "zh" ( echo [ERROR] Game.ini链接文件删除失败。 ) else ( echo [ERROR] Fail to delete Game.ini link file. )
+                @ EXIT /B %threshold_abort%
+            )            
+        ) else (
+            set flag_switchGameIni_skipMklink=true
+            if /I "%mLANG%" == "zh" ( echo [INFO] 新Game.ini链接已存在。 ) else ( echo [INFO] Link to the new Game.ini has been ready. )
+        )
+    )
+
+    if /I "%flag_switchGameIni_skipMklink%" == "false" (
+        if /I "%mLANG%" == "zh" ( echo [INFO] 准备替换 ) else ( echo [INFO] Replacing... )
+        mklink "%gameinipath%" "%realgameinipath%"
+        if ERRORLEVEL 1 (
+            set exit_value=13
+            if /I "%mLANG%" == "zh" ( echo [ERROR] Game.ini链接文件创建失败。 ) else ( echo [ERROR] Fail to create Game.ini link file. )
+            if /I "%flag_nopause%" NEQ "true" ( pause )
+            @ EXIT /B %threshold_abort%
+        ) else (
+            if /I "%mLANG%" == "zh" ( echo [INFO] Game.ini链接文件创建成功。 ) else ( echo [INFO] Succeed in creating Game.ini link file. )
+        )
+    )
+
+    if /I "%mLANG%" == "zh" ( echo [INFO] Game.ini链接已完全准备好。 ) else ( echo [INFO] Everything about the link to the Game.ini is ready. )
+
+@ goto:eof
+
+@REM # End of file
