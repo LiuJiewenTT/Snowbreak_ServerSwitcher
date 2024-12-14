@@ -1,4 +1,5 @@
 @echo off
+@REM # Global Scope
 
 @REM ----------------------------------------------
 @REM Program Initialization Stage 1
@@ -7,6 +8,7 @@
 @for /F "tokens=2 delims=:" %%i in ('chcp') do @( set /A codepage=%%i ) 
 @call :func_ensureACP
 REM 已设定代码页，如遇乱码请检查文件编码或终端字体，通常可以得到解决。 
+REM 若仍有乱码，请检查文件是否是UTF-8编码，且换行符是CRLF模式。 
 
 setlocal enabledelayedexpansion
 
@@ -52,6 +54,10 @@ setlocal enabledelayedexpansion
 @set StartupSettingsName_homeland=startup-homeland.settings
 @set StartupSettingsName_worldwide=startup-worldwide.settings
 
+@set GameIniName_worldwide=Game-worldwide.ini
+@set GameIniName_bilibili=Game-bilibili.ini
+@set GameIniName_jinshan=Game-jinshan.ini
+
 @set flag_enable_admin_autodetect=true
 
 @REM ----------------------------------------------
@@ -76,6 +82,10 @@ setlocal enabledelayedexpansion
 @set launcher_exslot_1_localization_type=homeland
 @set launcher_exslot_2_localization_type=homeland
 @set launcher_exslot_3_localization_type=
+
+@set launcher_exslot_1_GameIniName=Game-exslot_1.ini
+@set launcher_exslot_2_GameIniName=Game-exslot_2.ini
+@set launcher_exslot_3_GameIniName=Game-exslot_3.ini
 
 @REM 非用户区（高级） 
 
@@ -126,6 +136,7 @@ set GameConfigsHome=%APPDATA%\..\Local\Game\Saved
 set StartupSettingsDir_path=%GameConfigsHome%\PersistentDownloadDir
 set startwrapper=CBJQ_SS.StartWrapper.exe
 
+@REM # Dectect Admin Privilege
 if /I "%flag_enable_admin_autodetect%" == "true" (
     call :detect_admin_privilege
     if /I "!flag_hasAdminPrivilege!" == "true" (
@@ -141,6 +152,7 @@ if defined startwrapper (
     set startwrapper="%startwrapper%"
 )
 
+@REM # loop1
 :loop1
 
 @ if "%~1" == "" (
@@ -154,6 +166,7 @@ if defined startwrapper (
     set flag_nopause=true
 ) else (
     @ if /I "%~1" == "worldwide" (
+        @REM ## 国际服启动条目 
         if /I "%mLANG%" == "zh" ( echo [INFO] 启动国际服 ) else ( echo [INFO] Start Option: worldwide )
         if /I "%flag_noswitch%" == "false" (
             call :func_updateSymlink "%launcher_worldwide_dest%" "%launcher_worldwide%"
@@ -186,6 +199,7 @@ if defined startwrapper (
         )
         
     ) else if /I "%~1" == "bilibili" (
+        @REM ## B服启动条目 
         if /I "%mLANG%" == "zh" ( echo [INFO] 启动B服 ) else ( echo [INFO] Start Option: bilibili )
         if /I "%flag_noswitch%" == "false" (
             call :func_updateSymlink "%launcher_bilibili_dest%" "%launcher_bilibili%"
@@ -218,6 +232,7 @@ if defined startwrapper (
         )
         
     ) else if /I "%~1" == "kingsoft" (
+        @REM ## 官服启动条目 
         if /I "%mLANG%" == "zh" ( echo [INFO] 启动官服 ) else ( echo [INFO] Start Option: kingsoft )
         if /I "%flag_noswitch%" == "false" (
             call :func_updateSymlink "%launcher_kingsoft_dest%" "%launcher_kingsoft%"
@@ -253,6 +268,7 @@ if defined startwrapper (
         set flag_matched_on_exslots=false
         set flag_exslot_match_loopbreak=false
         if /I "%flag_enable_match_with_exslots%" == "true" (
+            @REM ## 预留槽位匹配启动条目 
             if /I "%mLANG%" == "zh" ( echo [INFO] 尝试在预留槽位匹配此服务器的启动器配置。【%~1】 ) else ( echo [INFO] Try to match the launcher of this server in the reserved slots. [%~1] )
             
             for /L %%i in (1, 1, 3) do (            
@@ -316,6 +332,7 @@ goto:loop1
 @REM ----------------------------------------------
 
 
+@REM # 程序退出 
 @REM 程序退出 
 echo exit_value=%exit_value%
 set "StartupSettingsName_homeland="
@@ -324,6 +341,7 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
 @REM @endlocal
 @ EXIT /B %exit_value%
 
+@REM # exit_value含义 
 @REM ----------------------------------------------
 @REM exit_value含义 
 @REM 备注：仅能返回最后的错误代码。 
@@ -340,6 +358,7 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
 @REM 10 不存在实际启动器文件。 
 @REM ----------------------------------------------
 
+@REM # func_ensureACP
 :func_ensureACP
     @if /I %codepage% NEQ 65001 ( 
         echo "[LOG]: Active code page is not 65001(UTF-8). [%codepage%]"
@@ -347,28 +366,31 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
     )
 @ goto:eof
 
+@REM # func_programinfo_en_us
 :func_programinfo_en_us
     @echo Snowbreak_ServerSwitcher(CBJQ_SS)
     @echo Description: This is a server switcher for CBJQ(Snowbreak: Containment Zone) implemented with Windows bat script.
     @echo Author: LiuJiewenTT
-    @echo Version: 1.2.3
-    @echo File Version: 1.2.1
-    @echo Date: 2024-06-08
+    @echo Version: 1.3.0
+    @echo File Version: 1.3.0
+    @echo Date: 2024-12-14
     @echo Note：Github Repo：^<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher^>
     @echo       Author's Email：^<liuljwtt@163.com^>
 @ goto:eof
 
+@REM # func_programinfo_zh_cn
 :func_programinfo_zh_cn
     @echo 尘白禁区服务器切换器(CBJQ_SS)
     @echo 描述: 这是一个使用Windows批处理脚本实现的尘白禁区服务器切换器。
     @echo 作者: LiuJiewenTT
-    @echo 版本: 1.2.3
-    @echo 文件版本: 1.2.1
-    @echo 日期: 2024-06-08
+    @echo 版本: 1.3.0
+    @echo 文件版本: 1.3.0
+    @echo 日期: 2024-12-14
     @echo 备注：Github项目链接：^<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher^>
     @echo       作者Email地址：^<liuljwtt@163.com^>
 @ goto:eof
 
+@REM # detect_admin_privilege
 :detect_admin_privilege
     @REM method 1
     net session >nul 2>&1 
@@ -381,6 +403,7 @@ if /I "%flag_nopause%" NEQ "true" ( pause )
     )
 @ goto:eof
 
+@REM # func_updateSymlink
 :func_updateSymlink
 @REM param1: Name of launcher (It can be a path).
 @REM param2: Path to expected real launcher (It can be a relative path).
@@ -433,6 +456,7 @@ Before using this program, please follow the instructions to set up.
     )
 @ goto:eof
 
+@REM # switchStartupSetting
 :switchStartupSetting
     if /I "%mLANG%" == "zh" ( echo [INFO] 【启动设置目录】：%StartupSettingsDir_path%。 ) else ( echo [INFO] [Directory]: %StartupSettingsDir_path%. )
 
