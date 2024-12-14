@@ -190,7 +190,7 @@ if defined startwrapper (
                 goto:loop1
             )
 
-            call :func_switchGameIni "%launcher_worldwide_GameIniName%"
+            call :func_switchGameIni "%GameIniDir_path%\%launcher_worldwide_GameIniName%"
             if /I "!exit_value!" GEQ "%retv_range_gameini_start%" if /I "!exit_value!" NEQ "12" ( 
                 shift /1
                 goto:loop1
@@ -229,7 +229,7 @@ if defined startwrapper (
                 goto:loop1
             )
 
-            call :func_switchGameIni "%launcher_bilibili_GameIniName%"
+            call :func_switchGameIni "%GameIniDir_path%\%launcher_bilibili_GameIniName%"
             if /I "!exit_value!" GEQ "%retv_range_gameini_start%" if /I "!exit_value!" NEQ "12" ( 
                 shift /1
                 goto:loop1
@@ -268,7 +268,7 @@ if defined startwrapper (
                 goto:loop1
             )
 
-            call :func_switchGameIni "%launcher_kingsoft_GameIniName%"
+            call :func_switchGameIni "%GameIniDir_path%\%launcher_kingsoft_GameIniName%"
             if /I "!exit_value!" GEQ "%retv_range_gameini_start%" if /I "!exit_value!" NEQ "12" ( 
                 shift /1
                 goto:loop1
@@ -322,7 +322,7 @@ if defined startwrapper (
                                 goto:loop1
                             )
 
-                            call :func_switchGameIni "!launcher_exslot_%%i_GameIniName!"
+                            call :func_switchGameIni "%GameIniDir_path%\!launcher_exslot_%%i_GameIniName!"
                             if /I "!exit_value!" GEQ "%retv_range_gameini_start%" if /I "!exit_value!" NEQ "12" ( 
                                 shift /1
                                 goto:loop1
@@ -616,6 +616,7 @@ Before using this program, please follow the instructions to set up.
     set gameinipath=%GameIniDir_path%\Game.ini
     set gameininame=Game.ini
     set realgameinipath=%~1
+    set realgameinidir=%~dp1
     set realgameininame=%~nx1
 
     set flag_switchGameIni_invalidRealGameIniName=false
@@ -634,6 +635,8 @@ Before using this program, please follow the instructions to set up.
             set flag_switchGameIni_invalidRealGameIniName=true
             if /I "%mLANG%" == "zh" ( echo [ERROR] 指定的Game.ini实际文件扩展名不匹配。 ) else ( echo [ERROR] Specified Game.ini actual file extension does not match. )
         )
+    )
+    if /I "%flag_switchGameIni_invalidRealGameIniName%" == "true" (
         @ EXIT /B 15
     )
 
@@ -646,11 +649,11 @@ Before using this program, please follow the instructions to set up.
         set exit_value=12
         if /I "%mLANG%" == "zh" ( 
             echo [ERROR] Game.ini实际文件不存在，请做好重命名工作（创建空文件也可）。 
-            echo [INFO] 【目录】：%GameIniDir_path%
+            echo [INFO] 【目录】：%realgameinidir%
             echo [INFO] 【需要的文件名】：%realgameininame%
         ) else (
-            echo [ERROR] Game.ini actual file does not exist, please check your renaming work (create an empty file also can). 
-            echo [INFO] [Directory]: %GameIniDir_path%
+            echo [ERROR] Game.ini actual file does not exist, please check your renaming work ^(create an empty file also can^). 
+            echo [INFO] [Directory]: %realgameinidir%
             echo [INFO] [Required Filename]: %realgameininame%
         )
     ) else (
