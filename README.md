@@ -274,8 +274,12 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
    > ``` bat
    > @set flag_enable_GameIni_switching=false
    > ```
-   > 
-   > 即`true`改`false`。
+   >
+   > 即`true`改`false`。或将其注释，使其无效化：
+   >
+   > ```bat
+   > @REM @set flag_enable_GameIni_switching=true
+   > ```
 
 9. 使用命令行按照上述参数示例启动/切换启动器；或使用[<strong style="color:red">GUI</strong>](#guis)操作；或直接使用<strong style="color:red"><a href="#一键启动">一键启动</a></strong>程序。
 

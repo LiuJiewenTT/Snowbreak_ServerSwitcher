@@ -622,10 +622,7 @@ Before using this program, please follow the instructions to set up.
     set flag_switchGameIni_invalidRealGameIniName=false
     set flag_switchGameIni_skipMklink=false
 
-    if /I "%flag_enable_GameIni_switching%" == "false" (
-        if /I "%mLANG%" == "zh" ( echo [INFO] Game.ini功能出于禁用状态。 ) else ( echo [INFO] Game.ini switching is disabled. )
-        @ EXIT /B 0
-    ) else (
+    if /I "%flag_enable_GameIni_switching%" == "true" (
         if /I "%mLANG%" == "zh" ( echo [INFO] Game.ini功能已启用。 ) else ( echo [INFO] Game.ini switching is enabled. )
 
         if /I "%realgameininame%" == "" (
@@ -635,6 +632,9 @@ Before using this program, please follow the instructions to set up.
             set flag_switchGameIni_invalidRealGameIniName=true
             if /I "%mLANG%" == "zh" ( echo [ERROR] 指定的Game.ini实际文件扩展名不匹配。 ) else ( echo [ERROR] Specified Game.ini actual file extension does not match. )
         )
+    ) else (
+        if /I "%mLANG%" == "zh" ( echo [INFO] Game.ini功能出于禁用状态。 ) else ( echo [INFO] Game.ini switching is disabled. )
+        @ EXIT /B 0
     )
     if /I "%flag_switchGameIni_invalidRealGameIniName%" == "true" (
         @ EXIT /B 15
