@@ -1,6 +1,6 @@
 ---
 LANG: zh_CN.UTF-8
-date: 2024-12-15 00:21:00 +0800
+date: 2024-12-16 22:17:00 +0800
 permalink: /
 redirect_from:
   - /README/
@@ -11,7 +11,7 @@ redirect_from:
 
 简介：此程序用于切换不同渠道的启动器，以连接到不同的《尘白禁区》服务器。
 
-> 自尘白一周年开始，lhm启用了西山居尘白启动器（以下简称西山居启动器），新用户下载到的不是旧版的尘白启动器。截止至2024年8月15日，西山居启动器存在诸多问题，包括缩放错误、闪退、蓝屏、无法开机（收集自启动器交流群群友自述内容）。因此，推荐暂时使用旧版启动器v2.0（群友说已经更新不了了）。
+> 自尘白一周年开始，lhm启用了西山居尘白启动器（以下简称西山居启动器），新用户下载到的不是旧版的尘白启动器。截止至2024年8月15日，西山居启动器存在诸多问题，包括缩放错误、闪退、蓝屏、无法开机、被顶号后无法登录（收集自启动器交流群群友自述内容）。因此，推荐暂时使用旧版启动器v2.0（仍在正常更新）。
 >
 > 旧版启动器下载链接：[跳转至v1.2.2发行](https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/releases/tag/v1.2.2)
 
@@ -111,7 +111,7 @@ CBJQ_SS.main [OPTIONS] [SERVER]
 
 游戏本体存在对于西山居启动器和尘白启动器配置文件的兼容，因此部分配置文件与作者使用的尘白启动器版本的目录不同（`%LOCALAPPDATA%\Game\Saved\`），而是在西山居启动器的尘白目录内。
 
-你的当前账户可能不被允许创建“文件符号链接”(symlink)，请到设置中打开开发者模式。
+你的当前账户可能不被允许创建“文件符号链接”(symlink)，请到设置中打开“**开发人员模式**”。
 
 *补充说明：请确保真正的启动器所在目录下有`preference.json`文件，如果没有这个文件，启动器会以为是第一次运行，进而无法定位到正确的游戏数据目录。*
 
@@ -189,8 +189,7 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
 
 > 请按照[注意事项](#注意事项)和脚本内的说明进行配置。
 >
-> **国际服的适配**<del>还在开发中，请暂时不要使用。</del><del>**默认支持，没有什么特殊的地方，只是不能和国服共用资源、启动器和启动器配置文件。**<br/>“要重装系统”是胡扯，“要重下资源”倒是有可能需要“2+1”次（详细原因见如下步骤4）。</del>罪魁祸首已经被我揪出来了，<del>请等待后续措施。</del>**`v1.1.0`版已通过适配测试。**更多信息：<br/>
-> 探究实践日志见：[日志](国际服兼容研究/国际服兼容研究.md)。
+> **国际服的适配**：**`v1.1.0`版已通过适配测试。**探究实践日志见：[日志](国际服兼容研究/国际服兼容研究.md)。
 
 **请在安装好一个版本后开始配置**。(推荐优先国服)
 
@@ -210,18 +209,18 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
    >
    > 1. 请确保真正的启动器所在目录下有`preference.json`文件，如果没有这个文件，启动器会以为是第一次运行，进而无法定位到正确的游戏数据目录。
    >
-   > 2. 国际服默认不可与国服共用文件，所以（简单的说最简单的办法是）您应该安装在其它位置，使用的`preference.json`也同样不能与国服的共用。
+   > 2. 国际服默认不可与国服共用文件，所以您应该安装游戏内容到其它位置，而启动器使用的`preference.json`也同样不能与国服的共用。
    >
-   >    > 启动器也不是非要放在另外的安装位置，只要和国服<u>*不在同一目录即可*</u>, 详细方法如下：
+   >    > 启动器也不是非要放在另外的*安装位置*，只要和国服<u>*不在同一目录即可*</u>, 详细方法如下：
    >    >
-   >    > ​	更改`preference.json`中资源储存位置`dataPath`，无此文件直接启动可能导致当处于同一目录时属于国服的`data\manifest.json`被覆写而使国服需要重新下载资源。非要装在一起，请先设置好国际服的`preference.json`或备份一下国服的`manifest.json`。
+   >    > ​	更改`preference.json`中资源储存位置`dataPath`，无此文件直接启动可能导致当处于同一目录时属于国服的`data\manifest.json`被覆写而使国服需要重新下载资源。
    >    
-   > 3. 同大类（国际服/国服）同版本是共用资源的基础，而**国服正式版和国服测试版资源版本不同**，所以不能完全共用。（想啥呢，要是都一样，只是新增没有修改，那是玩笑！）
+   > 3. 同大类（国际服/国服）同版本是共用资源的基础，而**国服正式版和国服测试版资源版本不同**，所以不能完全共用。（想啥呢，要是都一样，那还能是测试服吗？）
    >    
    >    > 所以如果差异不大，没关系共用资源，差异部分让它重新下载就行了（或者自己修改`manifest.json`）；
    >    > 如果大或者单纯不想折腾，打算分开装，请把它当国际服一样配置（除了切服器的对应localization要为`homeland`）。
 
-5. 把你要的其它渠道的安装包（如：`CBJQ_Setup.exe`）用解压软件打开，打开`app.7z`（压缩包内的压缩包）。
+5. 把你要的其它渠道的安装包（如：`CBJQ_Setup.exe`）用解压软件打开，打开其中的`app.7z`（即，压缩包内的压缩包）。
 
 6. 将里面的启动器复制到刚才那个启动器的新位置去，把它们放到一起（同一目录）（<strong style="color:red">国际服启动器不要和国服启动器放同一目录下！！！测试服也是！</strong>）。
 
@@ -248,23 +247,35 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
 
    不会改参数就按这里的命名，然后复制这一段将对应代码替换。
 
-   > 如果你既玩国服又玩国际服，请参照配置后续几行：
-   >
+   如果你既玩国服又玩国际服，请参照配置后续几行：
+
    > ``` bat
-   > @set StartupSettingsName_homeland=startup-homeland.settings
+   >@set StartupSettingsName_homeland=startup-homeland.settings
    > @set StartupSettingsName_worldwide=startup-worldwide.settings
    > ```
-   >
+   > 
    > 如果不是，这样即可：
    >
    > ``` bat
-   > @REM @set StartupSettingsName_homeland=startup-homeland.settings
+   >@REM @set StartupSettingsName_homeland=startup-homeland.settings
    > @REM @set StartupSettingsName_worldwide=startup-worldwide.settings
    > ```
-   >
+   > 
    > 即，在行首添加`@REM`注释掉命令使之不生效即可。如果用过上面的，配置且运行通过后，不想重新生成`startup.settings`（虽然无所谓），那只注释一个并留下自己要用的那个即可。
+
+   如果你不需要不同服拥有独立的语言配置，请将如下默认改去：
+
+   > ``` bat
+   > @set flag_enable_GameIni_switching=true
+   > ```
    >
-   > > <del>启用但不存在实际启动配置文件的话，启动会被终止。解决方法是停用（即注释掉）对应的命令，然后启动，完成登录和选服，可以尝试进入游戏，退出游戏后将启动配置文件重命名成命令中的名字即可。</del>（启动器也要退出。）
+   > 改为：
+   >
+   > ``` bat
+   > @set flag_enable_GameIni_switching=false
+   > ```
+   > 
+   > 即`true`改`false`。
 
 9. 使用命令行按照上述参数示例启动/切换启动器；或使用[<strong style="color:red">GUI</strong>](#guis)操作；或直接使用<strong style="color:red"><a href="#一键启动">一键启动</a></strong>程序。
 
@@ -288,7 +299,7 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
    >    M:\Program Files\Snow\Snowbreak_ServerSwitcher\GUIs\CBJQ_SS_FrontEnd_tk-B-I2\CBJQ_SS_FrontEnd_tk-B-I2> CBJQ_SS_FrontEnd_tk-B-I2.exe -cwd "M:\Program Files\Snow\Snowbreak_ServerSwitcher"
    >    ```
    >
-   > 4. 关闭弹出的图形窗口，配置得到保存。（如果有启动页，进入）
+   > 4. 关闭弹出的图形窗口，配置得到保存。（如果有启动页，先进入）
 
 ## GUIs
 
