@@ -1,9 +1,9 @@
 ---
 LANG: zh_CN.UTF-8
 date: 2024-12-16 22:17:00 +0800
-permalink: /
+permalink: /old/
 redirect_from:
-  - /README/
+  - /old/README/
 ---
 
 
@@ -17,7 +17,7 @@ redirect_from:
 
 快速跳转：[使用](#使用), [配置方法](#配置方法), [GUI](#guis)，[一键启动](#一键启动).
 
-<img src="辰星-云篆 团子.jpg" style="max-width:75%; display: block; margin: auto;">
+<img src="../../辰星-云篆 团子.jpg" style="max-width:75%; display: block; margin: auto;">
 
 项目地址：<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher><br/>
 说明页链接：<https://liujiewentt.github.io/Snowbreak_ServerSwitcher/README><br/>下载请到Release区：<https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/releases><br />视频教程：
@@ -82,7 +82,7 @@ redirect_from:
 > - *Razor Cortex (雷游)*
 > - Live2DViewerEx （小部件“桌面图标”已适配完美）
 >
-> <img src="doc_res/添加游戏到雷游.jpeg" style="max-width:75%">
+> <img src="../doc_res/添加游戏到雷游.jpeg" style="max-width:75%">
 >
 > 例：`M:\Program Files\Snow\snow_launcher.exe`（这将会是一个符号链接，三服都可以共用这个入口，雷游这样的程序也不需要添加多个服务器的启动器，一次就好。）
 
@@ -189,7 +189,7 @@ CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide
 
 > 请按照[注意事项](#注意事项)和脚本内的说明进行配置。
 >
-> **国际服的适配**：**`v1.1.0`版已通过适配测试。**探究实践日志见：[日志](国际服兼容研究/国际服兼容研究.md)。
+> **国际服的适配**：**`v1.1.0`版已通过适配测试。**探究实践日志见：[日志](../国际服兼容研究/国际服兼容研究.md)。
 
 **请在安装好一个版本后开始配置**。(推荐优先国服)
 
