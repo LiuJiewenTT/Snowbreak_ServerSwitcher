@@ -1,6 +1,6 @@
 ---
 LANG: zh_CN.UTF-8
-date: 2025-01-14 22:17:00 +0800
+date: 2025-01-15 22:30:00 +0800
 permalink: /
 redirect_from:
   - /README/
@@ -8,9 +8,13 @@ redirect_from:
 
 # 《尘白禁区》服务器切换器
 
+<div style="align-items: center; justify-content: center; display: flex; margin: 10px;">
+    <img src="辰星-云篆 团子.jpg" style=" max-height: 300px; height: 100%; aspect-ratio: 1; width: auto;"/>
+</div>
+
 本工具可以帮助你切换游玩不同服务器的《尘白禁区》游戏（Windows PC端）。
 
-快速跳转：[下载安装](#下载安装) [使用说明](#使用说明)
+快速跳转：[下载安装](#下载安装) [使用说明](#使用说明) [帮助](#帮助)
     [旧主页](/old/)
 
 项目地址：[GitHub](https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher) <br>
@@ -84,7 +88,8 @@ redirect_from:
 
 请转到Releases页面下载最新版本的安装包。[下载](https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/releases)
 
-下载后无需安装，将压缩包解压出来即可。（旧版本可能需要额外配置）
+下载后无需安装，将压缩包解压出来即可。（旧版本和特殊需求可能需要额外配置）<br>
+*推荐的存储位置* 是原本尘白启动器的所在目录下，例如：`M:\Program Files\Snow\`（如果你玩过了，此处你应该还会看到一个`data`文件夹）。
 
 版本说明：
 
@@ -101,27 +106,81 @@ redirect_from:
 
 由于发行的压缩包内带有一些初始配置文件，如果你曾经修改过其中的内容，请注意备份旧文件，更新后，可以使用VSCode等编辑器进行比对和更改。部分配置同运行脚本在一起，更新的时候可能需要特别注意。
 
+### 配置
+
+配置主要分为本体配置和周边配置（例如：GUI配置），详细内容可以在[旧主页](/old/)查看。
+
+本体配置：新版通常无需修改**切服器的配置**，仅需完成一些适配工作（即其他配置工作）即可（需要执行的操作会在运行过程中提示，依据提示操作即可）。
+
+如果你使用旧版本，或者有特别的需求（例如：关闭国际服支持、切换为英文、使用测试服），那么一定要修改一些对应的配置信息。
+
+<small>to be continued...</small>
+
 ## 使用说明
 
 此部分主要分为两部分，第一部分介绍项目本体的独立使用方法，第二部分额外介绍推荐的GUI套件发行包的使用方法。对于无编程基础的人，推荐直接跳过第一部分。每一部分，可能会额外划分基础内容和进阶内容，请自行选用。
 
+> 旧版本和特殊需求可能需要额外[配置](#配置)。
+> 部分情况可能需要管理员权限才能运行，比如安装在C盘特殊目录内。
+
 <details><summary>第1部分：本体独立使用</summary>
-    由于本体无GUI程序，因此需要使用命令行环境进行操作。您可以使用`cmd.exe`或`wt.exe`(*Windows Terminal*/终端)，不推荐使用*PowerShell*。其中，第一项为推荐的执行程序。如果您使用终端(wt)，也更推荐您使用“命令提示符”类型环境。
+    由于本体无GUI程序，因此需要使用命令行环境进行操作。您可以使用<code>cmd.exe</code>或<code>wt.exe</code>(<i>Windows Terminal</i> / 终端)，不推荐使用<i>PowerShell</i>。其中，第一项为推荐的执行程序。如果您使用终端(wt)，也更推荐您使用“命令提示符”类型环境。
     <ol>
-        <li>基础使用方法：
+        <li><details open><summary>基础使用方法：</summary>
             <ol>
-                <li>
+                <li>双击运行准备好的“尘白禁区*服（*）.bat”脚本。解释：
+                    <ol>
+                        <li>“*服”指：B服、官服、国际服</li>
+                        <li>“（*）”指：“启动”、“切换”、“启动+切换”</li>
+                    </ol>
                 </li>
             </ol>
-        </li>
-        <li>进阶使用方法：
-            <ol>
-                <li>
+        </details></li>
+        <li><details><summary>进阶I使用方法：</summary>
+            <ol>此方法需要您启动一个命令行终端，输入命令触发程序执行。
+                <li>打开命令行终端。</li>
+                <li>按需使用命令：
+                    <ol>
+                        <li>命令解释：
+                            <ol>
+                                <li>程序名：<code>CBJQ_SS.main.bat</code>。用<code>CBJQ_SS.main</code>（不带扩展名）也可。
+                                    <small>程序启动时总会展示版本信息。</small>
+                                </li>
+                                <li><details open><summary>参数解释：</summary>
+                                    <ol>
+                                        <li>服名，必须在所有选项之后。可选取值：<code>bilibili</code>, <code>kingsoft</code>, <code>worldwide</code>。<br>
+                                            <small>你还可以启动测试服，但这就需要额外配置了。</small>
+                                        </li>
+                                        <li><code>-nostart</code>：执行完毕时<strong style="color:red">不启动启动器</strong>。</li>
+                                        <li><code>-noswitch</code>：执行时<strong style="color:red">不切换启动器</strong>。</li>
+                                        <li><code>-nopause</code>：执行完毕时<strong style="color:red">不触发暂停（“按下任意键继续”）</strong>。</li>
+                                    </ol>
+                                </details></li>
+                            </ol>
+                        </li>
+                        <li><details open><summary>示例如下：</summary>
+                            <ol>
+                                <li>切换并启动B服：<code>CBJQ_SS.main.bat bilibili</code>。</li>
+                                <li>切换并启动官服（不暂停）：<code>CBJQ_SS.main.bat -nopause kingsoft</code>。</li>
+                                <li>不切换并<strong>直接启动</strong>国际服（不暂停）：<code>CBJQ_SS.main.bat -noswitch -nopause worldwide</code>。<br>
+                                    <small>（即：仅启动）</small>
+                                </li>
+                                <li>切换<strong>但不启动</strong>国际服（不暂停）：<code>CBJQ_SS.main.bat -nostart -nopause worldwide</code>。<br>
+                                    <small>（即：仅切换）</small>
+                                </li>
+                                <li>没什么意义的连续切服（不暂停）且不启动：<code>CBJQ_SS.main.bat -nostart -nopause bilibili kingsoft worldwide</code>。<br>
+                                    <small>如果启动，则会按最后且最新的一个为准。</small>
+                                </li>
+                            </ol>
+                        </details></li>
+                    </ol>
                 </li>
             </ol>
-        </li>
+        </details></li>
     </ol>
 </details>
+
+<small>to be continued...</small>
 
 ## LICENSE
 
