@@ -15,7 +15,7 @@ redirect_from:
 本工具可以帮助你切换游玩不同服务器的《尘白禁区》游戏（Windows PC端）。
 
 快速跳转：[下载安装](#下载安装) [使用说明](#使用说明) [帮助](#帮助)
-    [旧主页](/old/)
+    [旧主页](old/)
 
 项目地址：[GitHub](https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher) <br>
 项目主页：[尘白禁区服务器切换器](https://liujiewentt.github.io/Snowbreak_ServerSwitcher/) 
@@ -108,7 +108,7 @@ redirect_from:
 
 ### 配置
 
-配置主要分为本体配置和周边配置（例如：GUI配置），详细内容可以在[旧主页](/old/)查看。
+配置主要分为本体配置和周边配置（例如：GUI配置），详细内容可以在[旧主页](old/)查看。
 
 本体配置：新版通常无需修改**切服器的配置**，仅需完成一些适配工作（即其他配置工作）即可（需要执行的操作会在运行过程中提示，依据提示操作即可）。
 
