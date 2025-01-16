@@ -27,10 +27,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup encoding and terminal codepage
-        run: `
+        run: |
           echo "LANG=en_US.UTF-8" >> $GITHUB_ENV
           echo "LC_ALL=en_US.UTF-8" >> $GITHUB_ENV
-          `
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Pages
