@@ -1,6 +1,6 @@
 ---
 LANG: zh_CN.UTF-8
-date: 2025-01-15 22:30:00 +0800
+date: 2025-01-17 22:45:00 +0800
 permalink: /
 redirect_from:
   - /README/
@@ -93,14 +93,15 @@ redirect_from:
 
 版本说明：
 
-- 基础版：仅包含此核心，不包含GUI。
-- 完整版：包含此核心和GUI。文件名中带有`GUI`标识。
+- 基础版：仅包含此核心，不包含GUI，且仅包含能运行的最小配置。
+- 完整版：包含此核心和GUI，并包含更加完整、更加接近开箱即用的配置。文件名中带有`GUI`标识。
   > - GUI目前仅有 *tkinter* 实现版本。
   > - GUI通常以 *BasicPack* 的形式提供，不附带过多资源，尽可能避免版权纠纷。需要美化请自行配置。
   > - 发行包通常完成了基本配置，推荐使用附带GUI程序的版本。
 
 
-> 注：若需要尘白启动器，此项目亦友情提供缓存的版本，可在[此处](https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/releases/tag/v1.2.2)下载。
+> 注：若需要尘白启动器，可以在[snow_launcher_downloader](.\tools\snow_launcher_downloader\snow_launcher_downloader.html)下载（[备用](https://liujiewentt.github.io/snow_launcher_downloader/snow_launcher_downloader.html)）。下载后建议根据服名分别重命名为`snow_launcher-bilibili.exe`, `snow_launcher-kingsoft.exe`, `snow_launcher-worldwide.exe`。<br>
+>（本项目亦友情提供缓存的版本，可在[此处](https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/releases/tag/v1.2.2)下载）
 
 ### 更新安装的版本
 
@@ -114,7 +115,9 @@ redirect_from:
 
 如果你使用旧版本，或者有特别的需求（例如：关闭国际服支持、切换为英文、使用测试服），那么一定要修改一些对应的配置信息。
 
-<small>to be continued...</small>
+关于GUI的配置，可以前往[CBJQ_SS_FrontEnd-tk](https://github.com/LiuJiewenTT/CBJQ_SS_FrontEnd-tk)项目页查看。<small>“过于高级/冷门”的功能配置就不表述了，在对应项目的文档中可能有详细说明。</small>
+
+更多详细配置请参考[旧主页](old/)，那里还有旧的介绍和指引系列视频（视频教程）的链接。
 
 ## 使用说明
 
@@ -124,11 +127,21 @@ redirect_from:
 > 部分情况可能需要管理员权限才能运行，比如安装在C盘特殊目录内。
 
 <details><summary>第1部分：本体独立使用</summary>
-    由于本体无GUI程序，因此需要使用命令行环境进行操作。您可以使用<code>cmd.exe</code>或<code>wt.exe</code>(<i>Windows Terminal</i> / 终端)，不推荐使用<i>PowerShell</i>。其中，第一项为推荐的执行程序。如果您使用终端(wt)，也更推荐您使用“命令提示符”类型环境。
+    由于本体无GUI程序，因此通常需要使用命令行环境进行操作。本项目做了一些简化，除进阶方法外，无需通过终端环境使用。<br>
+    关于在命令行环境中使用，您可以选择<code>cmd.exe</code>或<code>wt.exe</code>(<i>Windows Terminal</i> / 终端)，不推荐选择<i>PowerShell</i>。其中，第一项为推荐的执行程序。如果您使用终端(wt)，也更推荐您使用“命令提示符”类型环境。
     <ol>
-        <li><details open><summary>基础使用方法：</summary>
+        <li><details open><summary>基础使用方法I：</summary>
             <ol>
-                <li>双击运行准备好的“尘白禁区*服（*）.bat”脚本。解释：
+                在发行的压缩包中，您应当会看到一个名为<code>CBJQ_SS.QS.exe</code>的程序。在部分发行包中，您还会看到<code>CBJQ_SS.QS.</code>为前缀、<code>.exe</code>为后缀，中间为服名的程序副本。需要什么副本取决于您需要一键启动什么服。
+                <li>双击运行准备好的<code>CBJQ_SS.QS.*.exe</code>。<i>此部分无需终端</i><br>
+                    注：“*”的示例值：“bilibili”、“kingsoft”、“worldwide”
+                </li>
+            </ol>
+        </details></li>
+        <li><details open><summary>基础使用方法II：</summary>
+            <ol>
+                <li>双击运行准备好的“尘白禁区*服（*）.bat”脚本。<i>此部分无需终端</i><br>
+                    解释：
                     <ol>
                         <li>“*服”指：B服、官服、国际服</li>
                         <li>“（*）”指：“启动”、“切换”、“启动+切换”</li>
@@ -136,7 +149,7 @@ redirect_from:
                 </li>
             </ol>
         </details></li>
-        <li><details><summary>进阶I使用方法：</summary>
+        <li><details><summary>进阶使用方法：</summary>
             <ol>此方法需要您启动一个命令行终端，输入命令触发程序执行。
                 <li>打开命令行终端。</li>
                 <li>按需使用命令：
@@ -179,8 +192,23 @@ redirect_from:
         </details></li>
     </ol>
 </details>
+<details><summary>第2部分：配合GUI等周围设施使用</summary>
+    此部分以推荐的默认GUI程序为例，您需要使用带有GUI字样的发行包才能使用GUI。默认GUI发行版分为A版（单文件版）和B版（极速版），此项目发行通常使用的是B版，但您也可以改用A版。<small>配置步骤不在此部分。</small><br>
+    以下使用<code>GUIs\CBJQ_SS_FrontEnd_tk-B-I2\CBJQ_SS_FrontEnd_tk-B-I2\CBJQ_SS_FrontEnd_tk-B-I2.exe</code>示范。
+    <ol>
+        <li><details open><summary>基础使用方法：</summary>
+            <ol>
+                <li>双击运行准备好的<code>CBJQ_SS_FrontEnd_tk-B-I2.exe</code>。推荐发送到桌面快捷方式，并使用管理员权限启动（可以在快捷方式的属性页的兼容性选项卡中勾选）。</li>
+                <li>在左侧选中你需要的服。</li>
+                <li>根据需要点击按钮：“切换”、“切换并启动”、“直接启动”。<small>可以开启日志展示以观察运行状况。</small></li>
+            </ol>
+        </details></li>
+        <li><details open><summary>进阶使用方法：</summary>
+            此部分主要是调整一些配置，进而展现一些“高级”功能。
+        </details></li>
+    </ol>
+</details>
 
-<small>to be continued...</small>
 
 ## LICENSE
 
@@ -190,11 +218,21 @@ redirect_from:
 
 本项目含子项目[`CBJQ_SS.QS` (`.\quickstart`)](https://github.com/LiuJiewenTT/CBJQ_SS.QS)（MIT开源协议）实现一键切换并启动。构建产品推荐在`main`所在目录使用；
 
-本项目内置[`IconFold` `v1.0.0` (`.\tools\IconFold\v1.0.0`)](https://github.com/LiuJiewenTT/IconFold) （MIT开源协议）实现文件夹图标的设置。可以删除tools文件夹。
+本项目内置[`IconFold` `v1.0.0` (`.\tools\IconFold\v1.0.0`)](https://github.com/LiuJiewenTT/IconFold)（MIT开源协议）实现文件夹图标的设置。可以删除此目录。
+
+本项目内置[`snow_launcher_downloader` (`.\tools\snow_launcher_downloader`)](https://github.com/LiuJiewenTT/snow_launcher_downloader)（UNLICENSE协议）实现自动下载最新版本的启动器。可以删除此目录。
+
+本项目或其组件含[cJSON @ 3249730](https://github.com/DaveGamble/cJSON/tree/324973008ced4ea03d1626a00915d0399ecbd9db)，遵循其要求（MIT开源协议）。
+
+### GUIs
+
+可用GUI程序：
+
+1. 项目：[CBJQ_SS_FrontEnd-tk](https://github.com/LiuJiewenTT/CBJQ_SS_FrontEnd-tk)。（目前仅支持中文）
 
 ## Copyrights
 
-此部分主要是关于资源的版权声明。（排序不分先后）
+此部分主要列出使用的部分资源的版权声明。（排序不分先后）
 
 | 资源位置           | 版权所有者                                   | 备注                                           |
 | ------------------ | -------------------------------------------- | ---------------------------------------------- |

@@ -1,9 +1,9 @@
 ---
 LANG: zh_CN.UTF-8
 date: 2024-12-16 22:17:00 +0800
-permalink: /old/
+permalink: /old/README/
 redirect_from:
-  - /old/README/
+  - /old/
 ---
 
 
@@ -82,7 +82,7 @@ redirect_from:
 > - *Razor Cortex (雷游)*
 > - Live2DViewerEx （小部件“桌面图标”已适配完美）
 >
-> <img src="../doc_res/添加游戏到雷游.jpeg" style="max-width:75%">
+> <img src="../../docs/doc_res/添加游戏到雷游.jpeg" style="max-width:75%">
 >
 > 例：`M:\Program Files\Snow\snow_launcher.exe`（这将会是一个符号链接，三服都可以共用这个入口，雷游这样的程序也不需要添加多个服务器的启动器，一次就好。）
 
