@@ -4,3 +4,6 @@
 [submodule "startwrapper"]
 	path = startwrapper
 	url = https://github.com/LiuJiewenTT/CBJQ_SS.StartWrapper.git
+[submodule "tools/snow_launcher_downloader"]
+	path = tools/snow_launcher_downloader
+	url = https://github.com/LiuJiewenTT/snow_launcher_downloader.git
