@@ -12,6 +12,13 @@ redirect_from:
     <img src="辰星-云篆 团子.jpg" style=" max-height: 300px; height: 100%; aspect-ratio: 1; width: auto;"/>
 </div>
 
+<div style="align-items: center; justify-content: center; display: flex; margin: 10px; gap: 10px">
+   <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/LiuJiewenTT/Snowbreak_ServerSwitcher/total">
+   <img alt="GitHub Release" src="https://img.shields.io/github/v/release/LiuJiewenTT/Snowbreak_ServerSwitcher">
+   <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/LiuJiewenTT/Snowbreak_ServerSwitcher/jekyll-gh-pages.yml">
+   <img alt="GitHub License" src="https://img.shields.io/github/license/LiuJiewenTT/Snowbreak_ServerSwitcher">
+</div>
+
 本工具可以帮助你切换游玩不同服务器的《尘白禁区》游戏（Windows PC端）。
 
 快速跳转：[下载安装](#下载安装) [使用说明](#使用说明) [帮助](#帮助)
