@@ -1,6 +1,6 @@
 ---
 LANG: zh_CN.UTF-8
-date: 2025-01-17 22:45:00 +0800
+date: 2025-01-25 23:20:00 +0800
 permalink: /
 redirect_from:
   - /README/
@@ -282,3 +282,14 @@ redirect_from:
 当你被顶号时，你已经保存的登录信息就失效了，你需要重新登录，这是正常情况。不正常的情况是：你后来登录不上了，那么你需要删除已保存的登录信息，它过期了，这样才能重新登录。
 
 1. 删除西山居版安装目录下的`xg_111111639`（你可以搜索一下，你可以选择不删除而是重命名）。
+
+
+### 玩了一下国际服，结果国服进不了了怎么办？
+
+这件事是国际服配置和国服冲突造成的，区服错误，导致卡在鉴权的环节上（国内网络通常连不上国际服）。
+
+这件事只需要删除一项区服配置即可，或者直接把这项配置所在的文件整个删掉。<strong>为了简化这个操作，我做了个专门删除这文件的脚本（文件名：`CBJQ_KickoffWorldwideServerConfigConfliction.bat`），放在了`tools`目录下，你直接运行一下就可以了。</strong>如果你找不到这个文件，可以在这里下载：[CBJQ_KickoffWorldwideServerConfigConfliction.bat](https://gist.github.com/LiuJiewenTT/e3a346c4458012416ea7d182ded7c82c#file-cbjq_kickoffworldwideserverconfigconfliction-bat)，或从以下代码块中复制：
+
+<script src="https://gist.github.com/LiuJiewenTT/e3a346c4458012416ea7d182ded7c82c.js"></script>
+
+冲突相关信息可见上述“冲突的主要成因”部分。如果想要更详细的信息，不妨了解一下我探索求解的日志：[国际服兼容研究](docs/国际服兼容研究/国际服兼容研究.md)。
