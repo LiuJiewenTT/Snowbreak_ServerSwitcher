@@ -293,3 +293,8 @@ redirect_from:
 <script src="https://gist.github.com/LiuJiewenTT/e3a346c4458012416ea7d182ded7c82c.js"></script>
 
 冲突相关信息可见上述“冲突的主要成因”部分。如果想要更详细的信息，不妨了解一下我探索求解的日志：[国际服兼容研究](docs/国际服兼容研究/国际服兼容研究.md)。
+
+
+### 怎么localization？
+
+如果你说的是切服器的本地化，那么这是`LANG`或`mLANG`环境变量到`en`；如果你说的是游戏本体的，那么就是另一回事了，和本切服器无关。（不建议修改游戏本体的本地化，但如果想要学习和研究，可以参考这两个项目：[PC端的本地化测试工具](https://github.com/LiuJiewenTT/CBJQ_XiaoKaiGuan)、[安卓端的本地化测试工具](https://github.com/LiuJiewenTT/CBJQ_HugFenny-PC)）。
