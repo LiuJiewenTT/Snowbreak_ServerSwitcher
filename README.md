@@ -1,6 +1,6 @@
 ---
 LANG: zh_CN.UTF-8
-date: 2025-04-19 21:38:00 +0800
+date: 2025-05-25 22:21:00 +0800
 permalink: /
 redirect_from:
   - /README/
@@ -307,4 +307,4 @@ redirect_from:
 
 ### 怎么localization？
 
-如果你说的是切服器的本地化，那么这是`LANG`或`mLANG`环境变量到`en`；如果你说的是游戏本体的，那么就是另一回事了，和本切服器无关。（不建议修改游戏本体的本地化，但如果想要学习和研究，可以参考这两个项目：[PC端的本地化测试工具](https://github.com/LiuJiewenTT/CBJQ_XiaoKaiGuan)、[安卓端的本地化测试工具](https://github.com/LiuJiewenTT/CBJQ_HugFenny-PC)）。
+如果你说的是切服器的本地化，那么这是`LANG`或`mLANG`环境变量到`en`；如果你说的是游戏本体的，那么就是另一回事了，和本切服器无关。（不建议修改游戏本体的本地化，但如果想要学习和研究，可以参考这两个项目：[PC端的本地化测试工具](https://github.com/LiuJiewenTT/CBJQ_XiaoKaiGuan)、[安卓端的本地化测试工具-PC平台](https://github.com/LiuJiewenTT/CBJQ_HugFenny-PC)、[安卓端的本地化测试工具-安卓平台](https://github.com/LiuJiewenTT/CBJQ_HugFenny)）。
