@@ -15,7 +15,7 @@ redirect_from:
 <div style="align-items: center; justify-content: center; display: flex; margin: 10px; gap: 10px">
    <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/LiuJiewenTT/Snowbreak_ServerSwitcher/total">
    <img alt="GitHub Release" src="https://img.shields.io/github/v/release/LiuJiewenTT/Snowbreak_ServerSwitcher">
-   <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/LiuJiewenTT/Snowbreak_ServerSwitcher/jekyll-gh-pages.yml">
+   <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/LiuJiewenTT/Snowbreak_ServerSwitcher">
    <img alt="GitHub License" src="https://img.shields.io/github/license/LiuJiewenTT/Snowbreak_ServerSwitcher">
 </div>
 
