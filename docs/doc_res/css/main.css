@@ -1,0 +1,82 @@
+:root {
+    --quick-navigate-main-color: rgb(145, 145, 241);
+}
+
+div.quick-navigate {
+    border: 2px solid var(--quick-navigate-main-color); /* 蓝色圆角边框 */
+    border-radius: 8px; /* 圆角大小可以根据需要调整 */
+    color: var(--quick-navigate-main-color); /* 蓝色文字 */
+    padding: 10px; /* 内边距可以根据需要调整 */
+    margin: 10px 0; /* 外边距可以根据需要调整 */
+    display: flex;
+    flex-direction: column;
+}
+
+div.quick-navigate-item-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+span.quick-navigate-item {
+    display: inline-block; /* 为了更好地控制span的样式 */
+    border: 2px solid var(--quick-navigate-main-color); /* 蓝色圆角边框 */
+    border-radius: 16px; /* 圆角大小可以根据需要调整 */
+    padding: 5px 10px; /* 内边距可以根据需要调整 */
+    margin: 0 5px; /* 外边距可以根据需要调整 */
+    color: var(--quick-navigate-main-color); /* 默认文字颜色为蓝色 */
+    transition: background-color 0.3s, color 0.3s; /* 添加过渡效果 */
+}
+
+span.quick-navigate-item a {
+    color: var(--quick-navigate-main-color);
+}
+
+span.quick-navigate-item:hover {
+    background-color: var(--quick-navigate-main-color); /* 鼠标移上去时背景变为蓝色 */
+    color: white; /* 鼠标移上去时文字变为白色 */
+    cursor: pointer; /* 添加鼠标指针样式 */
+}
+
+span.quick-navigate-item:hover a {
+    color: white;
+}
+
+span.quick-navigate-item:active {
+    background-color: lightblue; /* 点击时背景变为浅蓝色 */
+    color: var(--quick-navigate-main-color); /* 点击时文字保持蓝色 */
+    border-color: lightblue; /* 点击时边框颜色变为浅蓝色 */
+}
+
+span.quick-navigate-title {
+    font-weight: bold; /* 加粗标题 */
+    margin-bottom: 10px; /* 与下方元素间距 */
+    width: 100%;
+}
+
+/* Go to Top 按钮样式 */
+.go-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: var(--quick-navigate-main-color);
+    color: white;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+    z-index: 999;
+}
+
+.go-to-top:hover {
+    opacity: 1;
+}
+
+.go-to-top i {
+    font-size: 24px;
+}

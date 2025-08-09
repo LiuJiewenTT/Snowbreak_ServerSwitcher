@@ -12,6 +12,14 @@ redirect_from:
     <img src="辰星-云篆 团子.jpg" style=" max-height: 300px; height: 100%; aspect-ratio: 1; width: auto;"/>
 </div>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" >
+<script src="readme.js" ></script>
+<link rel="stylesheet" href="docs/doc_res/css/main.css" >
+
+<div class="go-to-top" style="display: none;">
+    <i class="fas fa-arrow-up"></i>
+</div>
+
 <div style="align-items: center; justify-content: center; display: flex; margin: 10px; gap: 10px">
    <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/LiuJiewenTT/Snowbreak_ServerSwitcher/total">
    <img alt="GitHub Release" src="https://img.shields.io/github/v/release/LiuJiewenTT/Snowbreak_ServerSwitcher">
@@ -21,11 +29,20 @@ redirect_from:
 
 本工具可以帮助你切换游玩不同服务器的《尘白禁区》游戏（Windows PC端）。
 
-快速跳转：[下载安装](#下载安装) [使用说明](#使用说明) [帮助](#帮助)
-    [旧主页](old/)
-
 项目地址：[GitHub](https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher) <br>
 项目主页：[尘白禁区服务器切换器](https://liujiewentt.github.io/Snowbreak_ServerSwitcher/) 
+
+<div class="quick-navigate">
+    <span class="quick-navigate-title">快速跳转：<br></span>
+    <div class="quick-navigate-item-group">
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="quick-navigate-item"><a href="#下载安装">下载安装</a></span>
+        <span class="quick-navigate-item"><a href="#使用说明">使用说明</a></span>
+        <span class="quick-navigate-item"><a href="#帮助">帮助</a></span>
+        <span class="quick-navigate-item"><a href="docs/old_version/README.md" id="old-version-link">旧主页</a></span>
+    </div>
+</div>
+
 
 ## 背景介绍
 
