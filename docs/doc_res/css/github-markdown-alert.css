@@ -1,0 +1,99 @@
+
+.markdown-alert {
+    --base-size-8: 0.5rem;
+    --base-size-16: 1rem;
+    --borderColor-default: #d1d9e0;
+    --base-text-weight-medium: 500;
+    --borderColor-accent-emphasis: #0969da;
+    --fgColor-accent: #0969da;
+    --borderColor-done-emphasis: #8250df;
+    --fgColor-done: #8250df;
+    --borderColor-attention-emphasis: #9a6700;
+    --fgColor-attention: #9a6700;
+    --borderColor-success-emphasis: #1a7f37;
+    --fgColor-success: #1a7f37;
+    --borderColor-danger-emphasis: #cf222e;
+    --fgColor-danger: #d1242f;
+    
+    --fgColor-closed: var(--fgColor-danger);
+    --fgColor-disabled: #818b98;
+    --fgColor-muted: #59636e;
+    --fgColor-neutral: #59636e;
+    --fgColor-severe: #bc4c00;
+    --fgColor-sponsors: #bf3989;
+}
+
+.markdown-alert {
+    padding: var(--base-size-8) var(--base-size-16);
+    margin-bottom: var(--base-size-16);
+    color: inherit;
+    border-left: .25em solid var(--borderColor-default)
+}
+
+.markdown-alert>:first-child {
+    margin-top: 0
+}
+
+.markdown-alert>:last-child {
+    margin-bottom: 0
+}
+
+.markdown-alert-title {
+    font-family: var(--fontStack-sansSerif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji");
+    font-size: 16px;
+}
+
+.markdown-alert .markdown-alert-title {
+    display: flex;
+    font-weight: var(--base-text-weight-medium, 500);
+    align-items: center;
+    line-height: 1
+}
+
+.markdown-alert.markdown-alert-note {
+    border-left-color: var(--borderColor-accent-emphasis)
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+    color: var(--fgColor-accent)
+}
+
+.markdown-alert.markdown-alert-important {
+    border-left-color: var(--borderColor-done-emphasis)
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+    color: var(--fgColor-done)
+}
+
+.markdown-alert.markdown-alert-warning {
+    border-left-color: var(--borderColor-attention-emphasis)
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+    color: var(--fgColor-attention)
+}
+
+.markdown-alert.markdown-alert-tip {
+    border-left-color: var(--borderColor-success-emphasis)
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+    color: var(--fgColor-success)
+}
+
+.markdown-alert.markdown-alert-caution {
+    border-left-color: var(--borderColor-danger-emphasis)
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+    color: var(--fgColor-danger)
+}
+
+.markdown-alert svg.markdown-alert-icon {
+    margin-right: var(--base-size-8, 8px) !important;
+    display: inline-block;
+	overflow: visible !important;
+    vertical-align: text-bottom;
+    fill: currentColor;
+}

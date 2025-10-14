@@ -1,12 +1,20 @@
-function add_script(src) {
-    var script = document.createElement('script');
+function loadScript_Promise(src, async_flag=true) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
     script.src = src;
-    script.async = false;
+    script.async = async_flag;
+    script.onload = () => resolve(script);
+    script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
     document.head.appendChild(script);
+  });
 }
 
-add_script('https://code.jquery.com/jquery-3.6.0.min.js');
-add_script('docs/doc_res/js/go_to_top.js');
+
+async function await_add_scripts() {
+    await loadScript_Promise('https://code.jquery.com/jquery-3.6.0.min.js', false);
+    loadScript_Promise('docs/doc_res/js/go_to_top.js');
+    await loadScript_Promise('docs/doc_res/js/github-markdown-alert-reproduce.js');
+}
 
 
 function edit_old_version_link() {
@@ -18,8 +26,15 @@ function edit_old_version_link() {
     }
 }
 
+
 function dom_edit() {
     edit_old_version_link();
+    process_blockquote_to_markdown_alert();
+    // document.body.prepend(process_blockquote_to_markdown_alert);
 }
 
-dom_edit();
+
+(async () => {
+    await await_add_scripts();
+    dom_edit();
+})();

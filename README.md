@@ -1,6 +1,6 @@
 ---
 LANG: zh_CN.UTF-8
-date: 2025-05-25 22:21:00 +0800
+date: 2025-10-14 20:37:00 +0800
 permalink: /
 redirect_from:
   - /README/
@@ -14,7 +14,10 @@ redirect_from:
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" >
 <script src="readme.js" ></script>
-<link rel="stylesheet" href="docs/doc_res/css/main.css" >
+<!-- <link rel="stylesheet" href="docs/doc_res/css/main.css" > -->
+<link rel="stylesheet" href="docs/doc_res/css/go-to-top.css" >
+<link rel="stylesheet" href="docs/doc_res/css/quick-navigate.css" >
+<link rel="stylesheet" href="docs/doc_res/css/github-markdown-alert.css">
 
 <div class="go-to-top" style="display: none;">
     <i class="fas fa-arrow-up"></i>
@@ -103,6 +106,7 @@ redirect_from:
 6. 详尽且准确的输出信息和错误纠正提示。
 
 更多：<br>
+
 7. 自动检测当前文件配置，高效安全。
 8. 支持启动器控制台输出监控，可以了解启动器的运行情况。
 9. 完全开源，大部分为脚本，完全透明安全。
@@ -115,6 +119,8 @@ redirect_from:
 下载后无需安装，将压缩包解压出来即可。（旧版本和特殊需求可能需要额外配置）<br>
 *推荐的存储位置* 是原本尘白启动器的所在目录下，例如：`M:\Program Files\Snow\`（如果你玩过了，此处你应该还会看到一个`data`文件夹）。
 
+> [!TIP]
+>
 > 使用方法见[【使用说明】](#使用说明)。
 
 版本说明：
@@ -122,11 +128,13 @@ redirect_from:
 - 基础版：仅包含此核心，不包含GUI，且仅包含能运行的最小配置。
 - 完整版：包含此核心和GUI，并包含更加完整、更加接近开箱即用的配置。文件名中带有`GUI`标识。
   > - GUI目前仅有 *tkinter* 实现版本。
-  > - GUI通常以 *BasicPack* 的形式提供，不附带过多资源，尽可能避免版权纠纷。需要美化请自行配置。
+  > - GUI通常以 *BasicPack* 的形式提供，仅附带少量资源（为了尽可能避免纠纷）。如果需要美化，可以前往GUI项目主页，参照说明并自行配置。
   > - 发行包通常完成了基本配置，推荐使用附带GUI程序的版本。
 
 
-> 注：若需要尘白启动器，可以在[snow_launcher_downloader](.\tools\snow_launcher_downloader\snow_launcher_downloader.html)下载（[备用](https://liujiewentt.github.io/snow_launcher_downloader/snow_launcher_downloader.html)）。下载后建议根据服名分别重命名为`snow_launcher-bilibili.exe`, `snow_launcher-kingsoft.exe`, `snow_launcher-worldwide.exe`。<br>
+> [!TIP]
+> 
+> 若需要尘白启动器，可以在[snow_launcher_downloader](.\tools\snow_launcher_downloader\snow_launcher_downloader.html)下载（[备用](https://liujiewentt.github.io/snow_launcher_downloader/snow_launcher_downloader.html)）。下载后建议根据服名分别重命名为`snow_launcher-bilibili.exe`, `snow_launcher-kingsoft.exe`, `snow_launcher-worldwide.exe`。<br>
 >（本项目亦友情提供缓存的版本，可在[此处](https://github.com/LiuJiewenTT/Snowbreak_ServerSwitcher/releases/tag/v1.2.2)下载）
 
 ### 更新安装的版本
@@ -139,9 +147,11 @@ redirect_from:
 
 本体配置：新版通常无需修改**切服器的配置**，仅需完成一些适配工作（即其他配置工作）即可（需要执行的操作会在运行过程中提示，依据提示操作即可）。
 
-如果你使用旧版本，或者有特别的需求（例如：关闭国际服支持、切换为英文、使用测试服），那么一定要修改一些对应的配置信息。
-
-关于GUI的配置，可以前往[CBJQ_SS_FrontEnd-tk](https://github.com/LiuJiewenTT/CBJQ_SS_FrontEnd-tk)项目页查看。<small>“过于高级/冷门”的功能配置就不表述了，在对应项目的文档中可能有详细说明。</small>
+> [!NOTE]
+> 
+> 1. 如果你使用旧版本，或者有特别的需求（例如：关闭国际服支持、切换为英文、使用测试服），那么一定要修改一些对应的配置信息。
+>
+> 2. 关于GUI的配置，可以前往[CBJQ_SS_FrontEnd-tk](https://github.com/LiuJiewenTT/CBJQ_SS_FrontEnd-tk)项目页查看。<small>“过于高级/冷门”的功能配置就不表述了，在对应项目的文档中或许会有详细说明。</small>
 
 更多详细配置请参考[旧主页](old/)，那里还有旧的介绍和指引系列视频（视频教程）的链接。
 
@@ -149,8 +159,11 @@ redirect_from:
 
 此部分主要分为两部分，第一部分介绍项目本体的独立使用方法，第二部分额外介绍推荐的GUI套件发行包的使用方法。对于无编程基础的人，推荐直接跳过第一部分。每一部分，可能会额外划分基础内容和进阶内容，请自行选用。
 
-> 旧版本和特殊需求可能需要额外[配置](#配置)。
-> 部分情况可能需要管理员权限才能运行，比如安装在C盘特殊目录内。
+> [!NOTE]
+>
+> - 旧版本和特殊需求可能需要额外[配置](#配置)。
+>
+> - 部分情况可能需要管理员权限才能运行，比如安装在C盘特殊目录内。
 
 <details><summary>第1部分：本体独立使用</summary>
     由于本体无GUI程序，因此通常需要使用命令行环境进行操作。本项目做了一些简化，除进阶方法外，无需通过终端环境使用。<br>
@@ -197,7 +210,7 @@ redirect_from:
                                 </details></li>
                             </ol>
                         </li>
-                        <li><details open><summary>示例如下：</summary>
+                        <li><details><summary>示例如下：</summary>
                             <ol>
                                 <li>切换并启动B服：<code>CBJQ_SS.main.bat bilibili</code>。</li>
                                 <li>切换并启动官服（不暂停）：<code>CBJQ_SS.main.bat -nopause kingsoft</code>。</li>
@@ -230,7 +243,29 @@ redirect_from:
             </ol>
         </details></li>
         <li><details open><summary>进阶使用方法：</summary>
-            此部分主要是调整一些配置，进而展现一些“高级”功能。
+            此部分主要是调整一些配置，进而展现一些“高级”功能。详见GUI项目主页，那里有配置条目的说明，可以根据说明自行配置默认GUI程序使用的<strong>启动页和结果表情包</strong>。
+        </details></li>
+        <li><details open><summary>与<i>Live2DViewerEx</i>一起使用：</summary>
+            您可以把启动入口添加到<i>Live2DViewerEx</i>的“桌面图标”小部件中，这样你可以以图标组的方式展现自己想要显示在桌面的入口。基础添加方法如下：
+            <ol>
+                <li>在<i>Live2DViewerEx</i>的控制面板中，找到“小部件”，选择“桌面图标”，并点击右侧的电源样式的图标启用此小部件。</li>
+                <li>在右侧点击<code>+</code>号，添加图标组；或点击已有图标组右侧的设置按钮。</li>
+                <li>在弹出的窗口中输入名称，类型选择“文件”，点击加号选择程序入口文件。</li>
+                <li>点击“选择图标”，选择或先添加图标。添加图标时可以在切服器目录下找。</li>
+                <li>一切就绪，点击确定即可。</li>
+            </ol>
+            <blockquote>
+                <p>[!CAUTION]</p>
+                <p>由于<i>Live2DViewerEx</i>对于启动方法的实现较为简单，它无法保证程序在合适的目录下启动，您启动部分程序时可能会遇到问题，如：找不到配置文件。</p>
+                <small>
+                    <details><summary>已知程序类别及现象：</summary>
+                        <ol>
+                            <li>所有使用PyInstaller打包的非单文件程序：闪退、找不到配置文件。</li>
+                            <li>所有默认读取配置文件时在当前工作目录下的程序：找不到配置文件。</li>
+                        </ol>
+                    </details>
+                </small>
+            </blockquote>
         </details></li>
     </ol>
 </details>
@@ -285,20 +320,28 @@ redirect_from:
 
 如果你已经安装了西山居启动器，但又不想卸载它，也不想删除游戏资源，那么可以尝试以下方法：
 
+> [!NOTE] 准备
+> 
 > 你需要先行下载好尘白启动器。
 
-> 尘白启动器的资源目录默认为：启动器文件所在目录下的`data`目录。
-> > 如果你使用开服安装包安装的，这个路径应该是: `[盘符]\Snow\data`。
+> [!TIP] 资源目录
+> 
+> - 尘白启动器的资源目录默认为：启动器文件所在目录下的`data`目录。
+>   > 如果你使用开服安装包安装的，这个路径应该是: `[盘符]\Snow\data`。
 >
-> 西山居启动器的资源目录默认为：启动器文件所在目录下的`Game\cbjq`目录。
->
-> > 如果你使用不早于尘白一周年的安装包安装的，这个路径通常是:` [盘符]\SeasunCBJQos\Game\cbjq`。
+> - 西山居启动器的资源目录默认为：启动器文件所在目录下的`Game\cbjq`目录。
+>   > 如果你使用不早于尘白一周年的安装包安装的，这个路径通常是: `[盘符]\SeasunCBJQos\Game\cbjq`。
 
 
 1. 选好尘白启动器的存放目录，运行它，修改下方的游戏资源存档目录到当前西山居版的游戏资源目录。
-> 你也可以在右上角的设置（“齿轮”）图标内的界面更改资源存档目录。
+   > [!TIP]
+   >
+   > 你也可以在右上角的设置（“齿轮”）图标内的界面更改资源存档目录。
 2. 关闭启动器就会保存好设置（到同目录下的`preference.json`文件中）。
 
+> [!WARNING]
+> 
+> 由于启动器会自动追加路径，所以可能会存成：`[盘符]\SeasunCBJQos\Game\cbjq\data`。这时候你可以使用“记事本”打开`preference.json`文件，删除后面的`\\data`部分，保存即可（操作前请先关闭启动器）。
 
 ### 原本使用西山居启动器，现在被顶号了登录不了了怎么办？
 
